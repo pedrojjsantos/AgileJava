@@ -8,7 +8,7 @@ import static org.junit.Assert.assertEquals;
 public class RosterReporterTest {
     @Test
     public void testRosterReport() {
-        CourseSession session = new CourseSession(
+        CourseSession session = CourseSession.create(
                 "ENGL",
                 "101",
                 DateUtil.createDate(2003, 1, 6)
