@@ -16,7 +16,7 @@ public class CourseSessionTest {
     @Before
     public void setUp() {
         startDate = DateUtil.createDate(2003, 1, 6);
-        session = new CourseSession("ENGL", "101", startDate);
+        session = createCourseSession();
     }
 
     @Test
@@ -47,7 +47,6 @@ public class CourseSessionTest {
 
     @Test
     public void testCourseDates() {
-        CourseSession session = new CourseSession("ABCD", "200", startDate);
         Date sixteenWeeksOut = DateUtil.createDate(2003, 4, 25);
         assertEquals(sixteenWeeksOut, session.getEndDate());
     }
@@ -67,5 +66,18 @@ public class CourseSessionTest {
                         CourseSession.ROSTER_REPORT_FOOTER +
                         "2" + CourseSession.NEWLINE, rosterReport
         );
+    }
+
+    @Test
+    public void testCount() {
+        CourseSession.resetCount();
+        createCourseSession();
+        assertEquals(1, CourseSession.getCount());
+        createCourseSession();
+        assertEquals(2, CourseSession.getCount());
+    }
+
+    private CourseSession createCourseSession() {
+        return new CourseSession("ENGL", "101", startDate);
     }
 }

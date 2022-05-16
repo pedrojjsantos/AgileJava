@@ -14,6 +14,7 @@ public class CourseSession {
     public static final String NEWLINE = System.getProperty("line.separator");
     public static final String ROSTER_REPORT_HEADER = "Student" + NEWLINE + '-' + NEWLINE;
     public static final String ROSTER_REPORT_FOOTER = NEWLINE + "# students = ";
+    private static int count;
     private String department;
     private String number;
     private Date startDate;
@@ -23,6 +24,19 @@ public class CourseSession {
         this.department = department;
         this.number = number;
         this.startDate = startDate;
+        CourseSession.incrementCount();
+    }
+
+    public static void resetCount() {
+        count = 0;
+    }
+
+    private static void incrementCount() {
+        count++;
+    }
+
+    public static int getCount() {
+        return count;
     }
 
     public String getDepartment() {
