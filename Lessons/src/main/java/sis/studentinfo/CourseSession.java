@@ -15,6 +15,7 @@ public class CourseSession {
     public static final String ROSTER_REPORT_HEADER = "Student" + NEWLINE + '-' + NEWLINE;
     public static final String ROSTER_REPORT_FOOTER = NEWLINE + "# students = ";
     private static int count;
+    private int numberOfCredits;
     private String department;
     private String number;
     private Date startDate;
@@ -56,6 +57,7 @@ public class CourseSession {
     }
 
     public void enroll(Student s) {
+        s.addCredits(numberOfCredits);
         students.add(s);
     }
 
@@ -79,5 +81,9 @@ public class CourseSession {
 
     public Date getStartDate() {
         return startDate;
+    }
+
+    public void setNumberOfCredits(int credits) {
+        this.numberOfCredits = credits;
     }
 }
