@@ -1,15 +1,11 @@
-package chess;
+package util;
 
-import chess.pieces.PieceTest;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-        BoardTest.class,
-        PieceTest.class,
-        CharacterTest.class,
+        StringUtilTest.class,
 })
-
 public class AllTests {
 }
