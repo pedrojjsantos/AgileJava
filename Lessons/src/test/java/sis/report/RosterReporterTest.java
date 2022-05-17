@@ -2,6 +2,7 @@ package sis.report;
 
 import org.junit.Test;
 import sis.studentinfo.*;
+import static  sis.report.ReportConstant.NEWLINE;
 
 import static org.junit.Assert.assertEquals;
 
@@ -18,10 +19,11 @@ public class RosterReporterTest {
         String rosterReport = new RosterReporter(session).getReport();
         assertEquals(
                 RosterReporter.ROSTER_REPORT_HEADER +
-                        "A" + RosterReporter.NEWLINE +
-                        "B" + RosterReporter.NEWLINE +
+                        "A" + NEWLINE +
+                        "B" + NEWLINE +
                         RosterReporter.ROSTER_REPORT_FOOTER +
-                        "2" + RosterReporter.NEWLINE, rosterReport
+                        "2" + NEWLINE,
+                rosterReport
         );
 
     }

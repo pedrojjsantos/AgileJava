@@ -4,6 +4,9 @@ import org.junit.Before;
 import org.junit.Test;
 import sis.report.RosterReporter;
 
+import static org.junit.Assert.assertTrue;
+import static sis.report.ReportConstant.NEWLINE;
+
 import java.util.Date;
 
 import static org.junit.Assert.assertEquals;
@@ -59,11 +62,11 @@ public class CourseSessionTest {
 
         String rosterReport = new RosterReporter(session).getReport();
         assertEquals(
-                CourseSession.ROSTER_REPORT_HEADER +
-                        "A" + CourseSession.NEWLINE +
-                        "B" + CourseSession.NEWLINE +
-                        CourseSession.ROSTER_REPORT_FOOTER +
-                        "2" + CourseSession.NEWLINE, rosterReport
+                RosterReporter.ROSTER_REPORT_HEADER +
+                        "A" + NEWLINE + "B" + NEWLINE +
+                        RosterReporter.ROSTER_REPORT_FOOTER +
+                        "2" + NEWLINE,
+                rosterReport
         );
     }
 
@@ -74,6 +77,27 @@ public class CourseSessionTest {
         assertEquals(1, CourseSession.getCount());
         createCourseSession();
         assertEquals(2, CourseSession.getCount());
+    }
+
+    @Test
+    public void testComparable() {
+        final Date date = new Date();
+        CourseSession sessionA =
+                CourseSession.create("CMSC", "101", date);
+        CourseSession sessionB =
+                CourseSession.create("ENGL", "101", date);
+        CourseSession sessionC =
+                CourseSession.create("CMSC", "101", date);
+        CourseSession sessionD =
+                CourseSession.create("CMSC", "210", date);
+
+        assertTrue(sessionA.compareTo(sessionB) < 0);
+        assertTrue(sessionB.compareTo(sessionA) > 0);
+
+        assertEquals(0, sessionA.compareTo(sessionC));
+
+        assertTrue(sessionC.compareTo(sessionD) < 0);
+        assertTrue(sessionD.compareTo(sessionC) > 0);
     }
 
     private CourseSession createCourseSession() {

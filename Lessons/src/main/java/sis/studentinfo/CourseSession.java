@@ -10,10 +10,7 @@ import java.util.GregorianCalendar;
  * session of a specific university course.
  * @author Administrator
  */
-public class CourseSession {
-    public static final String NEWLINE = System.getProperty("line.separator");
-    public static final String ROSTER_REPORT_HEADER = "Student" + NEWLINE + '-' + NEWLINE;
-    public static final String ROSTER_REPORT_FOOTER = NEWLINE + "# students = ";
+public class CourseSession implements Comparable<CourseSession> {
     private static int count;
     private int numberOfCredits;
     private String department;
@@ -85,5 +82,11 @@ public class CourseSession {
 
     public void setNumberOfCredits(int credits) {
         this.numberOfCredits = credits;
+    }
+
+    public int compareTo(CourseSession that) {
+        int comparison = this.getDepartment().compareTo(that.getDepartment());
+        return (comparison != 0) ?
+                comparison : this.getNumber().compareTo(that.getNumber());
     }
 }
