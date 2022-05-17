@@ -49,4 +49,47 @@ public class StudentTest {
         student.setState("MD");
         assertFalse(student.isInState());
     }
+
+    private static final double GRADE_TOLERANCE = 0.05;
+
+    @Test
+    public void testCalculateGpa() {
+        assertGpa(0.0, student);
+        student.addGrade(Student.Grade.A);
+        assertGpa(4.0, student);
+        student.addGrade(Student.Grade.B);
+        assertGpa(3.5, student);
+        student.addGrade(Student.Grade.C);
+        assertGpa(3.0, student);
+        student.addGrade(Student.Grade.D);
+        assertGpa(2.5, student);
+        student.addGrade(Student.Grade.F);
+        assertGpa(2.0, student);
+    }
+
+    @Test
+    public void testCalculateHonorsStudentGpa() {
+        assertGpa(0.0, createHonorsStudent());
+        assertGpa(5.0, createHonorsStudent(Student.Grade.A));
+        assertGpa(4.0, createHonorsStudent(Student.Grade.B));
+        assertGpa(3.0, createHonorsStudent(Student.Grade.C));
+        assertGpa(2.0, createHonorsStudent(Student.Grade.D));
+        assertGpa(0.0, createHonorsStudent(Student.Grade.F));
+    }
+
+    private Student createHonorsStudent(Student.Grade grade) {
+        Student student = createHonorsStudent();
+        student.addGrade(grade);
+        return student;
+    }
+
+    private Student createHonorsStudent() {
+        Student student = new Student("a");
+        student.setGradingStrategy(new HonorsGradingStrategy());
+        return student;
+    }
+
+    private void assertGpa(double expected, Student student) {
+        assertEquals(expected, student.getGpa(), GRADE_TOLERANCE);
+    }
 }
