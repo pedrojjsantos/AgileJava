@@ -1,6 +1,7 @@
 package sis.studentinfo;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Student {
     public static final int CREDITS_REQUIRED_FOR_FULL_TIME = 12;
@@ -8,7 +9,7 @@ public class Student {
     private String name;
     private String state = "";
     private int credits;
-    private ArrayList<Grade> grades = new ArrayList<>();
+    private List<Grade> grades = new ArrayList<>();
     private GradingStrategy gradingStrategy =
             new RegularGradingStrategy();
 

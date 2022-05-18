@@ -23,28 +23,28 @@ public class Board {
     public Board() {}
     public void initialize() {
         Piece.resetCount();
-        rank1.add(Piece.createWhite(Piece.ROOK,   'r'));
-        rank1.add(Piece.createWhite(Piece.KNIGHT, 'n'));
-        rank1.add(Piece.createWhite(Piece.BISHOP, 'b'));
-        rank1.add(Piece.createWhite(Piece.QUEEN,  'q'));
-        rank1.add(Piece.createWhite(Piece.KING,   'k'));
-        rank1.add(Piece.createWhite(Piece.BISHOP, 'b'));
-        rank1.add(Piece.createWhite(Piece.KNIGHT, 'n'));
-        rank1.add(Piece.createWhite(Piece.ROOK,   'r'));
+        rank1.add(Piece.createWhite(Piece.Type.ROOK,   'r'));
+        rank1.add(Piece.createWhite(Piece.Type.KNIGHT, 'n'));
+        rank1.add(Piece.createWhite(Piece.Type.BISHOP, 'b'));
+        rank1.add(Piece.createWhite(Piece.Type.QUEEN,  'q'));
+        rank1.add(Piece.createWhite(Piece.Type.KING,   'k'));
+        rank1.add(Piece.createWhite(Piece.Type.BISHOP, 'b'));
+        rank1.add(Piece.createWhite(Piece.Type.KNIGHT, 'n'));
+        rank1.add(Piece.createWhite(Piece.Type.ROOK,   'r'));
 // Q3
         for (int i = 0; i < 8; i++)
-            rank2.add(Piece.createWhite(Piece.PAWN, 'p'));
+            rank2.add(Piece.createWhite(Piece.Type.PAWN, 'p'));
         for (int i = 0; i < 8; i++)
-            rank7.add(Piece.createBlack(Piece.PAWN, 'P'));
+            rank7.add(Piece.createBlack(Piece.Type.PAWN, 'P'));
 
-        rank8.add(Piece.createBlack(Piece.ROOK,   'R'));
-        rank8.add(Piece.createBlack(Piece.KNIGHT, 'N'));
-        rank8.add(Piece.createBlack(Piece.BISHOP, 'B'));
-        rank8.add(Piece.createBlack(Piece.QUEEN,  'Q'));
-        rank8.add(Piece.createBlack(Piece.KING,   'K'));
-        rank8.add(Piece.createBlack(Piece.BISHOP, 'B'));
-        rank8.add(Piece.createBlack(Piece.KNIGHT, 'N'));
-        rank8.add(Piece.createBlack(Piece.ROOK,   'R'));
+        rank8.add(Piece.createBlack(Piece.Type.ROOK,   'R'));
+        rank8.add(Piece.createBlack(Piece.Type.KNIGHT, 'N'));
+        rank8.add(Piece.createBlack(Piece.Type.BISHOP, 'B'));
+        rank8.add(Piece.createBlack(Piece.Type.QUEEN,  'Q'));
+        rank8.add(Piece.createBlack(Piece.Type.KING,   'K'));
+        rank8.add(Piece.createBlack(Piece.Type.BISHOP, 'B'));
+        rank8.add(Piece.createBlack(Piece.Type.KNIGHT, 'N'));
+        rank8.add(Piece.createBlack(Piece.Type.ROOK,   'R'));
     }
     /**
      * @return The number of pieces added to the board

@@ -1,9 +1,6 @@
 package sis.studentinfo;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
+import java.util.*;
 
 /**
  * Provides a representation of a single-semester
@@ -16,7 +13,7 @@ public class CourseSession implements Comparable<CourseSession> {
     private String department;
     private String number;
     private Date startDate;
-    private ArrayList<Student> students = new ArrayList<>();
+    private List<Student> students = new ArrayList<>();
 
     private CourseSession(String department, String number, Date startDate) {
         this.department = department;
@@ -62,7 +59,7 @@ public class CourseSession implements Comparable<CourseSession> {
         return students.get(i);
     }
 
-    public ArrayList<Student> getAllStudents() {
+    public List<Student> getAllStudents() {
         return students;
     }
 
