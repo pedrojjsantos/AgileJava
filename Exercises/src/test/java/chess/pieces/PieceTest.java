@@ -25,25 +25,25 @@ public class PieceTest {
         verifyCreation(
                 Piece.createWhiteKing(), Piece.createBlackKing(),
                 Piece.Type.KING, Piece.KING_CHAR);
-//        Piece blank = Piece.noPiece();
-//        assertEquals('.', blank.print());
-//        assertEquals(Piece.Type.NO_PIECE, blank.getType());
+        Piece blank = Piece.noPiece();
+        assertEquals('.', blank.print());
+        assertEquals(Piece.Type.NO_PIECE, blank.getType());
     }
 
     @Test
     public void testCount() {
         Piece.resetCount();
         assertEquals(0, Piece.getCountWhite());
-        createWhitePiece();
+        Piece.createWhitePawn();
         assertEquals(1, Piece.getCountWhite());
-        createWhitePiece();
+        Piece.createWhitePawn();
         assertEquals(2, Piece.getCountWhite());
 
 
         assertEquals(0, Piece.getCountBlack());
-        createBlackPiece();
+        Piece.createBlackPawn();
         assertEquals(1, Piece.getCountBlack());
-        createBlackPiece();
+        Piece.createBlackPawn();
         assertEquals(2, Piece.getCountBlack());
 
         assertEquals(2, Piece.getCountWhite());
@@ -58,14 +58,5 @@ public class PieceTest {
         assertTrue(blackPiece.isBlack());
         assertEquals(type, blackPiece.getType());
         assertEquals(Character.toUpperCase(representation), blackPiece.print());
-    }
-
-    private Piece createWhitePiece() {
-        return Piece.createWhite(Piece.Type.PAWN, 'p');
-
-    }
-
-    private Piece createBlackPiece() {
-        return Piece.createBlack(Piece.Type.PAWN, 'P');
     }
 }

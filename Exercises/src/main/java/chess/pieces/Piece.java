@@ -11,9 +11,10 @@ public class Piece {
     public final static char BISHOP_CHAR = 'b';
     public final static char QUEEN_CHAR = 'q';
     public final static char KING_CHAR = 'k';
+    public final static char BLANK_CHAR = '.';
 
     private enum Color {WHITE, BLACK}
-    public enum Type {PAWN, KNIGHT, ROOK, BISHOP, QUEEN, KING}
+    public enum Type {PAWN, KNIGHT, ROOK, BISHOP, QUEEN, KING, NO_PIECE}
 
     private static int countWhite;
     private static int countBlack;
@@ -28,54 +29,68 @@ public class Piece {
         this.representation = representation;
     }
 
+    public static Piece noPiece() {
+        return new Piece(Color.WHITE, Type.NO_PIECE, BLANK_CHAR);
+    }
+
+    private static Piece createPiece(Color color, Type type, char representation) {
+        switch (color) {
+            case WHITE -> incrementWhiteCount();
+            case BLACK -> incrementBlackCount();
+        }
+        return new Piece(color, type, representation);
+    }
+
     // White Pieces
     public static Piece createWhitePawn() {
-        return new Piece(Color.WHITE, Type.PAWN, PAWN_CHAR);
+        return createPiece(Color.WHITE, Type.PAWN, PAWN_CHAR);
     }
     public static Piece createWhiteKnight() {
-        return new Piece(Color.WHITE, Type.KNIGHT, KNIGHT_CHAR);
+        return createPiece(Color.WHITE, Type.KNIGHT, KNIGHT_CHAR);
     }
     public static Piece createWhiteRook() {
-        return new Piece(Color.WHITE, Type.ROOK, ROOK_CHAR);
+        return createPiece(Color.WHITE, Type.ROOK, ROOK_CHAR);
     }
     public static Piece createWhiteBishop() {
-        return new Piece(Color.WHITE, Type.BISHOP, BISHOP_CHAR);
+        return createPiece(Color.WHITE, Type.BISHOP, BISHOP_CHAR);
     }
     public static Piece createWhiteQueen() {
-        return new Piece(Color.WHITE, Type.QUEEN, QUEEN_CHAR);
+        return createPiece(Color.WHITE, Type.QUEEN, QUEEN_CHAR);
     }
     public static Piece createWhiteKing() {
-        return new Piece(Color.WHITE, Type.KING, KING_CHAR);
+        return createPiece(Color.WHITE, Type.KING, KING_CHAR);
     }
+
 
     // Black Pieces
     public static Piece createBlackPawn() {
-        return new Piece(Color.BLACK, Type.PAWN, Character.toUpperCase(PAWN_CHAR));
+        return createPiece(Color.BLACK, Type.PAWN, Character.toUpperCase(PAWN_CHAR));
     }
     public static Piece createBlackKnight() {
-        return new Piece(Color.BLACK, Type.KNIGHT, Character.toUpperCase(KNIGHT_CHAR));
+        return createPiece(Color.BLACK, Type.KNIGHT, Character.toUpperCase(KNIGHT_CHAR));
     }
     public static Piece createBlackRook() {
-        return new Piece(Color.BLACK, Type.ROOK, Character.toUpperCase(ROOK_CHAR));
+        return createPiece(Color.BLACK, Type.ROOK, Character.toUpperCase(ROOK_CHAR));
     }
     public static Piece createBlackBishop() {
-        return new Piece(Color.BLACK, Type.BISHOP, Character.toUpperCase(BISHOP_CHAR));
+        return createPiece(Color.BLACK, Type.BISHOP, Character.toUpperCase(BISHOP_CHAR));
     }
     public static Piece createBlackQueen() {
-        return new Piece(Color.BLACK, Type.QUEEN, Character.toUpperCase(QUEEN_CHAR));
+        return createPiece(Color.BLACK, Type.QUEEN, Character.toUpperCase(QUEEN_CHAR));
     }
     public static Piece createBlackKing() {
-        return new Piece(Color.BLACK, Type.KING, Character.toUpperCase(KING_CHAR));
+        return createPiece(Color.BLACK, Type.KING, Character.toUpperCase(KING_CHAR));
     }
+
 
     public static void resetCount() {
         Piece.countWhite = 0;
         Piece.countBlack = 0;
     }
-    public static void incrementCountWhite() {
+    public static void incrementWhiteCount() {
         Piece.countWhite++;
     }
-    public static void incrementCountBlack() {
+    public static void incrementBlackCount() {
         Piece.countBlack++;
     }
 
@@ -84,15 +99,6 @@ public class Piece {
     }
     public static int getCountBlack() {
         return countBlack;
-    }
-
-    public static Piece createWhite(Type type, char printableRef) {
-        Piece.incrementCountWhite();
-        return new Piece(Color.WHITE, type, printableRef);
-    }
-    public static Piece createBlack(Type type, char printableRef) {
-        Piece.incrementCountBlack();
-        return new Piece(Color.BLACK, type, printableRef);
     }
 
     public String getColor() {
