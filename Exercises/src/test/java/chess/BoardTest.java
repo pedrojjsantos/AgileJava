@@ -12,7 +12,7 @@ import static org.junit.Assert.assertTrue;
 public class BoardTest {
     private Board board;
     private final String blankRank =
-            StringUtil.appendNewLine("........");
+            StringUtil.appendNewLine(". . . . . . . .");
 
     @Before
     public void setUp() {
@@ -40,11 +40,11 @@ public class BoardTest {
         assertEquals(16, Piece.getCountBlack());
 
         assertEquals(
-                StringUtil.appendNewLine("RNBQKBNR") +
-                        StringUtil.appendNewLine("PPPPPPPP") +
+                StringUtil.appendNewLine("R N B Q K B N R") +
+                        StringUtil.appendNewLine("P P P P P P P P") +
                         blankRank + blankRank + blankRank + blankRank +
-                        StringUtil.appendNewLine("pppppppp") +
-                        StringUtil.appendNewLine("rnbqkbnr"),
+                        StringUtil.appendNewLine("p p p p p p p p") +
+                        StringUtil.appendNewLine("r n b q k b n r"),
                 board.print());
         System.out.println(board.print());
     }
@@ -75,5 +75,34 @@ public class BoardTest {
 
     private void verifyBoardQuery(String position, Piece expected) {
         assertTrue(board.getPiece(position).isEqualTo(expected));
+    }
+
+    @Test
+    public void testPutPiece() {
+        verifyPutPiece("b4", Piece.createWhitePawn());
+        verifyPutPiece("f5", Piece.createWhiteKing());
+        verifyPutPiece("a8", Piece.createBlackBishop());
+        verifyPutPiece("d6", Piece.createWhiteRook());
+        verifyPutPiece("d6", Piece.noPiece());
+    }
+
+    private void verifyPutPiece(String position, Piece piece) {
+        board.putPiece(position, piece);
+        assertEquals(piece, board.getPiece(position));
+    }
+
+    @Test
+    public void testStrength() {
+        final double constraint = 0.05;
+        assertEquals(0.0, board.getWhiteStrength(), constraint);
+        assertEquals(0.0, board.getBlackStrength(), constraint);
+
+        board.putPiece("g4", Piece.createWhiteQueen());
+        board.putPiece("c8", Piece.createBlackRook());
+
+        assertEquals(9.0, board.getWhiteStrength(), constraint);
+        assertEquals(5.0, board.getBlackStrength(), constraint);
+
+        
     }
 }

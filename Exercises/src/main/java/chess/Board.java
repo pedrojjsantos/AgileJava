@@ -75,25 +75,31 @@ public class Board {
     public int pieceCount(char representation) {
         int count = 0;
 
-        for (List<Piece> rank : ranks)
-            count += pieceCountInRank(rank, representation);
+        for (List<Piece> rank : ranks) {
+            for (Piece piece : rank) {
+                if (piece.print() == representation)
+                    count++;
+            }
+        }
 
         return count;
     }
 
-    private int pieceCountInRank(List<Piece> rank, char representation) {
+    private int pieceCountInFile(int file, char representation) {
         int count = 0;
-        for (Piece piece : rank) {
-            if (piece.print() == representation)
+
+        for (int i = 0; i < 8; i++) {
+            if (ranks.get(i).get(file).print() == representation)
                 count++;
         }
         return count;
     }
 
-    public String printRank(List<Piece> rank) {
+    private String printRank(List<Piece> rank) {
         StringBuilder buffer = new StringBuilder();
-        for (Piece p : rank)
-            buffer.append(p.print());
+        for (int i = 0; i < 7; i++)
+            buffer.append(rank.get(i).print()).append(' ');
+        buffer.append(rank.get(7).print());
         return buffer.toString();
     }
 
@@ -111,6 +117,56 @@ public class Board {
         int rankNumber = position.charAt(1) - '1';
 
         return ranks.get(rankNumber).get(index);
+    }
+
+    public void putPiece(String position, Piece piece) {
+        int index = position.charAt(0) - 'a';
+        int rankNumber = position.charAt(1) - '1';
+
+        ranks.get(rankNumber).set(index, piece);
+    }
+
+    public double getWhiteStrength() {
+        double strength = 0;
+
+        strength +=
+                pieceCount(Piece.ROOK_CHAR)   * 5 +
+                pieceCount(Piece.KNIGHT_CHAR) * 2.5 +
+                pieceCount(Piece.BISHOP_CHAR) * 3 +
+                pieceCount(Piece.QUEEN_CHAR)  * 9;
+
+        double numberOfPawns;
+
+        for (int i = 0; i < 8; i++) {
+            numberOfPawns = pieceCountInFile(i, Piece.PAWN_CHAR);
+            if (numberOfPawns > 1)
+                numberOfPawns *= 0.5;
+
+            strength += numberOfPawns;
+        }
+
+        return strength;
+    }
+
+    public double getBlackStrength() {
+        double strength = 0;
+
+        strength += pieceCount(Character.toUpperCase(Piece.ROOK_CHAR))   * 5 +
+                pieceCount(Character.toUpperCase(Piece.KNIGHT_CHAR)) * 2.5 +
+                pieceCount(Character.toUpperCase(Piece.BISHOP_CHAR)) * 3 +
+                pieceCount(Character.toUpperCase(Piece.QUEEN_CHAR))  * 9;
+
+        double numberOfPawns;
+
+        for (int i = 0; i < 8; i++) {
+            numberOfPawns = pieceCountInFile(i, Character.toUpperCase(Piece.PAWN_CHAR));
+            if (numberOfPawns > 1)
+                numberOfPawns *= 0.5;
+
+            strength += numberOfPawns;
+        }
+
+        return strength;
     }
 }
 
