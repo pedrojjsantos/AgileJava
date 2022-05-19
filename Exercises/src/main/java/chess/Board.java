@@ -10,54 +10,61 @@ import java.util.List;
  * Provides representation of a chess board
  */
 public class Board {
-    private ArrayList<Piece> rank1 = new ArrayList<>();
-    private ArrayList<Piece> rank2 = new ArrayList<>();
-    private ArrayList<Piece> rank3 = new ArrayList<>();
-    private ArrayList<Piece> rank4 = new ArrayList<>();
-    private ArrayList<Piece> rank5 = new ArrayList<>();
-    private ArrayList<Piece> rank6 = new ArrayList<>();
-    private ArrayList<Piece> rank7 = new ArrayList<>();
-    private ArrayList<Piece> rank8 = new ArrayList<>();
+    private List<List<Piece>> ranks = new ArrayList<>(8);
 
 
+    public Board() {
+        Piece.resetCount();
 
-    public Board() {}
+        for (int i = 0; i < 8; i++) {
+            ranks.add(new ArrayList<>(8));
+
+            for (int j = 0; j < 8; j++)
+                ranks.get(i).add(Piece.noPiece());
+        }
+    }
 
     public void initialize() {
         Piece.resetCount();
-        rank1.add(Piece.createWhiteRook());
-        rank1.add(Piece.createWhiteKnight());
-        rank1.add(Piece.createWhiteBishop());
-        rank1.add(Piece.createWhiteQueen());
-        rank1.add(Piece.createWhiteKing());
-        rank1.add(Piece.createWhiteBishop());
-        rank1.add(Piece.createWhiteKnight());
-        rank1.add(Piece.createWhiteRook());
 
-        for (int i = 0; i < 8; i++)
-            rank2.add(Piece.createWhitePawn());
-
-        for (int i = 0; i < 8; i++)
-            rank3.add(Piece.noPiece());
-        for (int i = 0; i < 8; i++)
-            rank4.add(Piece.noPiece());
-        for (int i = 0; i < 8; i++)
-            rank5.add(Piece.noPiece());
-        for (int i = 0; i < 8; i++)
-            rank6.add(Piece.noPiece());
-
-        for (int i = 0; i < 8; i++)
-            rank7.add(Piece.createBlackPawn());
-
-        rank8.add(Piece.createBlackRook());
-        rank8.add(Piece.createBlackKnight());
-        rank8.add(Piece.createBlackBishop());
-        rank8.add(Piece.createBlackQueen());
-        rank8.add(Piece.createBlackKing());
-        rank8.add(Piece.createBlackBishop());
-        rank8.add(Piece.createBlackKnight());
-        rank8.add(Piece.createBlackRook());
+        initWhiteRanks();
+        initBlankRanks();
+        initBlackRanks();
     }
+
+    private void initBlackRanks() {
+        for (int i = 0; i < 8; i++)
+            ranks.get(6).set(i, Piece.createBlackPawn());
+
+        ranks.get(7).set(0, Piece.createBlackRook());
+        ranks.get(7).set(1, Piece.createBlackKnight());
+        ranks.get(7).set(2, Piece.createBlackBishop());
+        ranks.get(7).set(3, Piece.createBlackQueen());
+        ranks.get(7).set(4, Piece.createBlackKing());
+        ranks.get(7).set(5, Piece.createBlackBishop());
+        ranks.get(7).set(6, Piece.createBlackKnight());
+        ranks.get(7).set(7, Piece.createBlackRook());
+    }
+    private void initBlankRanks() {
+        for (int rank = 2; rank < 6; rank++) {
+            for (int i = 0; i < 8; i++)
+                ranks.get(rank).set(i, Piece.noPiece());
+        }
+    }
+    private void initWhiteRanks() {
+        ranks.get(0).set(0, Piece.createWhiteRook());
+        ranks.get(0).set(1, Piece.createWhiteKnight());
+        ranks.get(0).set(2, Piece.createWhiteBishop());
+        ranks.get(0).set(3, Piece.createWhiteQueen());
+        ranks.get(0).set(4, Piece.createWhiteKing());
+        ranks.get(0).set(5, Piece.createWhiteBishop());
+        ranks.get(0).set(6, Piece.createWhiteKnight());
+        ranks.get(0).set(7, Piece.createWhiteRook());
+
+        for (int i = 0; i < 8; i++)
+            ranks.get(1).set(i, Piece.createWhitePawn());
+    }
+
     /**
      * @return The number of pieces added to the board
      */
@@ -68,14 +75,8 @@ public class Board {
     public int pieceCount(char representation) {
         int count = 0;
 
-        count += pieceCountInRank(rank1, representation);
-        count += pieceCountInRank(rank2, representation);
-        count += pieceCountInRank(rank3, representation);
-        count += pieceCountInRank(rank4, representation);
-        count += pieceCountInRank(rank5, representation);
-        count += pieceCountInRank(rank6, representation);
-        count += pieceCountInRank(rank7, representation);
-        count += pieceCountInRank(rank8, representation);
+        for (List<Piece> rank : ranks)
+            count += pieceCountInRank(rank, representation);
 
         return count;
     }
@@ -89,7 +90,7 @@ public class Board {
         return count;
     }
 
-    public String printRank(ArrayList<Piece> rank) {
+    public String printRank(List<Piece> rank) {
         StringBuilder buffer = new StringBuilder();
         for (Piece p : rank)
             buffer.append(p.print());
@@ -97,15 +98,19 @@ public class Board {
     }
 
     public String print() {
-        final String blankRank = StringUtil.appendNewLine("........");
-        return  StringUtil.appendNewLine(printRank(rank8)) +
-                StringUtil.appendNewLine(printRank(rank7)) +
-                StringUtil.appendNewLine(printRank(rank6)) +
-                StringUtil.appendNewLine(printRank(rank5)) +
-                StringUtil.appendNewLine(printRank(rank4)) +
-                StringUtil.appendNewLine(printRank(rank3)) +
-                StringUtil.appendNewLine(printRank(rank2)) +
-                StringUtil.appendNewLine(printRank(rank1));
+        StringBuilder printedBoard = new StringBuilder();
+
+        for (int rank = 7; rank >= 0; rank--)
+            printedBoard.append(StringUtil.appendNewLine(printRank(ranks.get(rank))));
+
+        return  printedBoard.toString();
+    }
+
+    public Piece getPiece(String position) {
+        int index = position.charAt(0) - 'a';
+        int rankNumber = position.charAt(1) - '1';
+
+        return ranks.get(rankNumber).get(index);
     }
 }
 

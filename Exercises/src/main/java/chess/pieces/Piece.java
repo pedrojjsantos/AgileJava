@@ -123,4 +123,9 @@ public class Piece {
     public char print() {
         return representation;
     }
+
+    public boolean isEqualTo(Piece that) {
+        return (this.color == that.color) &&
+                (this.type == that.type);
+    }
 }
