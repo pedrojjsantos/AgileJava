@@ -1,6 +1,6 @@
 package chess.pieces;
 
-public class Piece {
+public class Piece implements Comparable<Piece> {
     // Colors
     public final static String WHITE = "white";
     public final static String BLACK = "black";
@@ -13,8 +13,10 @@ public class Piece {
     public final static char KING_CHAR = 'k';
     public final static char BLANK_CHAR = '.';
 
-    private enum Color {WHITE, BLACK}
-    public enum Type {PAWN, KNIGHT, ROOK, BISHOP, QUEEN, KING, NO_PIECE}
+
+    private enum Color {WHITE, BLACK;}
+
+    public enum Type {PAWN, KNIGHT, ROOK, BISHOP, QUEEN, KING, NO_PIECE;}
 
     private static int countWhite;
     private static int countBlack;
@@ -22,6 +24,7 @@ public class Piece {
     private final Type type;
     private final Color color;
     private final char representation;
+    private double strength = 0;
 
     private Piece(Color color, Type type, char representation) {
         this.color = color;
@@ -127,5 +130,20 @@ public class Piece {
     public boolean isEqualTo(Piece that) {
         return (this.color == that.color) &&
                 (this.type == that.type);
+    }
+
+    public int compareTo(Piece that) {
+        if (this.strength > that.strength)
+            return -1;
+        if (this.strength < that.strength)
+            return 1;
+        return 0;
+    }
+
+    public void setStrength(double strength) {
+        this.strength = strength;
+    }
+    public double getStrength() {
+        return strength;
     }
 }

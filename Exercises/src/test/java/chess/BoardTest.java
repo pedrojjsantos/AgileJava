@@ -6,6 +6,11 @@ import org.junit.Test;
 import util.StringUtil;
 
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+import static chess.pieces.Piece.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -13,6 +18,7 @@ public class BoardTest {
     private Board board;
     private final String blankRank =
             StringUtil.appendNewLine(". . . . . . . .");
+    private final double STRENGTH_PRECISION = 0.05;
 
     @Before
     public void setUp() {
@@ -46,16 +52,16 @@ public class BoardTest {
                         StringUtil.appendNewLine("p p p p p p p p") +
                         StringUtil.appendNewLine("r n b q k b n r"),
                 board.print());
-        System.out.println(board.print());
+//        System.out.println(board.print());
     }
 
     @Test
     public void testPieceCount() {
         board.initialize();
-        final char whitePawnRepresentation = Piece.PAWN_CHAR;
-        final char blackPawnRepresentation = Character.toUpperCase(Piece.PAWN_CHAR);
-        final char whiteRookRepresentation = Piece.ROOK_CHAR;
-        final char blackKingRepresentation = Character.toUpperCase(Piece.KING_CHAR);
+        final char whitePawnRepresentation = PAWN_CHAR;
+        final char blackPawnRepresentation = Character.toUpperCase(PAWN_CHAR);
+        final char whiteRookRepresentation = ROOK_CHAR;
+        final char blackKingRepresentation = Character.toUpperCase(KING_CHAR);
 
         assertEquals(8, board.pieceCount(whitePawnRepresentation));
         assertEquals(8, board.pieceCount(blackPawnRepresentation));
@@ -93,16 +99,99 @@ public class BoardTest {
 
     @Test
     public void testStrength() {
-        final double constraint = 0.05;
-        assertEquals(0.0, board.getWhiteStrength(), constraint);
-        assertEquals(0.0, board.getBlackStrength(), constraint);
+        assertEquals(0.0, board.getWhiteStrength(), STRENGTH_PRECISION);
+        assertEquals(0.0, board.getBlackStrength(), STRENGTH_PRECISION);
 
+        verifyWhiteStrength();
+        verifyBlackStrength();
+
+        System.out.println(board.print());
+    }
+
+    private void verifyWhiteStrength() {
         board.putPiece("g4", Piece.createWhiteQueen());
+        assertEquals(9.0, board.getWhiteStrength(), STRENGTH_PRECISION);
+
+        board.putPiece("f4", Piece.createWhiteKnight());
+        assertEquals(11.5, board.getWhiteStrength(), STRENGTH_PRECISION);
+
+        board.putPiece("f3", Piece.createWhitePawn());
+        board.putPiece("h3", Piece.createWhitePawn());
+        assertEquals(13.5, board.getWhiteStrength(), STRENGTH_PRECISION);
+
+        board.putPiece("f2", Piece.createWhitePawn());
+        board.putPiece("g2", Piece.createWhitePawn());
+        assertEquals(14.5, board.getWhiteStrength(), STRENGTH_PRECISION);
+
+        board.putPiece("e1", Piece.createWhiteRook());
+        assertEquals(19.5, board.getWhiteStrength(), STRENGTH_PRECISION);
+    }
+    private void verifyBlackStrength() {
         board.putPiece("c8", Piece.createBlackRook());
+        assertEquals(5.0, board.getBlackStrength(), STRENGTH_PRECISION);
 
-        assertEquals(9.0, board.getWhiteStrength(), constraint);
-        assertEquals(5.0, board.getBlackStrength(), constraint);
+        board.putPiece("a7", Piece.createBlackPawn());
+        board.putPiece("c7", Piece.createBlackPawn());
+        assertEquals(7.0, board.getBlackStrength(), STRENGTH_PRECISION);
 
-        
+        board.putPiece("d7", Piece.createBlackBishop());
+        assertEquals(10.0, board.getBlackStrength(), STRENGTH_PRECISION);
+
+        board.putPiece("b6", Piece.createBlackPawn());
+        board.putPiece("e6", Piece.createBlackQueen());
+        assertEquals(20.0, board.getBlackStrength(), STRENGTH_PRECISION);
+    }
+
+    @Test
+    public void testPiecesCollections() {
+        verifyWhiteSortedPieces();
+        verifyBlackSortedPieces();
+    }
+
+    private void verifyWhiteSortedPieces() {
+        ArrayList<Piece> whitePieces = new ArrayList<>();
+        whitePieces.add(createWhitePieceWithStrength(0.0));
+        whitePieces.add(createWhitePieceWithStrength(9.5));
+        whitePieces.add(createWhitePieceWithStrength(5.5));
+
+        board.putPiece("c8",whitePieces.get(2));
+        board.putPiece("b8",whitePieces.get(1));
+        board.putPiece("a8",whitePieces.get(0));
+
+        Collections.sort(whitePieces);
+
+        List<Piece> boardWhitePieces = board.getWhitePieces();
+
+        for (int index = 0; index < 3; index++)
+            assertTrue(whitePieces.get(index).isEqualTo(boardWhitePieces.get(index)));
+    }
+
+    private void verifyBlackSortedPieces() {
+        ArrayList<Piece> blackPieces = new ArrayList<>();
+        blackPieces.add(createBlackPieceWithStrength(0.0));
+        blackPieces.add(createBlackPieceWithStrength(9.5));
+        blackPieces.add(createBlackPieceWithStrength(5.5));
+
+        board.putPiece("c8",blackPieces.get(2));
+        board.putPiece("b8",blackPieces.get(1));
+        board.putPiece("a8",blackPieces.get(0));
+
+        Collections.sort(blackPieces);
+
+        List<Piece> boardBlackPieces = board.getBlackPieces();
+
+        for (int index = 0; index < 3; index++)
+            assertTrue(blackPieces.get(index).isEqualTo(boardBlackPieces.get(index)));
+    }
+
+    private Piece createWhitePieceWithStrength(double strength) {
+        Piece piece = Piece.createWhitePawn();
+        piece.setStrength(strength);
+        return piece;
+    }
+    private Piece createBlackPieceWithStrength(double strength) {
+        Piece piece = Piece.createBlackPawn();
+        piece.setStrength(strength);
+        return piece;
     }
 }
