@@ -5,6 +5,7 @@ import util.StringUtil;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.EnumMap;
 import java.util.List;
 
 /**
@@ -14,6 +15,8 @@ public class Board {
     private final List<List<Piece>> ranks = new ArrayList<>(8);
     private final List<Piece> whitePieces = new ArrayList<>();
     private final List<Piece> blackPieces = new ArrayList<>();
+
+    private EnumMap<Piece.Type, Double> pieceBaseStrength;
 
 
     public Board() {
@@ -26,6 +29,27 @@ public class Board {
                 ranks.get(i).add(Piece.noPiece());
         }
     }
+
+    public double getPieceBaseStrength(Piece.Type piece) {
+        return baseStrength().get(piece);
+    }
+
+    private EnumMap<Piece.Type, Double> baseStrength() {
+        if (pieceBaseStrength == null)
+            loadBaseStrength();
+        return pieceBaseStrength;
+    }
+
+    private void loadBaseStrength() {
+        pieceBaseStrength = new EnumMap<>(Piece.Type.class);
+        pieceBaseStrength.put(Piece.Type.PAWN, 1.0);
+        pieceBaseStrength.put(Piece.Type.KING, 0.0);
+        pieceBaseStrength.put(Piece.Type.KNIGHT, 2.5);
+        pieceBaseStrength.put(Piece.Type.ROOK, 5.0);
+        pieceBaseStrength.put(Piece.Type.QUEEN, 9.0);
+        pieceBaseStrength.put(Piece.Type.BISHOP, 3.0);
+    }
+
 
     public void initialize() {
         Piece.resetCount();
@@ -75,10 +99,7 @@ public class Board {
         whitePieces.addAll(ranks.get(0));
         whitePieces.addAll(ranks.get(1));
     }
-
-    /**
-     * @return The number of pieces added to the board
-     */
+    
     public int pieceCount() {
         return Piece.getCountWhite() + Piece.getCountBlack();
     }
@@ -201,14 +222,7 @@ public class Board {
 
 
     private void assignStrengthTo(Piece piece) {
-        double strength = switch (piece.getType()) {
-            case ROOK   -> 5.0;
-            case KNIGHT -> 2.5;
-            case BISHOP -> 3.0;
-            case QUEEN  -> 9.0;
-            default     -> 0.0;
-        };
-        piece.setStrength(strength);
+        piece.setStrength(getPieceBaseStrength(piece.getType()));
     }
 
     public List<Piece> getWhitePieces() {

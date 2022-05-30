@@ -18,7 +18,24 @@ public class Piece implements Comparable<Piece> {
 
 
     // todo: refactor the representations to the enum;
-    public enum Type {PAWN, KNIGHT, ROOK, BISHOP, QUEEN, KING, NO_PIECE;}
+    public enum Type {
+        PAWN(1.0),
+        KNIGHT(2.5),
+        ROOK(5.0),
+        BISHOP(3.0),
+        QUEEN(9.0),
+        KING(0),
+        NO_PIECE(0);
+
+        private double strength;
+        Type(double strength){
+            this.strength = strength;
+        }
+
+        private double getStrength() {
+            return this.strength;
+        }
+    }
 
     private static int countWhite;
     private static int countBlack;
