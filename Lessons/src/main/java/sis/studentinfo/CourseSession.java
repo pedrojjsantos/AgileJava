@@ -7,83 +7,32 @@ import java.util.*;
  * session of a specific university course.
  * @author Administrator
  */
-public class CourseSession implements Comparable<CourseSession> {
+public class CourseSession extends Session {
     private static int count;
-    private int numberOfCredits;
-    private String department;
-    private String number;
-    private Date startDate;
-    private List<Student> students = new ArrayList<>();
 
-    private CourseSession(String department, String number, Date startDate) {
-        this.department = department;
-        this.number = number;
-        this.startDate = startDate;
+    public static CourseSession create(String department, String number, Date startDate) {
+        return new CourseSession(department, number, startDate);
     }
 
-    public static void resetCount() {
-        count = 0;
+    protected CourseSession(String department, String number, Date startDate) {
+        super(department, number, startDate);
+        incrementCount();
     }
 
     private static void incrementCount() {
         count++;
     }
 
+    public static void resetCount() {
+        count = 0;
+    }
+
     public static int getCount() {
         return count;
     }
 
-    public static CourseSession create(String department, String number, Date startDate) {
-        CourseSession.incrementCount();
-        return new CourseSession(department, number, startDate);
-    }
-
-    public String getDepartment() {
-        return department;
-    }
-
-    public String getNumber() {
-        return number;
-    }
-
-    public int getNumberOfStudents() {
-        return students.size();
-    }
-
-    public void enroll(Student s) {
-        s.addCredits(numberOfCredits);
-        students.add(s);
-    }
-
-    public Student get(int i) {
-        return students.get(i);
-    }
-
-    public List<Student> getAllStudents() {
-        return students;
-    }
-
-    public Date getEndDate() {
-        GregorianCalendar calendar = new GregorianCalendar();
-        calendar.setTime(startDate);
-
-        // weeks * days per week - 3 days (Friday to Sunday)
-        int numberOfDays = 16 * 7 - 3;
-        calendar.add(Calendar.DAY_OF_YEAR, numberOfDays);
-        return calendar.getTime();
-    }
-
-    public Date getStartDate() {
-        return startDate;
-    }
-
-    public void setNumberOfCredits(int credits) {
-        this.numberOfCredits = credits;
-    }
-
-    public int compareTo(CourseSession that) {
-        int comparison = this.getDepartment().compareTo(that.getDepartment());
-        return (comparison != 0) ?
-                comparison : this.getNumber().compareTo(that.getNumber());
+    @Override
+    protected int getSessionLength() {
+        return 16;
     }
 }

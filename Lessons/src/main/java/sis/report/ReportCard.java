@@ -7,10 +7,10 @@ import java.util.Map;
 
 public class ReportCard {
     public static final String A_MESSAGE = "Excellent";
-    public static final String B_MESSAGE = "Excellent";
-    public static final String C_MESSAGE = "Excellent";
-    public static final String D_MESSAGE = "Excellent";
-    public static final String F_MESSAGE = "Excellent";
+    public static final String B_MESSAGE = "Very good";
+    public static final String C_MESSAGE = "Hmmm...";
+    public static final String D_MESSAGE = "You're not trying";
+    public static final String F_MESSAGE = "Loser";
 
     private Map<Student.Grade, String> messages = null;
 

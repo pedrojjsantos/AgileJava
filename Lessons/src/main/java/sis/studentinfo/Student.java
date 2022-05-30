@@ -11,13 +11,29 @@ public class Student {
     private int credits;
     private List<Grade> grades = new ArrayList<>();
     private GradingStrategy gradingStrategy =
-            new RegularGradingStrategy();
+            new BasicGradingStrategy();
 
     public void setGradingStrategy(GradingStrategy strategy) {
         this.gradingStrategy = strategy;
     }
 
-    public enum Grade {A, B, C, D, F}
+    public enum Grade {
+        A(4),
+        B(3),
+        C(2),
+        D(1),
+        F(0);
+
+        private int points;
+
+        Grade(int points) {
+            this.points = points;
+        }
+
+        int getPoints() {
+            return points;
+        }
+    }
 
     public Student(String name) {
         this.name = name;

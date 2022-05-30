@@ -16,6 +16,8 @@ public class Piece implements Comparable<Piece> {
 
     private enum Color {WHITE, BLACK;}
 
+
+    // todo: refactor the representations to the enum;
     public enum Type {PAWN, KNIGHT, ROOK, BISHOP, QUEEN, KING, NO_PIECE;}
 
     private static int countWhite;
