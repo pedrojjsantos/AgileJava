@@ -7,6 +7,13 @@ import static chess.pieces.Piece.*;
 import static org.junit.Assert.*;
 
 public class PieceTest {
+    private final char PAWN_CHAR     = 'p';
+    private final char KNIGHT_CHAR   = 'n';
+    private final char ROOK_CHAR     = 'r';
+    private final char BISHOP_CHAR   = 'b';
+    private final char QUEEN_CHAR    = 'q';
+    private final char KING_CHAR     = 'k';
+    private final char NO_PIECE_CHAR = '.';
     @Test
     public void testCreate() {
         verifyCreation(
@@ -28,7 +35,7 @@ public class PieceTest {
                 Piece.createWhiteKing(), Piece.createBlackKing(),
                 Type.KING, KING_CHAR);
         Piece blank = Piece.noPiece();
-        assertEquals('.', blank.print());
+        assertEquals(NO_PIECE_CHAR, blank.print());
         assertEquals(Type.NO_PIECE, blank.getType());
     }
 
@@ -73,7 +80,7 @@ public class PieceTest {
 
         assertTrue(blackPiece.isBlack());
         assertEquals(type, blackPiece.getType());
-        assertEquals(Character.toUpperCase(representation), blackPiece.print());
+        assertEquals(representation, blackPiece.print());
     }
 
     @Test
@@ -87,22 +94,18 @@ public class PieceTest {
     }
 
     private void verifyStrength(double strength, Piece piece) {
-        piece.setStrength(strength);
         assertEquals(strength, piece.getStrength(), 0.05);
     }
 
     @Test
     public void testCompare() {
-        Piece piece1 = Piece.noPiece();
-        piece1.setStrength(9);
-        Piece piece2 = Piece.noPiece();
-        piece2.setStrength(5);
-        Piece piece3 = Piece.noPiece();
-        piece3.setStrength(9);
+        Piece whiteQueen = createWhiteQueen();
+        Piece blackRook = createBlackRook();
+        Piece blackQueen = createBlackQueen();
 
-        assertTrue(piece1.compareTo(piece2) < 0);
-        assertTrue(piece2.compareTo(piece1) > 0);
-        assertEquals(0, piece1.compareTo(piece3));
-        assertEquals(0, piece3.compareTo(piece1));
+        assertTrue(whiteQueen.compareTo(blackRook) < 0);
+        assertTrue(blackRook.compareTo(whiteQueen) > 0);
+        assertEquals(0, whiteQueen.compareTo(blackQueen));
+        assertEquals(0, blackQueen.compareTo(whiteQueen));
     }
 }
