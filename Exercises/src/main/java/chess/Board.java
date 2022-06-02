@@ -94,17 +94,6 @@ public class Board {
         return count;
     }
 
-    private int pieceCountInFile(int file, Piece piece) {
-        int count = 0;
-
-        for (int i = 0; i < 8; i++) {
-            if (ranks.get(i).get(file).isEqualTo(piece))
-                count++;
-        }
-
-        return count;
-    }
-
     private String printRank(List<Piece> rank) {
         StringBuilder buffer = new StringBuilder();
         for (Piece piece : rank) {
@@ -150,82 +139,11 @@ public class Board {
         }
     }
 
-    public double getWhiteStrength() {
-        double strength = 0;
-
-        for (Piece piece : whitePieces) {
-            if (piece.getType() != Piece.Type.PAWN)
-                strength += piece.getStrength();
-        }
-
-        strength += getWhitePawnsStrength();
-
-        return strength;
-    }
-
-    private double getWhitePawnsStrength() {
-        double strengthCount = 0;
-
-        for (int file = 0; file < 8; file++) {
-            int nPawnsInFile = pieceCountInFile(file, Piece.createWhitePawn());
-            double pawnStrength = (nPawnsInFile > 1) ? 0.5 : 1.0;
-
-            strengthCount += pawnStrength * nPawnsInFile;
-        }
-        return strengthCount;
-    }
-
-    public double getBlackStrength() {
-        double strength = 0;
-
-        for (Piece piece : blackPieces) {
-            if (piece.getType() != Piece.Type.PAWN)
-                strength += piece.getStrength();
-        }
-
-        strength += getBlackPawnsStrength();
-
-        return strength;
-    }
-
-    private double getBlackPawnsStrength() {
-        double strengthCount = 0;
-
-        for (int file = 0; file < 8; file++) {
-            int nPawnsInFile = pieceCountInFile(file, Piece.createBlackPawn());
-            double pawnStrength = (nPawnsInFile > 1) ? 0.5 : 1.0;
-
-            strengthCount += pawnStrength * nPawnsInFile;
-        }
-
-        return strengthCount;
-    }
-
     public List<Piece> getWhitePieces() {
         return whitePieces;
     }
     public List<Piece> getBlackPieces() {
         return blackPieces;
-    }
-
-    public void moveKing(String currentPos, String nextPos) {
-        if (isValidKingMovement(currentPos, nextPos)) {
-            Piece king = getPiece(currentPos);
-            put(nextPos, king);
-            put(currentPos, Piece.noPiece());
-        }
-    }
-
-    private boolean isValidKingMovement(String currentPos, String nextPos) {
-        if (!isValidPosition(currentPos) || !isValidPosition(nextPos))
-            return false;
-
-        int fileCurrPos = currentPos.charAt(0) - 'a';
-        int rankCurrPos = currentPos.charAt(1) - '1';
-        int fileNextPos = nextPos.charAt(0) - 'a';
-        int rankNextPos = nextPos.charAt(1) - '1';
-
-        return Math.abs(fileCurrPos - fileNextPos) == 1 || Math.abs(rankCurrPos - rankNextPos) == 1;
     }
 
     public static boolean isValidPosition(String pos) {
@@ -235,5 +153,25 @@ public class Board {
         int rank = pos.charAt(1) - '1';
 
         return file >= 0 && file < 8 && rank >= 0 && rank < 8;
+    }
+
+    public List<String> getFilePositions(String pos) {
+        ArrayList<String> positions = new ArrayList<>();
+
+        char file = pos.charAt(0);
+
+        for (int i = 0; i < 8; i++)
+            positions.add(StringUtil.join2Chars(file, i + '1'));
+        return positions;
+    }
+
+    public List<String> getRankPositions(String pos) {
+        ArrayList<String> positions = new ArrayList<>();
+
+        char rank = pos.charAt(1);
+
+        for (int i = 0; i < 8; i++)
+            positions.add(StringUtil.join2Chars(rank, i + 'a'));
+        return positions;
     }
 }
