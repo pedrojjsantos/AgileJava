@@ -89,7 +89,7 @@ public class BoardTest {
     }
 
     private void verifyPutPiece(String position, Piece piece) {
-        board.putPiece(position, piece);
+        board.put(position, piece);
         assertEquals(piece, board.getPiece(position));
     }
 
@@ -105,36 +105,36 @@ public class BoardTest {
     }
 
     private void verifyWhiteStrength() {
-        board.putPiece("g4", createWhiteQueen());
+        board.put("g4", createWhiteQueen());
         assertEquals(9.0, board.getWhiteStrength(), STRENGTH_PRECISION);
 
-        board.putPiece("f4", createWhiteKnight());
+        board.put("f4", createWhiteKnight());
         assertEquals(11.5, board.getWhiteStrength(), STRENGTH_PRECISION);
 
-        board.putPiece("f3", createWhitePawn());
-        board.putPiece("h3", createWhitePawn());
+        board.put("f3", createWhitePawn());
+        board.put("h3", createWhitePawn());
         assertEquals(13.5, board.getWhiteStrength(), STRENGTH_PRECISION);
 
-        board.putPiece("f2", createWhitePawn());
-        board.putPiece("g2", createWhitePawn());
+        board.put("f2", createWhitePawn());
+        board.put("g2", createWhitePawn());
         assertEquals(14.5, board.getWhiteStrength(), STRENGTH_PRECISION);
 
-        board.putPiece("e1", createWhiteRook());
+        board.put("e1", createWhiteRook());
         assertEquals(19.5, board.getWhiteStrength(), STRENGTH_PRECISION);
     }
     private void verifyBlackStrength() {
-        board.putPiece("c8", createBlackRook());
+        board.put("c8", createBlackRook());
         assertEquals(5.0, board.getBlackStrength(), STRENGTH_PRECISION);
 
-        board.putPiece("a7", createBlackPawn());
-        board.putPiece("c7", createBlackPawn());
+        board.put("a7", createBlackPawn());
+        board.put("c7", createBlackPawn());
         assertEquals(7.0, board.getBlackStrength(), STRENGTH_PRECISION);
 
-        board.putPiece("d7", createBlackBishop());
+        board.put("d7", createBlackBishop());
         assertEquals(10.0, board.getBlackStrength(), STRENGTH_PRECISION);
 
-        board.putPiece("b6", createBlackPawn());
-        board.putPiece("e6", createBlackQueen());
+        board.put("b6", createBlackPawn());
+        board.put("e6", createBlackQueen());
         assertEquals(20.0, board.getBlackStrength(), STRENGTH_PRECISION);
     }
 
@@ -150,9 +150,9 @@ public class BoardTest {
         whitePieces.add(createWhiteQueen());
         whitePieces.add(createWhiteRook());
 
-        board.putPiece("c8",whitePieces.get(2));
-        board.putPiece("b8",whitePieces.get(1));
-        board.putPiece("a8",whitePieces.get(0));
+        board.put("c8",whitePieces.get(2));
+        board.put("b8",whitePieces.get(1));
+        board.put("a8",whitePieces.get(0));
 
         Collections.sort(whitePieces);
 
@@ -168,9 +168,9 @@ public class BoardTest {
         blackPieces.add(createBlackQueen());
         blackPieces.add(createBlackRook());
 
-        board.putPiece("c8",blackPieces.get(2));
-        board.putPiece("b8",blackPieces.get(1));
-        board.putPiece("a8",blackPieces.get(0));
+        board.put("c8",blackPieces.get(2));
+        board.put("b8",blackPieces.get(1));
+        board.put("a8",blackPieces.get(0));
 
         Collections.sort(blackPieces);
 
@@ -196,7 +196,7 @@ public class BoardTest {
     private void verifyMovement(String currentPos, String nextPos) {
         Piece king = createWhiteKing();
 
-        board.putPiece(currentPos, king);
+        board.put(currentPos, king);
         assertEquals(king, board.getPiece(currentPos));
 
         board.moveKing(currentPos, nextPos);

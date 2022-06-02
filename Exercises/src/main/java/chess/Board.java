@@ -5,7 +5,6 @@ import util.StringUtil;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.EnumMap;
 import java.util.List;
 
 /**
@@ -135,7 +134,7 @@ public class Board {
         return ranks.get(rankNumber).get(index);
     }
 
-    public void putPiece(String position, Piece piece) {
+    public void put(String position, Piece piece) {
         int index = position.charAt(0) - 'a';
         int rankNumber = position.charAt(1) - '1';
 
@@ -212,8 +211,8 @@ public class Board {
     public void moveKing(String currentPos, String nextPos) {
         if (isValidKingMovement(currentPos, nextPos)) {
             Piece king = getPiece(currentPos);
-            putPiece(nextPos, king);
-            putPiece(currentPos, Piece.noPiece());
+            put(nextPos, king);
+            put(currentPos, Piece.noPiece());
         }
     }
 
@@ -229,7 +228,7 @@ public class Board {
         return Math.abs(fileCurrPos - fileNextPos) == 1 || Math.abs(rankCurrPos - rankNextPos) == 1;
     }
 
-    private boolean isValidPosition(String pos) {
+    public static boolean isValidPosition(String pos) {
         if (pos.length() < 2) return false;
 
         int file = pos.charAt(0) - 'a';
