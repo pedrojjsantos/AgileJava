@@ -63,7 +63,42 @@ public class Game {
     }
 
     private List<String> possibleQueenMoves(String pos) {
-        
+        ArrayList<String> moves = new ArrayList<>();
+
+        if (Board.isValidPosition(pos)) {
+            char file = pos.charAt(0);
+            char rank = pos.charAt(1);
+
+            // Horizontal and Vertical movement
+            for (int i = 0; i < 8; i++) {
+                if (i + '1' != rank)
+                    moves.add(StringUtil.join2Chars(file, i + '1'));
+                if (i + 'a' != file)
+                    moves.add(StringUtil.join2Chars(i + 'a', rank));
+            }
+
+            // First diagonal
+            for (int i = 1; i <= 8; i++) {
+                if (file + i > 'h' || rank + i > '8') break;
+                moves.add(StringUtil.join2Chars(file+i, rank+i));
+            }
+            for (int i = 1; i <= 8; i++) {
+                if (file - i < 'a' || rank - i < '1') break;
+                moves.add(StringUtil.join2Chars(file-i, rank-i));
+            }
+
+            // Second Diagonal
+            for (int i = 1; i <= 8; i++) {
+                if (file + i > 'h' || rank - i < '1') break;
+                moves.add(StringUtil.join2Chars(file+i, rank-i));
+            }
+            for (int i = 1; i <= 8; i++) {
+                if (file - i < 'a' || rank + i > '8') break;
+                moves.add(StringUtil.join2Chars(file-i, rank+i));
+            }
+        }
+
+        return moves;
     }
 
 }
