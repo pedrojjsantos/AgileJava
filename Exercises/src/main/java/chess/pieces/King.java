@@ -8,7 +8,7 @@ import java.util.List;
 
 public class King extends Piece{
     King(Color color) {
-        super(color, Type.KING, 0.0);
+        super(color, 'k', 0.0);
     }
 
     public List<String> getPossibleMoves(String pos, Board board) {

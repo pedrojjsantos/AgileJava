@@ -5,23 +5,30 @@ import org.junit.Test;
 
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
-public class KingTest {
-    @Test
-    public void testCreate() {
-        King whiteKing = Piece.createWhiteKing();
-        King blackKing = Piece.createBlackKing();
-
-        assertTrue(whiteKing.isWhite());
-        assertEquals(Piece.Type.KING, whiteKing.getType());
-        assertEquals('k', whiteKing.print());
-
-        assertTrue(blackKing.isBlack());
-        assertEquals(Piece.Type.KING, blackKing.getType());
-        assertEquals('k', blackKing.print());
+public class KingTest extends PieceTest {
+    @Override
+    protected Piece createWhitePiece() {
+        return Piece.createWhiteKing();
     }
+
+    @Override
+    protected Piece createBlackPiece() {
+        return Piece.createBlackKing();
+    }
+
+    @Override
+    protected void verifyCreation(Piece whitePiece, Piece blackPiece) {
+        assertTrue(whitePiece.isWhite());
+        assertSame(King.class, whitePiece.getClass());
+        assertEquals('k', whitePiece.print());
+
+        assertTrue(blackPiece.isBlack());
+        assertEquals(King.class, blackPiece.getClass());
+        assertEquals('k', blackPiece.print());
+    }
+
     @Test
     public void testKingMoves() {
         Board board = new Board();

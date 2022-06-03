@@ -16,8 +16,6 @@ public class Board {
     private final List<Piece> blackPieces = new ArrayList<>();
 
     public Board() {
-        Piece.resetCount();
-
         for (int i = 0; i < 8; i++) {
             ranks.add(new ArrayList<>(8));
 
@@ -27,7 +25,8 @@ public class Board {
     }
 
     public void initialize() {
-        Piece.resetCount();
+        whitePieces.clear();
+        blackPieces.clear();
 
         initWhiteRanks();
         initBlankRanks();

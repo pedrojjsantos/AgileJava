@@ -1,10 +1,6 @@
 package chess;
 
 import chess.pieces.Piece;
-import util.StringUtil;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class Game {
     private final Board board;
@@ -42,9 +38,10 @@ public class Game {
 
     public double getWhiteStrength() {
         double strength = 0;
+        Piece pawn = Piece.createWhitePawn();
 
         for (Piece piece : board.getWhitePieces()) {
-            if (piece.getType() != Piece.Type.PAWN)
+            if (piece.isEqualTo(pawn))
                 strength += piece.getStrength();
         }
 
@@ -67,9 +64,10 @@ public class Game {
 
     public double getBlackStrength() {
         double strength = 0;
+        Piece pawn = Piece.createBlackPawn();
 
         for (Piece piece : board.getBlackPieces()) {
-            if (piece.getType() != Piece.Type.PAWN)
+            if (piece.isEqualTo(pawn))
                 strength += piece.getStrength();
         }
 

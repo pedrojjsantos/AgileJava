@@ -7,7 +7,7 @@ import java.util.List;
 
 public class Queen extends Piece{
     Queen(Color color) {
-        super(color, Type.QUEEN, 9.0);
+        super(color, 'q', 9.0);
     }
 
     public List<String> getPossibleMoves(String pos, Board board) {
