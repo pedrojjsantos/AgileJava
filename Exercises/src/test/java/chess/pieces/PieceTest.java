@@ -1,7 +1,10 @@
 package chess.pieces;
 
+import chess.Board;
 import chess.pieces.Piece.Type;
 import org.junit.Test;
+
+import java.util.List;
 
 import static chess.pieces.Piece.*;
 import static org.junit.Assert.*;
@@ -39,6 +42,17 @@ public class PieceTest {
         assertEquals(Type.NO_PIECE, blank.getType());
     }
 
+    private void verifyCreation(Piece whitePiece, Piece blackPiece,
+                                Type type, char representation) {
+        assertTrue(whitePiece.isWhite());
+        assertEquals(type, whitePiece.getType());
+        assertEquals(representation, whitePiece.print());
+
+        assertTrue(blackPiece.isBlack());
+        assertEquals(type, blackPiece.getType());
+        assertEquals(representation, blackPiece.print());
+    }
+
     @Test
     public void testCount() {
         Piece.resetCount();
@@ -72,17 +86,6 @@ public class PieceTest {
 
     }
 
-    private void verifyCreation(Piece whitePiece, Piece blackPiece,
-                                Type type, char representation) {
-        assertTrue(whitePiece.isWhite());
-        assertEquals(type, whitePiece.getType());
-        assertEquals(representation, whitePiece.print());
-
-        assertTrue(blackPiece.isBlack());
-        assertEquals(type, blackPiece.getType());
-        assertEquals(representation, blackPiece.print());
-    }
-
     @Test
     public void testSetStrength() {
         verifyStrength(1.0, Piece.createWhitePawn());
@@ -107,5 +110,73 @@ public class PieceTest {
         assertTrue(blackRook.compareTo(whiteQueen) > 0);
         assertEquals(0, whiteQueen.compareTo(blackQueen));
         assertEquals(0, blackQueen.compareTo(whiteQueen));
+    }
+
+    @Test
+    public void testKingMoves() {
+        Board board = new Board();
+        Piece king = Piece.createWhiteKing();
+
+        List<String> possibleMoves = king.getPossibleMoves("d4", board);
+
+        assertEquals(8, possibleMoves.size());
+        assertTrue(possibleMoves.contains("c3"));
+        assertTrue(possibleMoves.contains("c4"));
+        assertTrue(possibleMoves.contains("c5"));
+        assertTrue(possibleMoves.contains("d3"));
+        assertTrue(possibleMoves.contains("d5"));
+        assertTrue(possibleMoves.contains("e3"));
+        assertTrue(possibleMoves.contains("e4"));
+        assertTrue(possibleMoves.contains("e5"));
+
+        board.put("a2", king);
+
+        possibleMoves = king.getPossibleMoves("a2", board);
+
+        assertEquals(5, possibleMoves.size());
+        assertTrue(possibleMoves.contains("a1"));
+        assertTrue(possibleMoves.contains("a3"));
+        assertTrue(possibleMoves.contains("b1"));
+        assertTrue(possibleMoves.contains("b2"));
+        assertTrue(possibleMoves.contains("b3"));
+    }
+
+    @Test
+    public void testQueenMoves() {
+        Board board = new Board();
+        Piece queen = Piece.createBlackQueen();
+        board.put("d3", queen);
+
+        List<String> possibleMoves = queen.getPossibleMoves("d3", board);
+
+        assertEquals(25, possibleMoves.size());
+        assertTrue(possibleMoves.contains("d1"));
+        assertTrue(possibleMoves.contains("d2"));
+        assertTrue(possibleMoves.contains("d4"));
+        assertTrue(possibleMoves.contains("d5"));
+        assertTrue(possibleMoves.contains("d6"));
+        assertTrue(possibleMoves.contains("d7"));
+        assertTrue(possibleMoves.contains("d8"));
+
+        assertTrue(possibleMoves.contains("a3"));
+        assertTrue(possibleMoves.contains("b3"));
+        assertTrue(possibleMoves.contains("c3"));
+        assertTrue(possibleMoves.contains("e3"));
+        assertTrue(possibleMoves.contains("f3"));
+        assertTrue(possibleMoves.contains("g3"));
+        assertTrue(possibleMoves.contains("h3"));
+
+        assertTrue(possibleMoves.contains("b1"));
+        assertTrue(possibleMoves.contains("c2"));
+        assertTrue(possibleMoves.contains("e4"));
+        assertTrue(possibleMoves.contains("f5"));
+        assertTrue(possibleMoves.contains("g6"));
+        assertTrue(possibleMoves.contains("h7"));
+
+        assertTrue(possibleMoves.contains("a6"));
+        assertTrue(possibleMoves.contains("b5"));
+        assertTrue(possibleMoves.contains("c4"));
+        assertTrue(possibleMoves.contains("e2"));
+        assertTrue(possibleMoves.contains("f1"));
     }
 }
