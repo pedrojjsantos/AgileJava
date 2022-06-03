@@ -44,7 +44,6 @@ public class BoardTest {
         assertEquals(16, Piece.getCountWhite());
         assertEquals(16, Piece.getCountBlack());
 
-        System.out.println(board.print());
         assertEquals(
                 StringUtil.appendNewLine("R N B Q K B N R") +
                         StringUtil.appendNewLine("P P P P P P P P") +
@@ -135,16 +134,52 @@ public class BoardTest {
 
     @Test
     public void testGetFilePositions() {
-        List<String> file = board.getFilePositions("b4");
+        List<String> positions = board.getFilePositionsAt("b4");
 
-        assertEquals("b1", file.get(0));
-        assertEquals("b2", file.get(1));
-        assertEquals("b3", file.get(2));
-        assertEquals("b4", file.get(3));
-        assertEquals("b5", file.get(4));
-        assertEquals("b6", file.get(5));
-        assertEquals("b7", file.get(6));
-        assertEquals("b8", file.get(7));
+        assertEquals(8, positions.size());
+        assertEquals("b1", positions.get(0));
+        assertEquals("b2", positions.get(1));
+        assertEquals("b3", positions.get(2));
+        assertEquals("b4", positions.get(3));
+        assertEquals("b5", positions.get(4));
+        assertEquals("b6", positions.get(5));
+        assertEquals("b7", positions.get(6));
+        assertEquals("b8", positions.get(7));
 
+    }
+
+    @Test
+    public void testGetRankPositions() {
+        List<String> positions = board.getRankPositionsAt("a5");
+
+        assertEquals(8, positions.size());
+        assertEquals("a5", positions.get(0));
+        assertEquals("b5", positions.get(1));
+        assertEquals("c5", positions.get(2));
+        assertEquals("d5", positions.get(3));
+        assertEquals("e5", positions.get(4));
+        assertEquals("f5", positions.get(5));
+        assertEquals("g5", positions.get(6));
+        assertEquals("h5", positions.get(7));
+    }
+
+    @Test
+    public void testGetDiagonalPositions() {
+        List<String> positions = board.getDiagonalPositionsAt("d3");
+
+        assertEquals(12, positions.size());
+        assertTrue(positions.contains("b1"));
+        assertTrue(positions.contains("c2"));
+        assertTrue(positions.contains("e4"));
+        assertTrue(positions.contains("f5"));
+        assertTrue(positions.contains("g6"));
+        assertTrue(positions.contains("h7"));
+
+        assertTrue(positions.contains("a6"));
+        assertTrue(positions.contains("b5"));
+        assertTrue(positions.contains("c4"));
+        assertTrue(positions.contains("d3"));
+        assertTrue(positions.contains("e2"));
+        assertTrue(positions.contains("f1"));
     }
 }

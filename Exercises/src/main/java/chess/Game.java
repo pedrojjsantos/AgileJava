@@ -50,7 +50,7 @@ public class Game {
         double strengthCount = 0;
 
         for (int file = 0; file < 8; file++) {
-            int nPawnsInFile = pieceCountInFile(file, Piece.createWhitePawn());
+            int nPawnsInFile = board.pieceCountInFile(file, Piece.createWhitePawn());
             double pawnStrength = (nPawnsInFile > 1) ? 0.5 : 1.0;
 
             strengthCount += pawnStrength * nPawnsInFile;
@@ -75,7 +75,7 @@ public class Game {
         double strengthCount = 0;
 
         for (int file = 0; file < 8; file++) {
-            int nPawnsInFile = pieceCountInFile(file, Piece.createBlackPawn());
+            int nPawnsInFile = board.pieceCountInFile(file, Piece.createBlackPawn());
             double pawnStrength = (nPawnsInFile > 1) ? 0.5 : 1.0;
 
             strengthCount += pawnStrength * nPawnsInFile;
@@ -119,36 +119,11 @@ public class Game {
         ArrayList<String> moves = new ArrayList<>();
 
         if (Board.isValidPosition(pos)) {
-            char file = pos.charAt(0);
-            char rank = pos.charAt(1);
+            moves.addAll(board.getFilePositionsAt(pos));
+            moves.addAll(board.getRankPositionsAt(pos));
+            moves.addAll(board.getDiagonalPositionsAt(pos));
 
-            // Horizontal and Vertical movement
-            for (int i = 0; i < 8; i++) {
-                if (i + '1' != rank)
-                    moves.add(StringUtil.join2Chars(file, i + '1'));
-                if (i + 'a' != file)
-                    moves.add(StringUtil.join2Chars(i + 'a', rank));
-            }
-
-            // First diagonal
-            for (int i = 1; i <= 8; i++) {
-                if (file + i > 'h' || rank + i > '8') break;
-                moves.add(StringUtil.join2Chars(file+i, rank+i));
-            }
-            for (int i = 1; i <= 8; i++) {
-                if (file - i < 'a' || rank - i < '1') break;
-                moves.add(StringUtil.join2Chars(file-i, rank-i));
-            }
-
-            // Second Diagonal
-            for (int i = 1; i <= 8; i++) {
-                if (file + i > 'h' || rank - i < '1') break;
-                moves.add(StringUtil.join2Chars(file+i, rank-i));
-            }
-            for (int i = 1; i <= 8; i++) {
-                if (file - i < 'a' || rank + i > '8') break;
-                moves.add(StringUtil.join2Chars(file-i, rank+i));
-            }
+            moves.removeIf(p -> p.equals(pos));
         }
 
         return moves;

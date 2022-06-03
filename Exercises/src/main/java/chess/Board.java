@@ -155,23 +155,68 @@ public class Board {
         return file >= 0 && file < 8 && rank >= 0 && rank < 8;
     }
 
-    public List<String> getFilePositions(String pos) {
+    public int pieceCountInFile(int file, Piece piece) {
+        List<String> filePositions = getFilePositionsAt(StringUtil.join2Chars('a' + file, '1'));
+        int count = 0;
+        for (String pos : filePositions) {
+            if (getPiece(pos).isEqualTo(piece))
+                count++;
+        }
+        return count;
+    }
+
+    public List<String> getFilePositionsAt(String pos) {
         ArrayList<String> positions = new ArrayList<>();
 
-        char file = pos.charAt(0);
+        if (isValidPosition(pos)) {
+            char file = pos.charAt(0);
 
-        for (int i = 0; i < 8; i++)
-            positions.add(StringUtil.join2Chars(file, i + '1'));
+            for (int i = 0; i < 8; i++)
+                positions.add(StringUtil.join2Chars(file, i + '1'));
+        }
         return positions;
     }
 
-    public List<String> getRankPositions(String pos) {
+    public List<String> getRankPositionsAt(String pos) {
         ArrayList<String> positions = new ArrayList<>();
 
-        char rank = pos.charAt(1);
+        if (isValidPosition(pos)){
+            char rank = pos.charAt(1);
 
-        for (int i = 0; i < 8; i++)
-            positions.add(StringUtil.join2Chars(rank, i + 'a'));
+            for (int i = 0; i < 8; i++)
+                positions.add(StringUtil.join2Chars(i + 'a', rank));
+        }
+        return positions;
+    }
+
+    public List<String> getDiagonalPositionsAt(String pos) {
+        ArrayList<String> positions = new ArrayList<>();
+
+        if (Board.isValidPosition(pos)) {
+            char file = pos.charAt(0);
+            char rank = pos.charAt(1);
+
+            // First diagonal
+            for (int i = 0; i <= 8; i++) {
+                if (file + i > 'h' || rank + i > '8') break;
+                positions.add(StringUtil.join2Chars(file+i, rank+i));
+            }
+            for (int i = 1; i <= 8; i++) {
+                if (file - i < 'a' || rank - i < '1') break;
+                positions.add(StringUtil.join2Chars(file-i, rank-i));
+            }
+
+            // Second Diagonal
+            for (int i = 1; i <= 8; i++) {
+                if (file + i > 'h' || rank - i < '1') break;
+                positions.add(StringUtil.join2Chars(file+i, rank-i));
+            }
+            for (int i = 1; i <= 8; i++) {
+                if (file - i < 'a' || rank + i > '8') break;
+                positions.add(StringUtil.join2Chars(file-i, rank+i));
+            }
+        }
+
         return positions;
     }
 }
