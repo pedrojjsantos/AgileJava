@@ -21,6 +21,13 @@ public class Game {
         return board.pieceCount();
     }
 
+    public int getCountWhite() {
+        return board.getCountWhite();
+    }
+    public int getCountBlack() {
+        return board.getCountBlack();
+    }
+
     public String printBoard() {
         return board.print();
     }

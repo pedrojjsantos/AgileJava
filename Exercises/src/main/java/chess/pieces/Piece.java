@@ -41,16 +41,27 @@ public class Piece implements Comparable<Piece> {
 
     private final Type type;
     private final Color color;
+    private double strength = 0;
 
-    private Piece(Color color, Type type) {
+    protected Piece(Color color, Type type) {
         this.color = color;
         this.type = type;
+    }
+
+    protected Piece(Color color, Type type, double strength) {
+        this.color = color;
+        this.strength = strength;
+        this.type = type;
+
+        switch (color) {
+            case WHITE -> incrementWhiteCount();
+            case BLACK -> incrementBlackCount();
+        }
     }
 
     public static Piece noPiece() {
         return new Piece(Color.WHITE, Type.NO_PIECE);
     }
-
     private static Piece createPiece(Color color, Type type) {
         switch (color) {
             case WHITE -> incrementWhiteCount();
@@ -60,44 +71,44 @@ public class Piece implements Comparable<Piece> {
     }
 
     // White Pieces
-    public static Piece createWhitePawn() {
-        return createPiece(Color.WHITE, Type.PAWN);
+    public static Pawn createWhitePawn() {
+        return new Pawn(Color.WHITE);
     }
-    public static Piece createWhiteKnight() {
-        return createPiece(Color.WHITE, Type.KNIGHT);
+    public static Knight createWhiteKnight() {
+        return new Knight(Color.WHITE);
     }
-    public static Piece createWhiteRook() {
-        return createPiece(Color.WHITE, Type.ROOK);
+    public static Rook createWhiteRook() {
+        return new Rook(Color.WHITE);
     }
-    public static Piece createWhiteBishop() {
-        return createPiece(Color.WHITE, Type.BISHOP);
+    public static Bishop createWhiteBishop() {
+        return new Bishop(Color.WHITE);
     }
-    public static Piece createWhiteQueen() {
-        return createPiece(Color.WHITE, Type.QUEEN);
+    public static Queen createWhiteQueen() {
+        return new Queen(Color.WHITE);
     }
-    public static Piece createWhiteKing() {
-        return createPiece(Color.WHITE, Type.KING);
+    public static King createWhiteKing() {
+        return new King(Color.WHITE);
     }
 
 
     // Black Pieces
-    public static Piece createBlackPawn() {
-        return createPiece(Color.BLACK, Type.PAWN);
+    public static Pawn createBlackPawn() {
+        return new Pawn(Color.BLACK);
     }
-    public static Piece createBlackKnight() {
-        return createPiece(Color.BLACK, Type.KNIGHT);
+    public static Knight createBlackKnight() {
+        return new Knight(Color.BLACK);
     }
-    public static Piece createBlackRook() {
-        return createPiece(Color.BLACK, Type.ROOK);
+    public static Rook createBlackRook() {
+        return new Rook(Color.BLACK);
     }
-    public static Piece createBlackBishop() {
-        return createPiece(Color.BLACK, Type.BISHOP);
+    public static Bishop createBlackBishop() {
+        return new Bishop(Color.BLACK);
     }
-    public static Piece createBlackQueen() {
-        return createPiece(Color.BLACK, Type.QUEEN);
+    public static Queen createBlackQueen() {
+        return new Queen(Color.BLACK);
     }
-    public static Piece createBlackKing() {
-        return createPiece(Color.BLACK, Type.KING);
+    public static King createBlackKing() {
+        return new King(Color.BLACK);
     }
 
 
@@ -148,47 +159,4 @@ public class Piece implements Comparable<Piece> {
         return this.type.getStrength();
     }
 
-    public List<String> getPossibleMoves(String pos, Board board) {
-        return switch (getType()) {
-            case KING  -> possibleKingMoves(pos);
-            case QUEEN -> possibleQueenMoves(pos, board);
-            default    -> new ArrayList<String>();
-        };
-    }
-
-    private List<String> possibleKingMoves(String pos) {
-        ArrayList<String> moves = new ArrayList<>();
-
-        if (Board.isValidPosition(pos)) {
-            char file = pos.charAt(0);
-            char rank = pos.charAt(1);
-
-            moves.add(StringUtil.join2Chars(file + 1, rank + 1));
-            moves.add(StringUtil.join2Chars(file + 1, rank));
-            moves.add(StringUtil.join2Chars(file + 1, rank - 1));
-            moves.add(StringUtil.join2Chars(file, rank + 1));
-            moves.add(StringUtil.join2Chars(file, rank - 1));
-            moves.add(StringUtil.join2Chars(file - 1, rank + 1));
-            moves.add(StringUtil.join2Chars(file - 1, rank));
-            moves.add(StringUtil.join2Chars(file - 1, rank - 1));
-
-            moves.removeIf(position -> !Board.isValidPosition(position));
-        }
-
-        return moves;
-    }
-
-    private List<String> possibleQueenMoves(String pos, Board board) {
-        ArrayList<String> moves = new ArrayList<>();
-
-        if (Board.isValidPosition(pos)) {
-            moves.addAll(board.getFilePositionsAt(pos));
-            moves.addAll(board.getRankPositionsAt(pos));
-            moves.addAll(board.getDiagonalPositionsAt(pos));
-
-            moves.removeIf(p -> p.equals(pos));
-        }
-
-        return moves;
-    }
 }

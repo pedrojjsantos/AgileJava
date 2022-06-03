@@ -35,8 +35,8 @@ public class GameTest {
     public void testInitialize() {
         game.initialize();
         assertEquals(32, game.pieceCount());
-        assertEquals(16, Piece.getCountWhite());
-        assertEquals(16, Piece.getCountBlack());
+        assertEquals(16, game.getCountWhite());
+        assertEquals(16, game.getCountBlack());
 
         System.out.println(game.printBoard());
         assertEquals(

@@ -41,8 +41,8 @@ public class BoardTest {
     public void testInitialize() {
         board.initialize();
         assertEquals(32, board.pieceCount());
-        assertEquals(16, Piece.getCountWhite());
-        assertEquals(16, Piece.getCountBlack());
+        assertEquals(16, board.getCountWhite());
+        assertEquals(16, board.getCountBlack());
 
         assertEquals(
                 StringUtil.appendNewLine("R N B Q K B N R") +

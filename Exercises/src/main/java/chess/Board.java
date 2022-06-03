@@ -76,7 +76,14 @@ public class Board {
 
         Collections.sort(whitePieces);
     }
-    
+
+    public int getCountWhite() {
+        return whitePieces.size();
+    }
+    public int getCountBlack() {
+        return blackPieces.size();
+    }
+
     public int pieceCount() {
         return whitePieces.size() + blackPieces.size();
     }
@@ -91,6 +98,16 @@ public class Board {
             }
         }
 
+        return count;
+    }
+
+    public int pieceCountInFile(int file, Piece piece) {
+        List<String> filePositions = getFilePositionsAt(StringUtil.join2Chars('a' + file, '1'));
+        int count = 0;
+        for (String pos : filePositions) {
+            if (getPiece(pos).isEqualTo(piece))
+                count++;
+        }
         return count;
     }
 
@@ -138,10 +155,10 @@ public class Board {
             Collections.sort(blackPieces);
         }
     }
-
     public List<Piece> getWhitePieces() {
         return whitePieces;
     }
+
     public List<Piece> getBlackPieces() {
         return blackPieces;
     }
@@ -153,16 +170,6 @@ public class Board {
         int rank = pos.charAt(1) - '1';
 
         return file >= 0 && file < 8 && rank >= 0 && rank < 8;
-    }
-
-    public int pieceCountInFile(int file, Piece piece) {
-        List<String> filePositions = getFilePositionsAt(StringUtil.join2Chars('a' + file, '1'));
-        int count = 0;
-        for (String pos : filePositions) {
-            if (getPiece(pos).isEqualTo(piece))
-                count++;
-        }
-        return count;
     }
 
     public List<String> getFilePositionsAt(String pos) {
