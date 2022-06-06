@@ -2,21 +2,29 @@ package chess.pieces;
 
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
-public class KnightTest {
-    @Test
-    public void testCreate() {
-        Knight whiteKnight = Piece.createWhiteKnight();
-        Knight blackKnight = Piece.createBlackKnight();
+public class KnightTest extends PieceTest {
+    @Override
+    protected Piece createWhitePiece() {
+        return Piece.createWhiteKnight();
+    }
 
-        assertTrue(whiteKnight.isWhite());
-        assertEquals(Piece.Type.KNIGHT, whiteKnight.getType());
-        assertEquals('n', whiteKnight.print());
+    @Override
+    protected Piece createBlackPiece() {
+        return Piece.createBlackKnight();
+    }
 
-        assertTrue(blackKnight.isBlack());
-        assertEquals(Piece.Type.KNIGHT, blackKnight.getType());
-        assertEquals('n', blackKnight.print());
+    @Override
+    protected void verifyCreation(Piece whitePiece, Piece blackPiece) {
+        assertTrue(whitePiece.isWhite());
+        assertSame(Knight.class, whitePiece.getClass());
+        assertEquals('n', whitePiece.print());
+        assertEquals(2.5, whitePiece.getStrength(), STRENGTH_PRECISION);
+
+        assertTrue(blackPiece.isBlack());
+        assertSame(Knight.class, blackPiece.getClass());
+        assertEquals('n', blackPiece.print());
+        assertEquals(2.5, blackPiece.getStrength(), STRENGTH_PRECISION);
     }
 }

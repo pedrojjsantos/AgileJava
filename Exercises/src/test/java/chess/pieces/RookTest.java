@@ -2,21 +2,30 @@ package chess.pieces;
 
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
+import static org.junit.Assert.assertSame;
 
-public class RookTest {
-    @Test
-    public void testCreate() {
-        Rook whiteRook = Piece.createWhiteRook();
-        Rook blackRook = Piece.createBlackRook();
+public class RookTest extends PieceTest {
+    @Override
+    protected Piece createWhitePiece() {
+        return Piece.createWhiteRook();
+    }
 
-        assertTrue(whiteRook.isWhite());
-        assertEquals(Piece.Type.ROOK, whiteRook.getType());
-        assertEquals('r', whiteRook.print());
+    @Override
+    protected Piece createBlackPiece() {
+        return Piece.createBlackRook();
+    }
 
-        assertTrue(blackRook.isBlack());
-        assertEquals(Piece.Type.ROOK, blackRook.getType());
-        assertEquals('r', blackRook.print());
+    @Override
+    protected void verifyCreation(Piece whitePiece, Piece blackPiece) {
+        assertTrue(whitePiece.isWhite());
+        assertSame(Rook.class, whitePiece.getClass());
+        assertEquals('r', whitePiece.print());
+        assertEquals(5, whitePiece.getStrength(), STRENGTH_PRECISION);
+
+        assertTrue(blackPiece.isBlack());
+        assertSame(Rook.class, blackPiece.getClass());
+        assertEquals('r', blackPiece.print());
+        assertEquals(5, blackPiece.getStrength(), STRENGTH_PRECISION);
     }
 }

@@ -105,7 +105,8 @@ public class Piece implements Comparable<Piece> {
     }
 
     public boolean isEqualTo(Piece that) {
-        return (this.getClass() == that.getClass());
+        return this.getClass() == that.getClass() &&
+                this.color == that.color;
     }
 
     public int compareTo(Piece that) {

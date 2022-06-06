@@ -5,24 +5,32 @@ import org.junit.Test;
 
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
+import static org.junit.Assert.assertSame;
 
-public class QueenTest {
-    @Test
-    public void testCreate() {
-        Queen whiteQueen = Piece.createWhiteQueen();
-        Queen blackQueen = Piece.createBlackQueen();
-
-        assertTrue(whiteQueen.isWhite());
-        assertEquals(Piece.Type.QUEEN, whiteQueen.getType());
-        assertEquals('q', whiteQueen.print());
-
-        assertTrue(blackQueen.isBlack());
-        assertEquals(Piece.Type.QUEEN, blackQueen.getType());
-        assertEquals('q', blackQueen.print());
+public class QueenTest extends PieceTest {
+    @Override
+    protected Piece createWhitePiece() {
+        return Piece.createWhiteQueen();
     }
 
+    @Override
+    protected Piece createBlackPiece() {
+        return Piece.createBlackQueen();
+    }
+
+    @Override
+    protected void verifyCreation(Piece whitePiece, Piece blackPiece) {
+        assertTrue(whitePiece.isWhite());
+        assertSame(Queen.class, whitePiece.getClass());
+        assertEquals('q', whitePiece.print());
+        assertEquals(9, whitePiece.getStrength(), STRENGTH_PRECISION);
+
+        assertTrue(blackPiece.isBlack());
+        assertSame(Queen.class, blackPiece.getClass());
+        assertEquals('q', blackPiece.print());
+        assertEquals(9, blackPiece.getStrength(), STRENGTH_PRECISION);
+    }
     @Test
     public void testQueenMoves() {
         Board board = new Board();

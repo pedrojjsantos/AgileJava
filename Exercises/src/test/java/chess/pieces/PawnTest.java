@@ -2,21 +2,30 @@ package chess.pieces;
 
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
+import static org.junit.Assert.assertSame;
 
-public class PawnTest {
-    @Test
-    public void testCreate() {
-        Pawn whitePawn = Piece.createWhitePawn();
-        Pawn blackPawn = Piece.createBlackPawn();
+public class PawnTest extends PieceTest {
+    @Override
+    protected Piece createWhitePiece() {
+        return Piece.createWhitePawn();
+    }
 
-        assertTrue(whitePawn.isWhite());
-        assertEquals(Piece.Type.PAWN, whitePawn.getType());
-        assertEquals('p', whitePawn.print());
+    @Override
+    protected Piece createBlackPiece() {
+        return Piece.createBlackPawn();
+    }
 
-        assertTrue(blackPawn.isBlack());
-        assertEquals(Piece.Type.PAWN, blackPawn.getType());
-        assertEquals('p', blackPawn.print());
+    @Override
+    protected void verifyCreation(Piece whitePiece, Piece blackPiece) {
+        assertTrue(whitePiece.isWhite());
+        assertSame(Pawn.class, whitePiece.getClass());
+        assertEquals('p', whitePiece.print());
+        assertEquals(1, whitePiece.getStrength(), STRENGTH_PRECISION);
+
+        assertTrue(blackPiece.isBlack());
+        assertSame(Pawn.class, blackPiece.getClass());
+        assertEquals('p', blackPiece.print());
+        assertEquals(1, blackPiece.getStrength(), STRENGTH_PRECISION);
     }
 }

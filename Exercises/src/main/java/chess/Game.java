@@ -41,7 +41,7 @@ public class Game {
         Piece pawn = Piece.createWhitePawn();
 
         for (Piece piece : board.getWhitePieces()) {
-            if (piece.isEqualTo(pawn))
+            if (!piece.isEqualTo(pawn))
                 strength += piece.getStrength();
         }
 
@@ -67,7 +67,7 @@ public class Game {
         Piece pawn = Piece.createBlackPawn();
 
         for (Piece piece : board.getBlackPieces()) {
-            if (piece.isEqualTo(pawn))
+            if (!piece.isEqualTo(pawn))
                 strength += piece.getStrength();
         }
 

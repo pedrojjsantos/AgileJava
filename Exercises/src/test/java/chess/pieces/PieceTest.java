@@ -6,6 +6,8 @@ import static chess.pieces.Piece.*;
 import static org.junit.Assert.*;
 
 abstract public class PieceTest {
+    protected final double STRENGTH_PRECISION = 0.05;
+
     abstract protected Piece createWhitePiece();
     abstract protected Piece createBlackPiece();
     abstract protected void verifyCreation(Piece whitePiece, Piece blackPiece);
@@ -15,46 +17,11 @@ abstract public class PieceTest {
         Piece whitePiece = createWhitePiece();
         Piece blackPiece = createBlackPiece();
 
+        assertTrue(whitePiece.isWhite());
+        assertTrue(blackPiece.isBlack());
+
         verifyCreation(whitePiece, blackPiece);
     }
-
-    //    @Test
-//    public void testCreate() {
-//        char PAWN_CHAR = 'p';
-//        verifyCreation(
-//                Piece.createWhitePawn(), Piece.createBlackPawn(), PAWN_CHAR);
-//        char ROOK_CHAR = 'r';
-//        verifyCreation(
-//                Piece.createWhiteRook(), Piece.createBlackRook(), ROOK_CHAR);
-//        char KNIGHT_CHAR = 'n';
-//        verifyCreation(
-//                Piece.createWhiteKnight(), Piece.createBlackKnight(), KNIGHT_CHAR);
-//        char BISHOP_CHAR = 'b';
-//        verifyCreation(
-//                Piece.createWhiteBishop(), Piece.createBlackBishop(), BISHOP_CHAR);
-//        char QUEEN_CHAR = 'q';
-//        verifyCreation(
-//                Piece.createWhiteQueen(), Piece.createBlackQueen(), QUEEN_CHAR);
-//        char KING_CHAR = 'k';
-//        verifyCreation(
-//                Piece.createWhiteKing(), Piece.createBlackKing(), KING_CHAR);
-//
-//        Piece blank = Piece.noPiece();
-//        char NO_PIECE_CHAR = '.';
-//        assertSame(blank.getClass(), NoPiece.class);
-//    }
-//
-//
-//    private void verifyCreation(Piece whitePiece, Piece blackPiece, char representation) {
-//        assertTrue(whitePiece.isWhite());
-//        assertEquals(type, whitePiece.getType());
-//        assertEquals(representation, whitePiece.print());
-//
-//        assertTrue(blackPiece.isBlack());
-//        assertEquals(type, blackPiece.getType());
-//        assertEquals(representation, blackPiece.print());
-//    }
-
     @Test
     public void testIsEqual() {
         Piece whitePawn1 = Piece.createWhitePawn();
