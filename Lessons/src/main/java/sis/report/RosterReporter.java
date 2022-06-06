@@ -1,6 +1,5 @@
 package sis.report;
 
-import sis.studentinfo.CourseSession;
 import sis.studentinfo.Session;
 import sis.studentinfo.Student;
 import static sis.report.ReportConstant.NEWLINE;
@@ -30,7 +29,7 @@ public class RosterReporter {
     }
     private void writeBody(StringBuilder buffer) {
         for (Student student: session.getAllStudents())
-            buffer.append(student.getName())
+            buffer.append(student.getFullName())
                     .append(NEWLINE);
     }
     private void writeFooter(StringBuilder buffer) {
