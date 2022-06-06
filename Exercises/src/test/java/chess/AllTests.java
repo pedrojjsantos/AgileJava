@@ -9,6 +9,7 @@ import org.junit.runners.Suite;
         BoardTest.class,
         GameTest.class,
         CharacterTest.class,
+        LoopTest.class,
         chess.pieces.AllTests.class,
 })
 
