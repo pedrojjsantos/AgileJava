@@ -10,6 +10,7 @@ import org.junit.runners.Suite;
         DateUtilTest.class,
         BasicGradingStrategyTest.class,
         HonorsGradingStrategyTest.class,
+        PerformanceTest.class,
 })
 public class AllTests {
 }

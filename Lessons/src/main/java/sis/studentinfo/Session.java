@@ -2,21 +2,23 @@ package sis.studentinfo;
 
 import java.util.*;
 
-abstract public class Session implements Comparable<Session>{
+abstract public class Session implements Comparable<Session>, Iterable<Student>{
     private static int count;
     private String department;
     private String number;
-    private List<Student> students = new ArrayList<Student>();
+    private List<Student> students = new ArrayList<>();
     private Date startDate;
     private int numberOfCredits;
 
-    protected Session(
-            String department, String number, Date startDate) {
+    protected Session(String department, String number, Date startDate) {
         this.department = department;
         this.number = number;
         this.startDate = startDate;
     }
 
+    public Iterator<Student> iterator() {
+        return students.iterator();
+    }
     public int compareTo(Session that) {
         int compare =
                 this.getDepartment().compareTo(that.getDepartment());
@@ -61,5 +63,19 @@ abstract public class Session implements Comparable<Session>{
                 getSessionLength() * daysInWeek - daysFromFridayToMonday;
         calendar.add(Calendar.DAY_OF_YEAR, numberOfDays);
         return calendar.getTime();
+    }
+
+    public double averageGpaForPartTimeStudents() {
+        int count = 0;
+        double total = 0.0;
+
+        for (Student student : students) {
+            if (student.isFullTime())
+                continue;
+            count++;
+            total += student.getGpa();
+        }
+
+        return (count > 0) ? total / count : 0.0;
     }
 }

@@ -1,6 +1,7 @@
 package sis.studentinfo;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class Student {
@@ -15,6 +16,7 @@ public class Student {
     private String state = "";
     private int credits;
     private List<Grade> grades = new ArrayList<>();
+    private List<Integer> charges = new ArrayList<>();
     private GradingStrategy gradingStrategy =
             new BasicGradingStrategy();
 
@@ -23,6 +25,18 @@ public class Student {
         credits = 0;
         List<String> nameParts = split(fullName);
         setName(nameParts);
+    }
+
+    public void addCharge(int charge) {
+        charges.add(charge);
+    }
+
+    public int totalCharges() {
+        int total = 0;
+        for (int charge : charges)
+            total += charge;
+
+        return total;
     }
 
     public enum Grade {
@@ -44,23 +58,7 @@ public class Student {
     }
 
     private List<String> split(String str) {
-        List<String> results = new ArrayList<>();
-        StringBuilder word = new StringBuilder();
-        int index = 0;
-
-        while (index < str.length()) {
-            char ch = str.charAt(index);
-            if (!Character.isWhitespace(ch))
-                word.append(ch);
-            else if (!word.isEmpty()) {
-                results.add(word.toString());
-                word = new StringBuilder();
-            }
-            index++;
-        }
-        if (!word.isEmpty())
-            results.add(word.toString());
-        return results;
+        return new ArrayList<>(Arrays.asList(str.split(" ")));
     }
 
     public boolean isFullTime() {
