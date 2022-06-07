@@ -2,7 +2,11 @@ package chess;
 
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
+import java.util.Arrays;
+import java.util.Enumeration;
+import java.util.Vector;
+
+import static org.junit.Assert.*;
 
 public class LoopTest {
     @Test
@@ -97,6 +101,38 @@ public class LoopTest {
             buffer.append('*');
         }
 
+        return buffer.toString();
+    }
+
+    @Test
+    public void testSplit() {
+        String sequence = sequence(7);
+        Vector splitSequence = new Vector(Arrays.asList(sequence.split(" ")));
+        Vector expected =
+                new Vector(Arrays.asList("1", "2", "3", "4", "5*", "6", "7"));
+
+        assertEquals(expected, splitSequence);
+    }
+
+    @Test
+    public void testJoin() {
+        String sequence = sequence(7);
+        Vector splitSequence = new Vector(Arrays.asList(sequence.split(" ")));
+        String joinedSequence = join(splitSequence);
+
+        assertEquals(sequence, joinedSequence);
+    }
+
+    private String join(Vector splitSequence) {
+        StringBuilder buffer = new StringBuilder();
+
+        for (Enumeration it = splitSequence.elements();
+             it.hasMoreElements(); ) {
+            String str = (String) it.nextElement();
+            buffer.append(str).append(' ');
+        }
+
+        buffer.setLength(buffer.length() - 1);
         return buffer.toString();
     }
 }

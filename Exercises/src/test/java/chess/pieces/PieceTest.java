@@ -2,6 +2,8 @@ package chess.pieces;
 
 import org.junit.Test;
 
+import java.util.List;
+
 import static chess.pieces.Piece.*;
 import static org.junit.Assert.*;
 
@@ -11,6 +13,10 @@ abstract public class PieceTest {
     abstract protected Piece createWhitePiece();
     abstract protected Piece createBlackPiece();
     abstract protected void verifyCreation(Piece whitePiece, Piece blackPiece);
+
+    protected void assertContains(List<String> list, String...expected) {
+        assertTrue(list.containsAll(List.of(expected)));
+    }
 
     @Test
     public void testCreate() {

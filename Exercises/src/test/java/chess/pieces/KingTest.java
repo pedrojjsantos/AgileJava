@@ -37,24 +37,11 @@ public class KingTest extends PieceTest {
         List<String> possibleMoves = king.getPossibleMoves("d4", board);
 
         assertEquals(8, possibleMoves.size());
-        assertTrue(possibleMoves.contains("c3"));
-        assertTrue(possibleMoves.contains("c4"));
-        assertTrue(possibleMoves.contains("c5"));
-        assertTrue(possibleMoves.contains("d3"));
-        assertTrue(possibleMoves.contains("d5"));
-        assertTrue(possibleMoves.contains("e3"));
-        assertTrue(possibleMoves.contains("e4"));
-        assertTrue(possibleMoves.contains("e5"));
-
-        board.put("a2", king);
+        assertContains(possibleMoves, "c3", "c4", "c5", "d3", "d5", "e3", "e4", "e5");
 
         possibleMoves = king.getPossibleMoves("a2", board);
 
         assertEquals(5, possibleMoves.size());
-        assertTrue(possibleMoves.contains("a1"));
-        assertTrue(possibleMoves.contains("a3"));
-        assertTrue(possibleMoves.contains("b1"));
-        assertTrue(possibleMoves.contains("b2"));
-        assertTrue(possibleMoves.contains("b3"));
+        assertContains(possibleMoves, "a1", "a3", "b1", "b2", "b3");
     }
 }

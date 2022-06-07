@@ -7,9 +7,10 @@ import util.StringUtil;
 
 import static chess.pieces.Piece.*;
 import static org.junit.Assert.*;
+import static util.StringUtil.appendNewLine;
 
 public class GameTest {
-    private final String blankRank = StringUtil.appendNewLine(". . . . . . . .");
+    private final String blankRank = appendNewLine(". . . . . . . .");
     private final double STRENGTH_PRECISION = 0.05;
     private Game game;
 
@@ -40,11 +41,11 @@ public class GameTest {
 
         System.out.println(game.printBoard());
         assertEquals(
-                StringUtil.appendNewLine("R N B Q K B N R") +
-                        StringUtil.appendNewLine("P P P P P P P P") +
+                appendNewLine("R N B Q K B N R") +
+                        appendNewLine("P P P P P P P P") +
                         blankRank + blankRank + blankRank + blankRank +
-                        StringUtil.appendNewLine("p p p p p p p p") +
-                        StringUtil.appendNewLine("r n b q k b n r"),
+                        appendNewLine("p p p p p p p p") +
+                        appendNewLine("r n b q k b n r"),
                 game.printBoard());
     }
 
