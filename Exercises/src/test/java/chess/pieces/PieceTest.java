@@ -1,5 +1,6 @@
 package chess.pieces;
 
+import chess.Board;
 import org.junit.Test;
 
 import java.util.List;
@@ -23,8 +24,8 @@ abstract public class PieceTest {
         Piece whitePiece = createWhitePiece();
         Piece blackPiece = createBlackPiece();
 
-        assertTrue(whitePiece.isWhite());
-        assertTrue(blackPiece.isBlack());
+        assertEquals("", whitePiece.getPosition());
+        assertEquals("", blackPiece.getPosition());
 
         verifyCreation(whitePiece, blackPiece);
     }
@@ -66,5 +67,17 @@ abstract public class PieceTest {
         assertTrue(blackRook.compareTo(whiteQueen) > 0);
         assertEquals(0, whiteQueen.compareTo(blackQueen));
         assertEquals(0, blackQueen.compareTo(whiteQueen));
+    }
+
+    @Test
+    public void testGetPosition() {
+        Board board = new Board();
+        Piece piece = Piece.createWhitePawn();
+
+        board.put("a2", piece);
+        assertEquals("a2", piece.getPosition());
+
+        board.put("a7", piece);
+        assertEquals("a7", piece.getPosition());
     }
 }

@@ -5,12 +5,13 @@ import util.StringUtil;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 
 /**
  * Provides representation of a chess board
  */
-public class Board {
+public class Board implements Iterable<Piece> {
     private final Piece[][] ranks = new Piece[8][8];
     private final List<Piece> whitePieces = new ArrayList<>();
     private final List<Piece> blackPieces = new ArrayList<>();
@@ -88,11 +89,9 @@ public class Board {
     public int pieceCount(Piece piece) {
         int count = 0;
 
-        for (Piece[] rank : ranks) {
-            for (Piece p : rank) {
-                if (piece.isEqualTo(p))
-                    count++;
-            }
+        for (Piece p : this) {
+            if (piece.isEqualTo(p))
+                count++;
         }
 
         return count;
@@ -142,6 +141,7 @@ public class Board {
         int rank = position.charAt(1) - '1';
 
         ranks[rank][file] = piece;
+        piece.setPosition(position);
 
         if (piece.isWhite()) {
             whitePieces.add(piece);
@@ -222,5 +222,42 @@ public class Board {
         }
 
         return positions;
+    }
+
+    @Override
+    public Iterator<Piece> iterator() {
+        return new BoardIterator();
+    }
+
+    class BoardIterator implements Iterator<Piece> {
+        private int rank;
+        private int file;
+
+        public BoardIterator() {
+            this.rank = 7;
+            this.file = 0;
+        }
+
+        public boolean hasNext() {
+            return (this.rank >= 0);
+        }
+
+        public Piece next() {
+            Piece current = ranks[rank][file];
+
+            nextCoordinates();
+
+            return current;
+        }
+
+        private void nextCoordinates() {
+            do{ file++;
+
+                if (file >= 8) {
+                    file = 0;
+                    rank--;
+                }
+            } while (hasNext() && ranks[rank][file].isEmpty());
+        }
     }
 }

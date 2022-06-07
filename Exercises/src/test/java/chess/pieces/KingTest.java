@@ -20,10 +20,12 @@ public class KingTest extends PieceTest {
 
     @Override
     protected void verifyCreation(Piece whitePiece, Piece blackPiece) {
+        assertTrue(whitePiece.isWhite());
         assertSame(King.class, whitePiece.getClass());
         assertEquals('k', whitePiece.print());
         assertEquals(0, whitePiece.getStrength(), STRENGTH_PRECISION);
 
+        assertTrue(blackPiece.isBlack());
         assertEquals(King.class, blackPiece.getClass());
         assertEquals('k', blackPiece.print());
         assertEquals(0, blackPiece.getStrength(), STRENGTH_PRECISION);

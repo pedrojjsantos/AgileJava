@@ -10,36 +10,20 @@ public class Piece implements Comparable<Piece> {
     public final static String WHITE = "white";
     public final static String BLACK = "black";
 
+    public boolean isEmpty() {
+        return false;
+    }
+
+    public void setPosition(String position) {
+        this.position = position;
+    }
+
     public enum Color {WHITE, BLACK;}
-//    public enum Type {
-//        PAWN    (1.0, 'p'),
-//        KNIGHT  (2.5, 'n'),
-//        ROOK    (5.0, 'r'),
-//        BISHOP  (3.0, 'b'),
-//        QUEEN   (9.0, 'q'),
-//        KING    (0.0, 'k'),
-//        NO_PIECE(0.0, '.');
-//
-//        private final double strength;
-//        private final char representation;
-//
-//        Type(double strength, char representation){
-//            this.strength = strength;
-//            this.representation = representation;
-//        }
-//
-//        private double getStrength() {
-//            return this.strength;
-//        }
-//        private char getCharRepresentation() {
-//            return this.representation;
-//        }
-//    }
-//
-//    private final Type type;
+
     private final Color color;
     private final char representation;
     private final double strength;
+    private String position = "";
 
     protected Piece(Color color, char representation, double strength) {
         this.color = color;
@@ -71,7 +55,6 @@ public class Piece implements Comparable<Piece> {
         return new King(Color.WHITE);
     }
 
-
     // Black Pieces
     public static Pawn createBlackPawn() {
         return new Pawn(Color.BLACK);
@@ -92,10 +75,10 @@ public class Piece implements Comparable<Piece> {
         return new King(Color.BLACK);
     }
 
+
     public boolean isWhite() {
         return color == Color.WHITE;
     }
-
     public boolean isBlack() {
         return color == Color.BLACK;
     }
@@ -115,6 +98,9 @@ public class Piece implements Comparable<Piece> {
 
     public double getStrength() {
         return strength;
+    }
+    public String getPosition() {
+        return position;
     }
 
 }

@@ -8,6 +8,7 @@ import org.junit.runners.Suite;
         BishopTest.class,
         KingTest.class,
         KnightTest.class,
+        NoPieceTest.class,
         PawnTest.class,
         QueenTest.class,
         RookTest.class,

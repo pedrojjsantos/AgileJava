@@ -18,10 +18,12 @@ public class BishopTest extends PieceTest {
 
     @Override
     protected void verifyCreation(Piece whitePiece, Piece blackPiece) {
+        assertTrue(whitePiece.isWhite());
         assertSame(Bishop.class, whitePiece.getClass());
         assertEquals('b', whitePiece.print());
         assertEquals(3, whitePiece.getStrength(), STRENGTH_PRECISION);
 
+        assertTrue(blackPiece.isBlack());
         assertSame(Bishop.class, blackPiece.getClass());
         assertEquals('b', blackPiece.print());
         assertEquals(3, blackPiece.getStrength(), STRENGTH_PRECISION);

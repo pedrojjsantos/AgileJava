@@ -157,4 +157,28 @@ public class BoardTest {
     private void assertContains(List<String> list, String...expected) {
         assertTrue(list.containsAll(List.of(expected)));
     }
+
+    @Test
+    public void testIterable() {
+        board.initialize();
+        String iteratedPrint = iteratePrint();
+        assertEquals(
+                "RNBQKBNR" +
+                        "PPPPPPPP" +
+                        "pppppppp" +
+                        "rnbqkbnr", iteratedPrint);
+    }
+
+    private String iteratePrint() {
+        StringBuilder buffer = new StringBuilder();
+
+        for (Piece piece : board) {
+            char ch = piece.print();
+
+            if (piece.isBlack())
+                ch = Character.toUpperCase(ch);
+            buffer.append(ch);
+        }
+        return buffer.toString();
+    }
 }
