@@ -11,16 +11,14 @@ import java.util.List;
  * Provides representation of a chess board
  */
 public class Board {
-    private final List<List<Piece>> ranks = new ArrayList<>(8);
+    private final Piece[][] ranks = new Piece[8][8];
     private final List<Piece> whitePieces = new ArrayList<>();
     private final List<Piece> blackPieces = new ArrayList<>();
 
     public Board() {
         for (int i = 0; i < 8; i++) {
-            ranks.add(new ArrayList<>(8));
-
             for (int j = 0; j < 8; j++)
-                ranks.get(i).add(Piece.noPiece());
+                ranks[i][j] = Piece.noPiece();
         }
     }
 
@@ -35,43 +33,43 @@ public class Board {
 
     private void initBlackRanks() {
         for (int i = 0; i < 8; i++)
-            ranks.get(6).set(i, Piece.createBlackPawn());
+            ranks[6][i] = Piece.createBlackPawn();
 
-        ranks.get(7).set(0, Piece.createBlackRook());
-        ranks.get(7).set(1, Piece.createBlackKnight());
-        ranks.get(7).set(2, Piece.createBlackBishop());
-        ranks.get(7).set(3, Piece.createBlackQueen());
-        ranks.get(7).set(4, Piece.createBlackKing());
-        ranks.get(7).set(5, Piece.createBlackBishop());
-        ranks.get(7).set(6, Piece.createBlackKnight());
-        ranks.get(7).set(7, Piece.createBlackRook());
+        ranks[7][0] = Piece.createBlackRook();
+        ranks[7][1] = Piece.createBlackKnight();
+        ranks[7][2] = Piece.createBlackBishop();
+        ranks[7][3] = Piece.createBlackQueen();
+        ranks[7][4] = Piece.createBlackKing();
+        ranks[7][5] = Piece.createBlackBishop();
+        ranks[7][6] = Piece.createBlackKnight();
+        ranks[7][7] = Piece.createBlackRook();
 
-        blackPieces.addAll(ranks.get(6));
-        blackPieces.addAll(ranks.get(7));
+        blackPieces.addAll(List.of(ranks[6]));
+        blackPieces.addAll(List.of(ranks[7]));
 
         Collections.sort(blackPieces);
     }
     private void initBlankRanks() {
-        for (int rank = 2; rank < 6; rank++) {
-            for (int i = 0; i < 8; i++)
-                ranks.get(rank).set(i, Piece.noPiece());
+        for (int i = 2; i < 6; i++) {
+            for (int j = 0; j < 8; j++)
+                ranks[i][j] = Piece.noPiece();
         }
     }
     private void initWhiteRanks() {
-        ranks.get(0).set(0, Piece.createWhiteRook());
-        ranks.get(0).set(1, Piece.createWhiteKnight());
-        ranks.get(0).set(2, Piece.createWhiteBishop());
-        ranks.get(0).set(3, Piece.createWhiteQueen());
-        ranks.get(0).set(4, Piece.createWhiteKing());
-        ranks.get(0).set(5, Piece.createWhiteBishop());
-        ranks.get(0).set(6, Piece.createWhiteKnight());
-        ranks.get(0).set(7, Piece.createWhiteRook());
+        ranks[0][0] = Piece.createWhiteRook();
+        ranks[0][1] = Piece.createWhiteKnight();
+        ranks[0][2] = Piece.createWhiteBishop();
+        ranks[0][3] = Piece.createWhiteQueen();
+        ranks[0][4] = Piece.createWhiteKing();
+        ranks[0][5] = Piece.createWhiteBishop();
+        ranks[0][6] = Piece.createWhiteKnight();
+        ranks[0][7] = Piece.createWhiteRook();
 
         for (int i = 0; i < 8; i++)
-            ranks.get(1).set(i, Piece.createWhitePawn());
+            ranks[1][i] = Piece.createWhitePawn();
 
-        whitePieces.addAll(ranks.get(0));
-        whitePieces.addAll(ranks.get(1));
+        whitePieces.addAll(List.of(ranks[0]));
+        whitePieces.addAll(List.of(ranks[1]));
 
         Collections.sort(whitePieces);
     }
@@ -90,7 +88,7 @@ public class Board {
     public int pieceCount(Piece piece) {
         int count = 0;
 
-        for (List<Piece> rank : ranks) {
+        for (Piece[] rank : ranks) {
             for (Piece p : rank) {
                 if (piece.isEqualTo(p))
                     count++;
@@ -110,7 +108,7 @@ public class Board {
         return count;
     }
 
-    private String printRank(List<Piece> rank) {
+    private String printRank(Piece[] rank) {
         StringBuilder buffer = new StringBuilder();
         for (Piece piece : rank) {
             char representation = piece.print();
@@ -127,23 +125,23 @@ public class Board {
         StringBuilder printedBoard = new StringBuilder();
 
         for (int rank = 7; rank >= 0; rank--)
-            printedBoard.append(StringUtil.appendNewLine(printRank(ranks.get(rank))));
+            printedBoard.append(StringUtil.appendNewLine(printRank(ranks[rank])));
 
         return  printedBoard.toString();
     }
 
     public Piece getPiece(String position) {
-        int index = position.charAt(0) - 'a';
-        int rankNumber = position.charAt(1) - '1';
+        int file = position.charAt(0) - 'a';
+        int rank = position.charAt(1) - '1';
 
-        return ranks.get(rankNumber).get(index);
+        return ranks[rank][file];
     }
 
     public void put(String position, Piece piece) {
-        int index = position.charAt(0) - 'a';
-        int rankNumber = position.charAt(1) - '1';
+        int file = position.charAt(0) - 'a';
+        int rank = position.charAt(1) - '1';
 
-        ranks.get(rankNumber).set(index, piece);
+        ranks[rank][file] = piece;
 
         if (piece.isWhite()) {
             whitePieces.add(piece);
