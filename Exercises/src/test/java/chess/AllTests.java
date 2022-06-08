@@ -10,6 +10,7 @@ import org.junit.runners.Suite;
         GameTest.class,
         CharacterTest.class,
         LoopTest.class,
+        ExceptionTest.class,
         chess.pieces.AllTests.class,
 })
 
