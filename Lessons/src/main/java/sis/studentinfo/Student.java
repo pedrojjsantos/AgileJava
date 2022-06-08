@@ -3,10 +3,18 @@ package sis.studentinfo;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
+import java.util.logging.Logger;
 
 public class Student {
+    final static Logger logger =
+            Logger.getLogger(Student.class.getName());
+
     public static final int CREDITS_REQUIRED_FOR_FULL_TIME = 12;
     public static final String IN_STATE = "CO";
+    public static final int MAX_NAME_PARTS = 3;
+    public static final String TOO_MANY_NAME_PARTS_MSG =
+            "Student name '%s' contains more than %d parts";
 
     private final String fullName;
     private String firstName  = "";
@@ -23,7 +31,14 @@ public class Student {
     public Student(String fullName) {
         this.fullName = fullName;
         credits = 0;
+        final int maximumNumberOfNameParts = 3;
         List<String> nameParts = split(fullName);
+        if (nameParts.size() > maximumNumberOfNameParts) {
+            String msg =
+                String.format(Student.TOO_MANY_NAME_PARTS_MSG, fullName, MAX_NAME_PARTS);
+            Student.logger.info(msg);
+            throw new StudentNameFormatException(msg);
+        }
         setName(nameParts);
     }
 
@@ -120,6 +135,7 @@ public class Student {
         return credits;
     }
     public double getGpa() {
+        Student.logger.fine("begin getGpa " + System.currentTimeMillis());
         if (grades.isEmpty()) return 0.0;
 
         double total = 0;
@@ -127,6 +143,7 @@ public class Student {
         for (Grade grade : grades) {
             total += gradingStrategy.getGradePointsFor(grade);
         }
+        Student.logger.fine("end getGpa " + System.currentTimeMillis());
         return total / grades.size();
     }
 }
