@@ -1,16 +1,13 @@
-package chess;
+package etc;
 
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-        BoardTest.class,
-        GameTest.class,
-        chess.pieces.AllTests.class,
+        CharacterTest.class,
+        LoopTest.class,
+        ExceptionTest.class,
 })
-
 public class AllTests {
 }
-
-

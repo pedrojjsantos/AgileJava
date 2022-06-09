@@ -1,6 +1,9 @@
-package chess;
+package etc;
 
 import org.junit.Test;
+
+import java.util.logging.Handler;
+import java.util.logging.Logger;
 
 import static org.junit.Assert.*;
 
@@ -40,6 +43,32 @@ public class ExceptionTest {
         }
     }
 
+    @Test
+    public void testWithProblems() {
+        try {
+            doSomething();
+            fail("no exception");
+        }
+        catch (Exception success) {}
+    }
+    void doSomething() throws Exception {
+        throw new Exception("blah");
+    }
+
+    @Test
+    public void testReverseLog() {
+        Logger logger = Logger.getLogger(Dyer.class.getName());
+        DyerHandler handler = new DyerHandler();
+        logger.addHandler(handler);
+
+        try {
+            Dyer dyer = Dyer.create();
+            fail("Expected an exception!");
+        } catch (RuntimeException e) {
+            assertEquals(e.getMessage(), handler.getLog(0));
+            assertEquals(e.getCause().getMessage(), handler.getLog(1));
+        }
+    }
 }
 // error: 3 4 e5
 // fail:  1 2  5 7 e3
