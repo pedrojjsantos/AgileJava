@@ -8,6 +8,7 @@ import org.junit.runners.Suite;
         CharacterTest.class,
         LoopTest.class,
         ExceptionTest.class,
+        CounterHandlerTest.class,
 })
 public class AllTests {
 }
