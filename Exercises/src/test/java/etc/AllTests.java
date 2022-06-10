@@ -9,6 +9,7 @@ import org.junit.runners.Suite;
         LoopTest.class,
         ExceptionTest.class,
         CounterHandlerTest.class,
+        CustomFormatterTest.class,
 })
 public class AllTests {
 }

@@ -12,6 +12,7 @@ public class CounterHandlerTest {
     public void testCounter() {
         Logger logger = Logger.getLogger(CounterHandlerTest.class.getName());
         CounterHandler handler = new CounterHandler();
+        logger.setLevel(Level.ALL);
         logger.addHandler(handler);
 
         assertEquals(0, handler.getCount(Level.SEVERE));
@@ -22,17 +23,17 @@ public class CounterHandlerTest {
         assertEquals(0, handler.getCount(Level.FINER));
         assertEquals(0, handler.getCount(Level.FINEST));
 
-        logger.severe("");
-        assertEquals(1, handler.getCount(Level.SEVERE));
-        logger.severe("");
-        assertEquals(2, handler.getCount(Level.SEVERE));
-        logger.severe("");
-        assertEquals(3, handler.getCount(Level.SEVERE));
+        logger.fine("");
+        assertEquals(1, handler.getCount(Level.FINE));
+        logger.fine("");
+        assertEquals(2, handler.getCount(Level.FINE));
+        logger.fine("");
+        assertEquals(3, handler.getCount(Level.FINE));
 
-        logger.info("");
-        logger.info("");
-        logger.info("");
-        assertEquals(3, handler.getCount(Level.INFO));
+        logger.finer("");
+        logger.finer("");
+        logger.finer("");
+        assertEquals(3, handler.getCount(Level.FINER));
 
     }
 }

@@ -1,11 +1,13 @@
 package etc;
 
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class Dyer {
     static final Logger logger = Logger.getLogger(Dyer.class.getName());
 
     private Dyer() {
+        logger.setLevel(Level.ALL);
         throw new SimpleException("oops.");
     }
 
@@ -22,7 +24,7 @@ public class Dyer {
     private static void logReverse(Throwable e) {
         Throwable exception = e;
         while (exception != null) {
-            logger.info(exception.getMessage());
+            logger.fine(exception.getMessage());
             exception = exception.getCause();
         }
     }
