@@ -12,6 +12,8 @@ import org.junit.runners.Suite;
         HonorsGradingStrategyTest.class,
         PerformanceTest.class,
         ScorerTest.class,
+        CourseTest.class,
+//        StudentDirectoryTest.class,
 })
 public class AllTests {
 }

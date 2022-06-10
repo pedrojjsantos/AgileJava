@@ -39,14 +39,18 @@ public class CourseSessionTest extends SessionTest {
     @Test
     public void testCount() {
         CourseSession.resetCount();
-        createSession("a", "1", startDate);
+        createSession(createCourse(), startDate);
         assertEquals(1, CourseSession.getCount());
-        createSession("a", "1", startDate);
+        createSession(createCourse(), startDate);
         assertEquals(2, CourseSession.getCount());
     }
 
     @Override
-    protected Session createSession(String department, String number, Date startDate) {
-        return CourseSession.create(department, number, startDate);
+    protected Session createSession(Course course, Date startDate) {
+        return CourseSession.create(course, startDate);
+    }
+
+    private Course createCourse() {
+        return new Course("ENGL", "101");
     }
 }
