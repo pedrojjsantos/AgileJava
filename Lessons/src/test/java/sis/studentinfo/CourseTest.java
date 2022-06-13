@@ -67,4 +67,11 @@ public class CourseTest {
         assertTrue("elapsed time = " + elapsed,
                 elapsed < arbitraryThreshold);
     }
+
+    @Test
+    public void testToString() {
+        Course course = new Course("ENGL", "301");
+        assertEquals("ENGL 301", course.toString());
+        assertNotEquals(course, new Course("SPAN", "420"));
+    }
 }

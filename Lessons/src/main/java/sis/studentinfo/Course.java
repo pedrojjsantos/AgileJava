@@ -28,6 +28,11 @@ public class Course {
         return result;
     }
 
+    @Override
+    public String toString() {
+        return department + " " + number;
+    }
+
     public String getDepartment() {
         return department;
     }
