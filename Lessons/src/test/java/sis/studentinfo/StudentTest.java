@@ -137,4 +137,22 @@ public class StudentTest {
             assertEquals(msg, ((TestHandler)handler).getMessage());
         }
     }
+
+    @Test
+    public void testFlags() {
+        Student student = new Student("a");
+        student.set(
+                Student.Flag.ON_CAMPUS,
+                Student.Flag.TAX_EXEMPT,
+                Student.Flag.MINOR);
+        assertTrue(student.isOn(Student.Flag.ON_CAMPUS));
+        assertTrue(student.isOn(Student.Flag.TAX_EXEMPT));
+        assertTrue(student.isOn(Student.Flag.MINOR));
+        assertFalse(student.isOff(Student.Flag.ON_CAMPUS));
+        assertTrue(student.isOff(Student.Flag.TROUBLEMAKER));
+        student.unset(Student.Flag.ON_CAMPUS);
+        assertTrue(student.isOff(Student.Flag.ON_CAMPUS));
+        assertTrue(student.isOn(Student.Flag.TAX_EXEMPT));
+        assertTrue(student.isOn(Student.Flag.MINOR));
+    }
 }

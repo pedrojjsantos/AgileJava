@@ -25,4 +25,10 @@ public class PerformanceTest {
         performance.setScores(75, 72, 90, 60);
         assertEquals(74.25, performance.average(), tolerance);
     }
+
+    @Test
+    public void testAverageForNoScores() {
+        Performance performance = new Performance();
+        assertEquals(0.0, performance.average(), 0.005);
+    }
 }

@@ -1,7 +1,7 @@
 package sis.studentinfo;
 
 public class Performance {
-    private int[] tests;
+    private int[] tests = {};
 
     public void setNumberOfTests(int numberOfTests) {
         tests = new int[numberOfTests];

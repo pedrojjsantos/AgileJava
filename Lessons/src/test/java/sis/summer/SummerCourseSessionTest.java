@@ -2,7 +2,7 @@ package sis.summer;
 
 import org.junit.Test;
 import sis.studentinfo.Course;
-import sis.studentinfo.DateUtil;
+import sis.util.DateUtil;
 import sis.studentinfo.Session;
 import sis.studentinfo.SessionTest;
 

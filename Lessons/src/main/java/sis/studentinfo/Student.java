@@ -3,13 +3,13 @@ package sis.studentinfo;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Locale;
 import java.util.logging.Logger;
 
 public class Student {
     final static Logger logger =
             Logger.getLogger(Student.class.getName());
 
+    private int settings = 0x0;
     public static final int CREDITS_REQUIRED_FOR_FULL_TIME = 12;
     public static final String IN_STATE = "CO";
     public static final int MAX_NAME_PARTS = 3;
@@ -23,10 +23,40 @@ public class Student {
 
     private String state = "";
     private int credits;
-    private List<Grade> grades = new ArrayList<>();
-    private List<Integer> charges = new ArrayList<>();
+    private final List<Grade> grades = new ArrayList<>();
+    private final List<Integer> charges = new ArrayList<>();
     private GradingStrategy gradingStrategy =
             new BasicGradingStrategy();
+
+    public enum Grade {
+        A(4),
+        B(3),
+        C(2),
+        D(1),
+        F(0);
+
+        private final int points;
+
+        Grade(int points) {
+            this.points = points;
+        }
+
+        int getPoints() {
+            return points;
+        }
+    }
+    public enum Flag {
+        ON_CAMPUS   (1 << 0),
+        TAX_EXEMPT  (1 << 1),
+        MINOR       (1 << 2),
+        TROUBLEMAKER(1 << 3);
+
+        private final int mask;
+
+        Flag(int mask) {
+            this.mask = mask;
+        }
+    }
 
     public Student(String fullName) {
         this.fullName = fullName;
@@ -52,24 +82,6 @@ public class Student {
             total += charge;
 
         return total;
-    }
-
-    public enum Grade {
-        A(4),
-        B(3),
-        C(2),
-        D(1),
-        F(0);
-
-        private int points;
-
-        Grade(int points) {
-            this.points = points;
-        }
-
-        int getPoints() {
-            return points;
-        }
     }
 
     private List<String> split(String str) {
@@ -103,6 +115,7 @@ public class Student {
             this.firstName = pop(nameParts);
         }
     }
+
     private String pop(List<String> list) {
         if (list.isEmpty())
             return "";
@@ -134,6 +147,7 @@ public class Student {
     public int getCredits() {
         return credits;
     }
+
     public double getGpa() {
         Student.logger.fine("begin getGpa " + System.currentTimeMillis());
         if (grades.isEmpty()) return 0.0;
@@ -145,5 +159,20 @@ public class Student {
         }
         Student.logger.fine("end getGpa " + System.currentTimeMillis());
         return total / grades.size();
+    }
+
+    public void set(Flag... flags) {
+        for (Flag flag: flags)
+            settings |= flag.mask;
+    }
+    public void unset(Flag... flags) {
+        for (Flag flag: flags)
+            settings &= ~flag.mask;
+    }
+    public boolean isOn(Flag flag) {
+        return (settings & flag.mask) == flag.mask;
+    }
+    public boolean isOff(Flag flag) {
+        return !isOn(flag);
     }
 }

@@ -2,6 +2,7 @@ package sis.studentinfo;
 
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
+import sis.util.DateUtilTest;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
@@ -13,6 +14,7 @@ import org.junit.runners.Suite;
         PerformanceTest.class,
         ScorerTest.class,
         CourseTest.class,
+        AccountTest.class,
 //        StudentDirectoryTest.class,
 })
 public class AllTests {

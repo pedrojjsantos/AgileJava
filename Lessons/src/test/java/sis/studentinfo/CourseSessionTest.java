@@ -1,8 +1,8 @@
 package sis.studentinfo;
 
-import org.junit.Before;
 import org.junit.Test;
 import sis.report.RosterReporter;
+import sis.util.DateUtil;
 
 import static org.junit.Assert.assertTrue;
 import static sis.report.ReportConstant.NEWLINE;

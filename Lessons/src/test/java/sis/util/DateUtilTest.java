@@ -1,4 +1,4 @@
-package sis.studentinfo;
+package sis.util;
 
 import org.junit.Test;
 

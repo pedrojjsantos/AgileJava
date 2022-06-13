@@ -9,7 +9,7 @@ import java.util.Date;
 import java.util.List;
 
 import static org.junit.Assert.*;
-import static sis.studentinfo.DateUtil.createDate;
+import static sis.util.DateUtil.createDate;
 
 abstract public class SessionTest {
     protected Session session;

@@ -2,6 +2,8 @@ package sis.report;
 
 import org.junit.Test;
 import sis.studentinfo.*;
+import sis.util.DateUtil;
+
 import static  sis.report.ReportConstant.NEWLINE;
 
 import static org.junit.Assert.assertEquals;
