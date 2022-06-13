@@ -10,6 +10,8 @@ import org.junit.runners.Suite;
         ExceptionTest.class,
         CounterHandlerTest.class,
         CustomFormatterTest.class,
+        WordCountTest.class,
+        NameTest.class,
 })
 public class AllTests {
 }
