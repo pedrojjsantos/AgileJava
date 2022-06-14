@@ -12,6 +12,7 @@ import org.junit.runners.Suite;
         CustomFormatterTest.class,
         WordCountTest.class,
         NameTest.class,
+        NumTest.class,
 })
 public class AllTests {
 }
