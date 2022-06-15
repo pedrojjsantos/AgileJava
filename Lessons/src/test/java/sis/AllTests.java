@@ -9,6 +9,7 @@ import org.junit.runners.Suite;
         sis.studentinfo.AllTests.class,
         sis.summer.AllTests.class,
         sis.util.AllTests.class,
+        sis.ui.AllTests.class,
 })
 public class AllTests {
 }

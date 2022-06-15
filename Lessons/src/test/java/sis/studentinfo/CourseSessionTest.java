@@ -19,22 +19,22 @@ public class CourseSessionTest extends SessionTest {
         assertEquals(sixteenWeeksOut, session.getEndDate());
     }
 
-    @Test
-    public void testRosterReport() {
-        Student studentA = new Student("A");
-        Student studentB = new Student("B");
-        session.enroll(studentA);
-        session.enroll(studentB);
-
-        String rosterReport = new RosterReporter(session).getReport();
-        assertEquals(
-                RosterReporter.ROSTER_REPORT_HEADER +
-                        "A" + NEWLINE + "B" + NEWLINE +
-                        RosterReporter.ROSTER_REPORT_FOOTER +
-                        "2" + NEWLINE,
-                rosterReport
-        );
-    }
+//    @Test
+//    public void testRosterReport() {
+//        Student studentA = new Student("A");
+//        Student studentB = new Student("B");
+//        session.enroll(studentA);
+//        session.enroll(studentB);
+//
+//        String rosterReport = new RosterReporter(session).getReport();
+//        assertEquals(
+//                RosterReporter.ROSTER_REPORT_HEADER +
+//                        "A" + NEWLINE + "B" + NEWLINE +
+//                        RosterReporter.ROSTER_REPORT_FOOTER +
+//                        "2" + NEWLINE,
+//                rosterReport
+//        );
+//    }
 
     @Test
     public void testCount() {
