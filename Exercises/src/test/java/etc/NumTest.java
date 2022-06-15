@@ -3,14 +3,14 @@ package etc;
 import org.junit.Test;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import static org.junit.Assert.*;
 
 public class NumTest {
-    @Test
+    @Test   // Q1
     public void testBigDecimalImmutability() {
         BigDecimal x = new BigDecimal("42.00");
         BigDecimal y = new BigDecimal("13.00");
@@ -20,7 +20,7 @@ public class NumTest {
         assertNotEquals(y, xPlusY);
     }
 
-    @Test
+    @Test   // Q2
     public void testScaleAndMultiplication() {
         BigDecimal x = new BigDecimal("10.00");
         BigDecimal y = new BigDecimal("1");
@@ -137,26 +137,126 @@ public class NumTest {
         assertEquals(Character.MAX_VALUE - 1,(char) ~1);    // Q16
 
         assertNotEquals(-128 >> 1, -128 >>> 1);
-        System.out.printf("%d != %d%n", -128 >> 1, -128 >>> 1);
+//        System.out.printf("%d != %d%n", -128 >> 1, -128 >>> 1);
     }
 
     @Test
     public void testRng() {
-        ArrayList<Integer> listRNG = new ArrayList<>();
-        for (int i = 0; i < 10000; i++)
-            listRNG.add(rng());
-        int max = listRNG.stream().max(Integer::compareTo).orElse(-1);
-        int min = listRNG.stream().min(Integer::compareTo).orElse(-1);
+        ArrayList<Integer> listRand = new ArrayList<>();
+        int min = 0;
+        int max = 1;
 
-        assertTrue(max != -1 && min != -1);
-        assertTrue(max <= 50);
-        assertTrue(min >= 0);
+        for (int i = 0; i < 100000; i++)
+            listRand.add(rng(min, max));
+
+        int maxOfList = listRand.stream().max(Integer::compareTo).orElse(-1);
+        int minOfList = listRand.stream().min(Integer::compareTo).orElse(-1);
+
+        assertTrue(maxOfList != -1 && minOfList != -1);
+        assertTrue(max >= maxOfList);
+        assertTrue(min <= minOfList);
     }
 
-    private int rng() {
-        return (int) Math.rint(Math.random() * 50);
+    private int rng(int min, int max) {
+        return min + (int) Math.rint(Math.random() * max);
+    }
+
+    @Test
+    public void testSwapper() {
+        int[] list = new int[100];
+
+        for (int i = 1; i <= 100; i++)
+            list[i-1] = i;
+
+        verifySwap(list);
+        verifySwap(list);
+        verifySwap(list);
+        verifySwap(list);
+        verifySwap(list);
+        verifySwap(list);
+    }
+
+    private void swap(int[] list, int i, int j) {
+        list[i] ^= list[j];
+        list[j] ^= list[i];
+        list[i] ^= list[j];
+    }
+
+    private void verifySwap(int[] list) {
+        int i = rng(0, 99);
+        int j = rng(0, 99);
+
+        int xi = list[i];
+        int xj = list[j];
+//        System.out.printf("i:\t%d\t\tj:\t%d%nxi:\t%d\t\txj:\t%d%n", i, j, xi, xj);
+        swap(list, i, j);
+
+        assertEquals(100, list.length);
+
+        assertEquals(xi , list[j]);
+        assertEquals(xj , list[i]);
+    }
+
+    @Test
+    public void testSwapWithoutTmp() {
+        int x = 13;
+        int y = 42;
+
+        x ^= y;
+        y ^= x;
+        x ^= y;
+
+        assertEquals(42, x);
+        assertEquals(13, y);
+    }
+
+    @Test
+    public void testRandomSeed() {
+        Random rngWithNoSeed = new Random();
+        Random rngWithSeed1 = new Random(1);
+
+        assertNotEquals(rngWithNoSeed.nextDouble(), rngWithSeed1.nextDouble());
+    }
+
+    @Test
+    public void testIntegralSize() {
+        assertEquals(8,  getNumOfBits(Type.BYTE));
+        assertEquals(16, getNumOfBits(Type.CHAR));
+        assertEquals(16, getNumOfBits(Type.SHORT));
+        assertEquals(32, getNumOfBits(Type.INT));
+        assertEquals(64, getNumOfBits(Type.LONG));
+    }
+    enum Type {BYTE, CHAR, SHORT, INT, LONG};
+
+    int getNumOfBits(Type type) {
+        switch (type) {
+            case BYTE -> {
+                for (int i = 1; i < 128; i++) {
+                    if ((byte) (1 << i) <= 1) return i+1;
+                }
+            }
+            case CHAR -> {
+                for (int i = 1; i < 128; i++) {
+                    if ((char) (1 << i) <= 1) return i;
+                }
+            }
+            case SHORT -> {
+                for (int i = 1; i < 128; i++) {
+                    if ((short) (1 << i) <= 1) return i+1;
+                }
+            }
+            case INT -> {
+                for (int i = 1; i < 128; i++) {
+                    if ((int) (1 << i) <= 1) return i+1;
+                }
+            }
+            case LONG -> {
+                for (int i = 1; i < 128; i++) {
+                    if ((1L << i) <= 1) return i+1;
+                }
+            }
+        }
+
+        return -1;
     }
 }
-
-// 0001
-// 1111
