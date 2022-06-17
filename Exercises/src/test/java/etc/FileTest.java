@@ -33,4 +33,37 @@ public class FileTest {
                 assertTrue(new File(fileName).delete());
         }
     }
+
+    @Test
+    public void testPerformance() throws IOException {
+        String fileName = "testExercise2.txt";
+        long size = 1;
+
+
+        for (long i = 1; i < 1000000000000000000L; i *= 10) {
+            try (FileOutputStream file = new FileOutputStream(fileName)) {
+                OutputStreamWriter writer = new OutputStreamWriter(file);
+                BufferedWriter bufferedWriter = new BufferedWriter(writer);
+
+                long writerTime = writerPerformance(writer, size);
+                long bufferedTime = writerPerformance(writer, size);
+
+                System.out.printf("w%d,\tb%d%n", writerTime, bufferedTime);
+            }
+
+        }
+    }
+
+    private long writerPerformance(Writer writer, long size) throws IOException {
+        char ch = 'Z';
+
+        long start = System.currentTimeMillis();
+
+        for (int i = 0; i < size; i++)
+            writer.write(ch);
+
+        long stop = System.currentTimeMillis();
+
+        return stop - start;
+    }
 }
