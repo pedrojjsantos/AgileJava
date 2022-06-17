@@ -15,7 +15,8 @@ import sis.util.DateUtilTest;
         ScorerTest.class,
         CourseTest.class,
         AccountTest.class,
-//        StudentDirectoryTest.class,
+        CourseCatalogTest.class,
+        StudentDirectoryTest.class,
 })
 public class AllTests {
 }

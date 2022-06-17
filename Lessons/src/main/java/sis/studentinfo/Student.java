@@ -1,11 +1,12 @@
 package sis.studentinfo;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Logger;
 
-public class Student {
+public class Student implements Serializable {
     final static Logger logger =
             Logger.getLogger(Student.class.getName());
 
@@ -27,6 +28,7 @@ public class Student {
     private final List<Integer> charges = new ArrayList<>();
     private GradingStrategy gradingStrategy =
             new BasicGradingStrategy();
+    private String id;
 
     public enum Grade {
         A(4),
@@ -44,20 +46,20 @@ public class Student {
         int getPoints() {
             return points;
         }
+
     }
     public enum Flag {
         ON_CAMPUS   (1 << 0),
         TAX_EXEMPT  (1 << 1),
         MINOR       (1 << 2),
         TROUBLEMAKER(1 << 3);
-
         private final int mask;
 
         Flag(int mask) {
             this.mask = mask;
         }
-    }
 
+    }
     public Student(String fullName) {
         this.fullName = fullName;
         credits = 0;
@@ -133,6 +135,7 @@ public class Student {
     public String getFullName() {
         return fullName;
     }
+
     public String getFirstName() {
         return firstName;
     }
@@ -143,9 +146,15 @@ public class Student {
         return lastName;
     }
 
-
     public int getCredits() {
         return credits;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+    public String getId() {
+        return id;
     }
 
     public double getGpa() {
@@ -174,5 +183,9 @@ public class Student {
     }
     public boolean isOff(Flag flag) {
         return !isOn(flag);
+    }
+
+    public static Student findByLastName(String lastName) {
+        return new Student(lastName);
     }
 }

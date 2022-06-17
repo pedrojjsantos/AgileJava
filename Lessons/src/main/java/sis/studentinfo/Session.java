@@ -1,13 +1,13 @@
 package sis.studentinfo;
 
+import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.*;
 
-abstract public class Session implements Comparable<Session>, Iterable<Student>{
-    private static int count;
+abstract public class Session implements Comparable<Session>, Iterable<Student>, Serializable {
     private Course course;
-    private List<Student> students = new ArrayList<>();
+    private transient List<Student> students = new ArrayList<>();
     private Date startDate;
     private int numberOfCredits;
     private URL url;
@@ -40,6 +40,10 @@ abstract public class Session implements Comparable<Session>, Iterable<Student>{
     public int getNumberOfStudents() {
         return students.size();
     }
+    public int getNumberOfCredits() {
+        return numberOfCredits;
+    }
+
     public void enroll(Student student) {
         student.addCredits(numberOfCredits);
         students.add(student);
@@ -95,5 +99,25 @@ abstract public class Session implements Comparable<Session>, Iterable<Student>{
     }
     private void log(Exception e) {
         //e.printStackTrace();
+    }
+
+    @Serial
+    private void writeObject(ObjectOutputStream output) throws IOException {
+        output.defaultWriteObject();
+        output.writeInt(students.size());
+        for (Student student: students)
+            output.writeObject(student.getLastName());
+    }
+
+    @Serial
+    private void readObject(ObjectInputStream input)
+            throws Exception {
+        input.defaultReadObject();
+        students = new ArrayList<>();
+        int size = input.readInt();
+        for (int i = 0; i < size; i++) {
+            String lastName = (String)input.readObject();
+            students.add(Student.findByLastName(lastName));
+        }
     }
 }

@@ -10,6 +10,7 @@ import org.junit.runners.Suite;
         sis.summer.AllTests.class,
         sis.util.AllTests.class,
         sis.ui.AllTests.class,
+        sis.db.AllTests.class,
 })
 public class AllTests {
 }

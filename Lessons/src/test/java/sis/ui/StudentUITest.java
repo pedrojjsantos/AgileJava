@@ -23,13 +23,22 @@ public class StudentUITest {
         InputStream inputStream = new ByteArrayInputStream(buffer);
         OutputStream outputStream = new ByteArrayOutputStream();
 
-        BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
-        BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(outputStream));
+        InputStream consoleIn = System.in;
+        PrintStream consoleOut = System.out;
+        System.setIn(inputStream);
+        System.setOut(new PrintStream(outputStream));
 
-        StudentUI ui = new StudentUI(reader, writer);
-        ui.run();
-        assertEquals(expectedOutput.toString(), outputStream.toString());
-        assertStudents(ui.getAddedStudents());
+        try {
+            StudentUI ui = new StudentUI();
+            ui.run();
+
+            assertEquals(expectedOutput.toString(), outputStream.toString());
+            assertStudents(ui.getAddedStudents());
+        }
+        finally {
+            System.setIn(consoleIn);
+            System.setOut(consoleOut);
+        }
     }
 
     private String line(String input) {

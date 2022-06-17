@@ -1,14 +1,14 @@
-package sis.util;
+package sis.db;
+
 
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
+import sis.util.DateUtilTest;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-        ParityCheckerTest.class,
-        PasswordGeneratorTest.class,
         DateUtilTest.class,
-        IOUtilTest.class,
+        KeyFileTest.class,
 })
 public class AllTests {
 }
