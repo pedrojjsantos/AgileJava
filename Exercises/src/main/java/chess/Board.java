@@ -152,6 +152,7 @@ public class Board implements Iterable<Piece> {
             Collections.sort(blackPieces);
         }
     }
+
     public List<Piece> getWhitePieces() {
         return whitePieces;
     }
@@ -251,8 +252,8 @@ public class Board implements Iterable<Piece> {
         }
 
         private void nextCoordinates() {
-            do{ file++;
-
+            do {
+                file++;
                 if (file >= 8) {
                     file = 0;
                     rank--;

@@ -4,8 +4,6 @@ import org.junit.Test;
 
 import java.math.BigDecimal;
 import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 import static org.junit.Assert.*;
 
@@ -126,15 +124,19 @@ public class NumTest {
 //        float x = 1.0;
         { float x = (int) 1.0; }
 
-        assertEquals(1, (int) 1.9);     // Q11
-        assertEquals(2, Math.rint(1.9), 0.05);  // Q12
+            // Q11
+        assertEquals(1, (int) 1.9);
+            // Q12
+        assertEquals(2, Math.rint(1.9), 0.05);
             // Q13
         assertEquals(2, Math.rint(1.5), 0.05);
         assertEquals(2, Math.rint(2.5), 0.05);
 
 
-        assertEquals(34, 17 << 1);      // Q15
-        assertEquals(Character.MAX_VALUE - 1,(char) ~1);    // Q16
+            // Q15
+        assertEquals(34, 17 << 1);
+            // Q16
+        assertEquals(Character.MAX_VALUE - 1,(char) ~1);
 
         assertNotEquals(-128 >> 1, -128 >>> 1);
 //        System.out.printf("%d != %d%n", -128 >> 1, -128 >>> 1);

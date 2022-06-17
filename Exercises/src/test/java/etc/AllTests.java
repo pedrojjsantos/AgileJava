@@ -13,6 +13,7 @@ import org.junit.runners.Suite;
         WordCountTest.class,
         NameTest.class,
         NumTest.class,
+        FileTest.class,
 })
 public class AllTests {
 }

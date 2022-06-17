@@ -18,7 +18,7 @@ public class Queen extends Piece{
             moves.addAll(board.getRankPositionsAt(pos));
             moves.addAll(board.getDiagonalPositionsAt(pos));
 
-            moves.removeIf(p -> p.equals(pos));
+            moves.removeIf(pos::equals);
         }
 
         return moves;
