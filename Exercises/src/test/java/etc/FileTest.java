@@ -28,29 +28,37 @@ public class FileTest {
             assertEquals(text, fileText);
         }
         finally {
-            File file = new File(fileName);
+            delete(fileName);
+        }
+    }
+
+    private void delete(String... filename) {
+        for (String name : filename) {
+            File file = new File(name);
             if (file.exists())
-                assertTrue(new File(fileName).delete());
+                assertTrue(file.delete());
         }
     }
 
     @Test
     public void testPerformance() throws IOException {
-        String fileName = "testExercise2.txt";
-        long size = 1;
+        String fileName1 = "testNotBuffered.txt";
+        String fileName2 = "testBuffered.txt";
+        long size = 100000;
 
+        try (FileOutputStream file1 = new FileOutputStream(fileName1);
+             FileOutputStream file2 = new FileOutputStream(fileName2)) {
+            OutputStreamWriter writer = new OutputStreamWriter(file1);
+            BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(file2));
 
-        for (long i = 1; i < 1000000000000000000L; i *= 10) {
-            try (FileOutputStream file = new FileOutputStream(fileName)) {
-                OutputStreamWriter writer = new OutputStreamWriter(file);
-                BufferedWriter bufferedWriter = new BufferedWriter(writer);
+            long writerTime = writerPerformance(writer, size);
+            long bufferedTime = writerPerformance(bufferedWriter, size);
 
-                long writerTime = writerPerformance(writer, size);
-                long bufferedTime = writerPerformance(writer, size);
-
-                System.out.printf("w%d,\tb%d%n", writerTime, bufferedTime);
-            }
-
+//            System.out.printf("w%d,\tb%d%n", writerTime, bufferedTime);
+            assertTrue(writerTime > bufferedTime);
+        }
+        finally {
+            delete(fileName1, fileName2);
         }
     }
 
@@ -59,9 +67,9 @@ public class FileTest {
 
         long start = System.currentTimeMillis();
 
-        for (int i = 0; i < size; i++)
+        for (long i = 0; i < size; i++)
             writer.write(ch);
-
+        writer.flush();
         long stop = System.currentTimeMillis();
 
         return stop - start;

@@ -179,6 +179,8 @@ public class NumTest {
     }
 
     private void swap(int[] list, int i, int j) {
+        if (i == j) return;
+
         list[i] ^= list[j];
         list[j] ^= list[i];
         list[i] ^= list[j];
@@ -187,6 +189,7 @@ public class NumTest {
     private void verifySwap(int[] list) {
         int i = rng(0, 99);
         int j = rng(0, 99);
+
 
         int xi = list[i];
         int xj = list[j];
