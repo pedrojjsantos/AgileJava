@@ -7,6 +7,7 @@ import org.junit.runners.Suite;
 @Suite.SuiteClasses({
         StringUtilTest.class,
         MyFileTest.class,
+        DirTest.class,
 })
 public class AllTests {
 }

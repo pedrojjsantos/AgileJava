@@ -10,18 +10,18 @@ import static org.junit.Assert.*;
 
 public class MyFileTest {
     private final String fileName = "testMyFile.txt";
-    private final String content = content();
-    private final List<String> contentList = contentList();
+    private final String content = _content();
+    private final List<String> contentList = _contentList();
     MyFile file;
 
-    private static String content() {
+    private static String _content() {
         return ("Create a test to write the text of this exercise to the file system.%n"+
                 "The test should read the file back in and make assertions about the content.%n" +
                 "Ensure that you can run the test multiple times and have it pass.%n" +
                 "Finally, make sure that there are no leftover files when the test finishes,%n" +
                 "even if an exception is thrown.%n").formatted();
     }
-    private static List<String> contentList() {
+    private static List<String> _contentList() {
         List<String> list = new ArrayList<>();
         list.add("Create a test to write the text of this exercise to the file system.");
         list.add("The test should read the file back in and make assertions about the content.");
@@ -46,23 +46,9 @@ public class MyFileTest {
             assertEquals(content, fileContent);
         }
         finally {
-            if (new File(fileName).exists())
-                assertTrue(file.delete());
+            deleteFile();
         }
     }
-    private String readFile() throws IOException {
-        try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
-
-            StringBuilder buffer = new StringBuilder();
-
-            for (String line : reader.lines().toList()) {
-                buffer.append(line).append("%n".formatted());
-            }
-
-            return buffer.toString();
-        }
-    }
-
     @Test
     public void testWriteException() throws IOException{
         try {
@@ -72,8 +58,7 @@ public class MyFileTest {
         } catch (FileAlreadyExistException success) {
         }
         finally {
-            if (new File(fileName).exists())
-                assertTrue(file.delete());
+            deleteFile();
         }
     }
 
@@ -87,10 +72,10 @@ public class MyFileTest {
             assertEquals(content, fileContent);
         }
         finally {
-            if (new File(fileName).exists())
-                assertTrue(file.delete());
+            deleteFile();
         }
     }
+
     @Test
     public void testWriteLinesException() throws IOException{
         try {
@@ -100,11 +85,9 @@ public class MyFileTest {
         } catch (FileAlreadyExistException success) {
         }
         finally {
-            if (new File(fileName).exists())
-                assertTrue(file.delete());
+            deleteFile();
         }
     }
-
     @Test
     public void testOverwrite() throws IOException {
         try {
@@ -116,8 +99,7 @@ public class MyFileTest {
             assertEquals(content, fileContent);
         }
         finally {
-            if (new File(fileName).exists())
-                assertTrue(file.delete());
+            deleteFile();
         }
     }
 
@@ -132,8 +114,7 @@ public class MyFileTest {
             assertEquals(contentList, fileContent);
         }
         finally {
-            if (new File(fileName).exists())
-                assertTrue(file.delete());
+            deleteFile();
         }
     }
 
@@ -147,8 +128,19 @@ public class MyFileTest {
             assertEquals(content, fileContent);
         }
         finally {
-            if (new File(fileName).exists())
-                assertTrue(file.delete());
+            deleteFile();
+        }
+    }
+
+    @Test
+    public void testReadException() throws IOException {
+        try {
+            file.read();
+            fail("Expected exception");
+        }
+        catch (FileDoesntExistException success) {}
+        finally {
+            deleteFile();
         }
     }
 
@@ -162,8 +154,37 @@ public class MyFileTest {
             assertEquals(contentList, fileContent);
         }
         finally {
-            if (new File(fileName).exists())
-                assertTrue(file.delete());
+            deleteFile();
         }
+    }
+
+    @Test
+    public void testReadLinesException() throws IOException {
+        try {
+            file.readLines();
+            fail("Expected exception");
+        }
+        catch (FileDoesntExistException success) {}
+        finally {
+            deleteFile();
+        }
+    }
+
+
+    private String readFile() throws IOException {
+        try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
+
+            StringBuilder buffer = new StringBuilder();
+
+            for (String line : reader.lines().toList()) {
+                buffer.append(line).append("%n".formatted());
+            }
+
+            return buffer.toString();
+        }
+    }
+    private void deleteFile() {
+        if (new File(fileName).exists())
+            assertTrue(file.delete());
     }
 }

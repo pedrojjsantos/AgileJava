@@ -47,7 +47,7 @@ public class MyFile {
 
     public String read() throws IOException {
         if (!file.exists())
-            throw new UncheckedIOException(new IOException("The file does not exist!"));
+            throw new FileDoesntExistException("The file does not exist!");
 
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
             StringBuilder buffer = new StringBuilder();
@@ -62,7 +62,7 @@ public class MyFile {
 
     public List<String> readLines() throws IOException {
         if (!file.exists())
-            throw new UncheckedIOException(new IOException("The file does not exist!"));
+            throw new FileDoesntExistException("The file does not exist!");
 
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
             return reader.lines().collect(Collectors.toList());
