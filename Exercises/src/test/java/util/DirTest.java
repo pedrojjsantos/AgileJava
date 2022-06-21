@@ -18,8 +18,6 @@ public class DirTest {
 
     @Test
     public void testGetFiles() throws IOException {
-        ;
-
         try {
             directory.ensureExists();
             assertTrue(new File("test").isDirectory());

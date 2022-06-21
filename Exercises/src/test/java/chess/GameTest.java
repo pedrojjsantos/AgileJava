@@ -11,6 +11,8 @@ import static util.StringUtil.appendNewLine;
 
 public class GameTest {
     private final String blankRank = appendNewLine(". . . . . . . .");
+    private final String saveFileSerialized = "boardSerialize.save";
+    private final String saveFileTextual = "boardTextual.save";
     private final double STRENGTH_PRECISION = 0.05;
     private Game game;
 
@@ -101,5 +103,18 @@ public class GameTest {
         game.putPiece("b6", createBlackPawn());
         game.putPiece("e6", createBlackQueen());
         assertEquals(20.0, game.getBlackStrength(), STRENGTH_PRECISION);
+    }
+
+    @Test
+    public void testSaveBoardSerialized() {
+        game.initialize();
+
+        game.saveSerialized(saveFileSerialized);
+        Game loadedGame = new Game();
+        loadedGame.loadSerialized(saveFileSerialized);
+
+        assertEquals(game.printBoard(), loadedGame.printBoard());
+        assertEquals(game.getBlackStrength(), game.getBlackStrength(), 0.05);
+        assertEquals(game.getWhiteStrength(), game.getWhiteStrength(), 0.05);
     }
 }

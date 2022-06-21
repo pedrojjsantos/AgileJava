@@ -2,6 +2,8 @@ package chess;
 
 import chess.pieces.Piece;
 
+import java.io.*;
+
 public class Game {
     private final Board board;
 
@@ -87,5 +89,11 @@ public class Game {
         }
 
         return strengthCount;
+    }
+
+    public void saveSerialized(String filename) throws IOException {
+        try (ObjectOutputStream outputStream = new ObjectOutputStream(new FileOutputStream(filename))) {
+            outputStream.writeObject(board);
+        }
     }
 }
