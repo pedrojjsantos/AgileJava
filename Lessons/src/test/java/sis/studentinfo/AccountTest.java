@@ -8,11 +8,24 @@ import java.math.BigDecimal;
 import static org.junit.Assert.*;
 
 public class AccountTest {
+    static final String ABA = "102000012";
+    static final String ACCOUNT_NUMBER = "194431518811";
     private Account account;
 
     @Before
     public void setUp() {
         account = new Account();
+        account.setBankAba(ABA);
+        account.setBankAccountNumber(ACCOUNT_NUMBER);
+        account.setBankAccountType(Account.BankAccountType.CHECKING);
+    }
+
+    @Test
+    public void testTransferFromBank() {
+        account.setAch(new com.jimbob.ach.JimBobAch()); // uh-oh
+        final BigDecimal amount = new BigDecimal("50.00");
+        account.transferFromBank(amount);
+        assertEquals(amount, account.getBalance());
     }
 
     @Test
