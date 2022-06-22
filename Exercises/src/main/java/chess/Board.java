@@ -3,15 +3,15 @@ package chess;
 import chess.pieces.Piece;
 import util.StringUtil;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
+import java.io.Serializable;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Provides representation of a chess board
  */
-public class Board implements Iterable<Piece> {
+public class Board implements Iterable<Piece>, Serializable {
     private final Piece[][] ranks = new Piece[8][8];
     private final List<Piece> whitePieces = new ArrayList<>();
     private final List<Piece> blackPieces = new ArrayList<>();
@@ -23,12 +23,53 @@ public class Board implements Iterable<Piece> {
         }
     }
 
+    public static Board fromString(String boardString) {
+        Board board = new Board();
+        List<List<Character>> representations =
+                boardString.lines().map(StringUtil::getInitials).toList();
+
+        if (representations.size() != 8) return null;
+
+        for (int i = 7; i >= 0; i--) {
+            Piece[] rank = board.ranks[i];
+            List<Character> rankChars = representations.get(7-i);
+
+            for (int j = 0; j < 8; j++) {
+                char ch = rankChars.get(j);
+                boolean isLower = Character.isLowerCase(ch);
+                rank[j] = (isLower) ? readWhitePiece(ch) : readBlackPiece(ch);
+            }
+        }
+        return board;
+    }
+    private static Piece readWhitePiece(char ch) {
+        return switch (ch) {
+            case 'b' -> Piece.createWhiteBishop();
+            case 'k' -> Piece.createWhiteKing();
+            case 'n' -> Piece.createWhiteKnight();
+            case 'p' -> Piece.createWhitePawn();
+            case 'q' -> Piece.createWhiteQueen();
+            case 'r' -> Piece.createWhiteRook();
+            default  -> Piece.noPiece();
+        };
+    }
+    private static Piece readBlackPiece(char ch) {
+        return switch (ch) {
+            case 'B' -> Piece.createBlackBishop();
+            case 'K' -> Piece.createBlackKing();
+            case 'N' -> Piece.createBlackKnight();
+            case 'P' -> Piece.createBlackPawn();
+            case 'Q' -> Piece.createBlackQueen();
+            case 'R' -> Piece.createBlackRook();
+            default  -> Piece.noPiece();
+        };
+    }
+
     public void initialize() {
         whitePieces.clear();
         blackPieces.clear();
 
         initWhiteRanks();
-        initBlankRanks();
         initBlackRanks();
     }
 
@@ -49,12 +90,6 @@ public class Board implements Iterable<Piece> {
         blackPieces.addAll(List.of(ranks[7]));
 
         Collections.sort(blackPieces);
-    }
-    private void initBlankRanks() {
-        for (int i = 2; i < 6; i++) {
-            for (int j = 0; j < 8; j++)
-                ranks[i][j] = Piece.noPiece();
-        }
     }
     private void initWhiteRanks() {
         ranks[0][0] = Piece.createWhiteRook();
@@ -89,10 +124,9 @@ public class Board implements Iterable<Piece> {
     public int pieceCount(Piece piece) {
         int count = 0;
 
-        for (Piece p : this) {
+        for (Piece p : this)
             if (piece.isEqualTo(p))
                 count++;
-        }
 
         return count;
     }

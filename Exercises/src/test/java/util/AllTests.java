@@ -8,6 +8,7 @@ import org.junit.runners.Suite;
         StringUtilTest.class,
         MyFileTest.class,
         DirTest.class,
+        CloneTest.class,
 })
 public class AllTests {
 }

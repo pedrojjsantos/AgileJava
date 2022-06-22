@@ -44,4 +44,33 @@ public class Dir {
             file.delete();
         return directory.delete();
     }
+
+    public Attributes getAttributes() {
+        return new Attributes(this);
+    }
+
+    private boolean isReadOnly() {
+        return !directory.canWrite() && directory.canRead();
+    }
+    private boolean isHidden() {
+        return directory.isHidden();
+    }
+
+    static class Attributes {
+        private boolean isReadOnly;
+        private boolean isHidden;
+
+        Attributes(Dir dir) {
+            isReadOnly = dir.isReadOnly();
+            isHidden = dir.isHidden();
+        }
+
+        public boolean isReadOnly() {
+            return isReadOnly;
+        }
+
+        public boolean isHidden() {
+            return isHidden;
+        }
+    }
 }

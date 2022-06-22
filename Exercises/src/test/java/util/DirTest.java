@@ -52,4 +52,12 @@ public class DirTest {
             fail("Expected Exception!");
         } catch (DirPathNameException success) {}
     }
+
+    @Test
+    public void testGetAttributes() {
+        Dir.Attributes att = new Dir.Attributes(directory);
+
+        assertFalse(att.isHidden());
+        assertFalse(att.isReadOnly());
+    }
 }

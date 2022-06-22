@@ -14,6 +14,7 @@ import org.junit.runners.Suite;
         NameTest.class,
         NumTest.class,
         FileTest.class,
+        PrimitiveSizeTest.class,
 })
 public class AllTests {
 }

@@ -3,13 +3,11 @@ package chess.pieces;
 import chess.Board;
 import util.StringUtil;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Piece implements Comparable<Piece> {
-    public final static String WHITE = "white";
-    public final static String BLACK = "black";
-
+public class Piece implements Comparable<Piece>, Serializable {
     public boolean isEmpty() {
         return false;
     }

@@ -5,14 +5,15 @@ import org.junit.Before;
 import org.junit.Test;
 import util.StringUtil;
 
+import java.io.File;
+import java.io.IOException;
+
 import static chess.pieces.Piece.*;
 import static org.junit.Assert.*;
 import static util.StringUtil.appendNewLine;
 
 public class GameTest {
     private final String blankRank = appendNewLine(". . . . . . . .");
-    private final String saveFileSerialized = "boardSerialize.save";
-    private final String saveFileTextual = "boardTextual.save";
     private final double STRENGTH_PRECISION = 0.05;
     private Game game;
 
@@ -106,15 +107,44 @@ public class GameTest {
     }
 
     @Test
-    public void testSaveBoardSerialized() {
+    public void testSaveBoardSerialized() throws IOException, ClassNotFoundException{
         game.initialize();
 
-        game.saveSerialized(saveFileSerialized);
-        Game loadedGame = new Game();
-        loadedGame.loadSerialized(saveFileSerialized);
+        String saveFileSerialized = "boardSerialize.save";
+        try {
+            game.saveSerialized(saveFileSerialized);
+            Game loadedGame = new Game();
+            loadedGame.loadSerialized(saveFileSerialized);
 
-        assertEquals(game.printBoard(), loadedGame.printBoard());
-        assertEquals(game.getBlackStrength(), game.getBlackStrength(), 0.05);
-        assertEquals(game.getWhiteStrength(), game.getWhiteStrength(), 0.05);
+            assertEquals(game.printBoard(), loadedGame.printBoard());
+            assertEquals(game.getBlackStrength(), game.getBlackStrength(), 0.05);
+            assertEquals(game.getWhiteStrength(), game.getWhiteStrength(), 0.05);
+        }
+        finally {
+            File file = new File(saveFileSerialized);
+            if (file.exists())
+                assertTrue(file.delete());
+        }
+    }
+
+    @Test
+    public void testSaveBoardTextual() throws IOException, ClassNotFoundException{
+        game.initialize();
+
+        String saveFileTextual = "boardTextual.save";
+        try {
+            game.saveTextual(saveFileTextual);
+            Game loadedGame = new Game();
+            loadedGame.loadTextual(saveFileTextual);
+
+            assertEquals(game.printBoard(), loadedGame.printBoard());
+            assertEquals(game.getBlackStrength(), game.getBlackStrength(), 0.05);
+            assertEquals(game.getWhiteStrength(), game.getWhiteStrength(), 0.05);
+        }
+        finally {
+            File file = new File(saveFileTextual);
+            if (file.exists())
+                assertTrue(file.delete());
+        }
     }
 }

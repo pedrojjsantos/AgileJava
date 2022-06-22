@@ -5,7 +5,7 @@ import chess.pieces.Piece;
 import java.io.*;
 
 public class Game {
-    private final Board board;
+    private Board board;
 
     Game() {
         board = new Board();
@@ -94,6 +94,32 @@ public class Game {
     public void saveSerialized(String filename) throws IOException {
         try (ObjectOutputStream outputStream = new ObjectOutputStream(new FileOutputStream(filename))) {
             outputStream.writeObject(board);
+        }
+    }
+
+    public void loadSerialized(String filename) throws IOException, ClassNotFoundException {
+        try (ObjectInputStream inputStream = new ObjectInputStream(new FileInputStream(filename))) {
+            this.board = (Board) inputStream.readObject();
+        }
+    }
+
+    public void saveTextual(String filename) throws IOException {
+        try (BufferedWriter output = new BufferedWriter(new FileWriter(filename))) {
+            output.write(board.print());
+        }
+    }
+
+    public void loadTextual(String filename) throws IOException {
+        try (BufferedReader input = new BufferedReader(new FileReader(filename))) {
+            StringBuilder printedBoard =new StringBuilder();
+            String line = input.readLine();
+
+            while (line != null) {
+                printedBoard.append(line).append("%n");
+                line = input.readLine();
+            }
+
+            this.board = Board.fromString(printedBoard.toString().formatted());
         }
     }
 }
