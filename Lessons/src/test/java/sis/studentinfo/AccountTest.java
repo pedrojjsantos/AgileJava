@@ -1,9 +1,12 @@
 package sis.studentinfo;
 
+import com.jimbob.ach.*;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.math.BigDecimal;
+import java.util.Date;
 
 import static org.junit.Assert.*;
 
@@ -22,10 +25,18 @@ public class AccountTest {
 
     @Test
     public void testTransferFromBank() {
-        account.setAch(new com.jimbob.ach.JimBobAch()); // uh-oh
+        account.setAch(createMockAch(AchStatus.SUCCESS));
         final BigDecimal amount = new BigDecimal("50.00");
         account.transferFromBank(amount);
         assertEquals(amount, account.getBalance());
+    }
+
+    @Test
+    public void testFailedTransferFromBank() {
+        account.setAch(createMockAch(AchStatus.FAILURE));
+        final BigDecimal amount = new BigDecimal("50.00");
+        account.transferFromBank(amount);
+        assertEquals(new BigDecimal("0.00"), account.getBalance());
     }
 
     @Test
@@ -41,5 +52,20 @@ public class AccountTest {
         account.credit(new BigDecimal("11.00"));
         account.credit(new BigDecimal("2.99"));
         assertEquals(new BigDecimal("4.70"), account.transactionAverage());
+    }
+
+    private Ach createMockAch(AchStatus status) {
+        return new MockAch() {
+            @Override
+            public AchResponse issueDebit(AchCredentials credentials, AchTransactionData data) {
+                assertEquals(AccountTest.ACCOUNT_NUMBER, data.account);
+                assertEquals(AccountTest.ABA, data.aba);
+                AchResponse response = new AchResponse();
+                response.timestamp = new Date();
+                response.traceCode = "1";
+                response.status = status;
+                return response;
+            }
+        };
     }
 }

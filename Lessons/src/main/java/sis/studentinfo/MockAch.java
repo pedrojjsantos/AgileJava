@@ -11,13 +11,7 @@ class MockAch implements Ach {
 
     public AchResponse issueDebit(
             AchCredentials credentials, AchTransactionData data) {
-        Assert.assertEquals(ACCOUNT_NUMBER, data.account);
-        Assert.assertEquals(ABA, data.aba);
-        AchResponse response = new AchResponse();
-        response.timestamp = new Date();
-        response.traceCode = "1";
-        response.status = AchStatus.SUCCESS;
-        return response;
+        return null;
     }
     public AchResponse markTransactionAsNSF(AchCredentials credentials,
                                             AchTransactionData data,
@@ -43,4 +37,6 @@ class MockAch implements Ach {
                                               String traceCode) {
         return null;
     }
+
 }
+
