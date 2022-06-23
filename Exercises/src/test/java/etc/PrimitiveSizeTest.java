@@ -16,6 +16,10 @@ public class PrimitiveSizeTest {
         assertEquals(1, byteStream.size());
         byteStream.reset();
 
+        outputStream.writeBoolean(false);
+        assertEquals(1, byteStream.size());
+        byteStream.reset();
+
         outputStream.writeChar(0);
         assertEquals(2, byteStream.size());
         byteStream.reset();

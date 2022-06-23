@@ -1,11 +1,8 @@
 package chess.pieces;
 
-import chess.Board;
-import util.StringUtil;
-
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.function.Supplier;
 
 public class Piece implements Comparable<Piece>, Serializable {
     public boolean isEmpty() {
@@ -29,50 +26,74 @@ public class Piece implements Comparable<Piece>, Serializable {
         this.representation = representation;
     }
 
+    private static HashMap<Character, Supplier<Piece>> charToPieceFactory;
+    private static void loadFactoryMap() {
+        if (charToPieceFactory != null) return;
+
+        charToPieceFactory = new HashMap<>();
+        charToPieceFactory.put('B', Piece::createBlackBishop);
+        charToPieceFactory.put('K', Piece::createBlackKing);
+        charToPieceFactory.put('N', Piece::createBlackKnight);
+        charToPieceFactory.put('P', Piece::createBlackPawn);
+        charToPieceFactory.put('Q', Piece::createBlackQueen);
+        charToPieceFactory.put('R', Piece::createBlackRook);
+        charToPieceFactory.put('.', Piece::noPiece);
+        charToPieceFactory.put('b', Piece::createWhiteBishop);
+        charToPieceFactory.put('k', Piece::createWhiteKing);
+        charToPieceFactory.put('n', Piece::createWhiteKnight);
+        charToPieceFactory.put('p', Piece::createWhitePawn);
+        charToPieceFactory.put('q', Piece::createWhiteQueen);
+        charToPieceFactory.put('r', Piece::createWhiteRook);
+    }
+
     public static NoPiece noPiece() {
         return new NoPiece();
     }
 
     // White Pieces
-    public static Pawn createWhitePawn() {
+    public static Pawn   createWhitePawn() {
         return new Pawn(Color.WHITE);
     }
     public static Knight createWhiteKnight() {
         return new Knight(Color.WHITE);
     }
-    public static Rook createWhiteRook() {
+    public static Rook   createWhiteRook() {
         return new Rook(Color.WHITE);
     }
     public static Bishop createWhiteBishop() {
         return new Bishop(Color.WHITE);
     }
-    public static Queen createWhiteQueen() {
+    public static Queen  createWhiteQueen() {
         return new Queen(Color.WHITE);
     }
-    public static King createWhiteKing() {
+    public static King   createWhiteKing() {
         return new King(Color.WHITE);
     }
 
     // Black Pieces
-    public static Pawn createBlackPawn() {
+    public static Pawn   createBlackPawn() {
         return new Pawn(Color.BLACK);
     }
     public static Knight createBlackKnight() {
         return new Knight(Color.BLACK);
     }
-    public static Rook createBlackRook() {
+    public static Rook   createBlackRook() {
         return new Rook(Color.BLACK);
     }
     public static Bishop createBlackBishop() {
         return new Bishop(Color.BLACK);
     }
-    public static Queen createBlackQueen() {
+    public static Queen  createBlackQueen() {
         return new Queen(Color.BLACK);
     }
-    public static King createBlackKing() {
+    public static King   createBlackKing() {
         return new King(Color.BLACK);
     }
 
+    public static Piece fromChar(char ch) {
+        loadFactoryMap();
+        return charToPieceFactory.get(ch).get();
+    }
 
     public boolean isWhite() {
         return color == Color.WHITE;

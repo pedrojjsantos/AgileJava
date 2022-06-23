@@ -10,6 +10,7 @@ import static org.junit.Assert.*;
 
 abstract public class PieceTest {
     protected final double STRENGTH_PRECISION = 0.05;
+    protected char pieceRepresentation;
 
     abstract protected Piece createWhitePiece();
     abstract protected Piece createBlackPiece();
@@ -28,7 +29,16 @@ abstract public class PieceTest {
         assertEquals("", blackPiece.getPosition());
 
         verifyCreation(whitePiece, blackPiece);
+
+        Piece whitePieceFromChar = Piece.fromChar(whitePiece.print());
+        Piece blackPieceFromChar = Piece.fromChar(Character.toUpperCase(whitePiece.print()));
+
+        assertEquals("", whitePieceFromChar.getPosition());
+        assertEquals("", blackPieceFromChar.getPosition());
+
+        verifyCreation(whitePieceFromChar, blackPieceFromChar);
     }
+
     @Test
     public void testIsEqual() {
         Piece whitePawn1 = Piece.createWhitePawn();

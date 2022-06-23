@@ -5,6 +5,8 @@ import util.StringUtil;
 
 import java.io.Serializable;
 import java.util.*;
+import java.util.function.Function;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -21,7 +23,32 @@ public class Board implements Iterable<Piece>, Serializable {
             for (int j = 0; j < 8; j++)
                 ranks[i][j] = Piece.noPiece();
         }
+
     }
+
+    private static Board fromBoardStringToBoard(String boardString) {
+        String[] lines = boardString.split("%n".formatted());
+        return null;
+    }
+
+    public static Board fromStringPrime(String boardString) {
+        Board board = new Board();
+        List<List<Character>> representations =
+                boardString.lines().map(StringUtil::getInitials).toList();
+
+        if (representations.size() != 8) return null;
+        for (int i = 7; i >= 0; i--) {
+            Piece[] rank = board.ranks[i];
+            List<Character> rankChars = representations.get(7-i);
+
+            for (int j = 0; j < 8; j++) {
+                char ch = rankChars.get(j);
+                rank[j] = Piece.fromChar(ch);
+            }
+        }
+        return board;
+    }
+
 
     public static Board fromString(String boardString) {
         Board board = new Board();

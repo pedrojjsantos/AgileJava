@@ -119,7 +119,7 @@ public class Game {
                 line = input.readLine();
             }
 
-            this.board = Board.fromString(printedBoard.toString().formatted());
+            this.board = Board.fromStringPrime(printedBoard.toString().formatted());
         }
     }
 }

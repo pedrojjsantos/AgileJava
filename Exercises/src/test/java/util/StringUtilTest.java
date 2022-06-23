@@ -53,4 +53,10 @@ public class StringUtilTest {
 
         assertEquals(expected, initials);
     }
+
+    @Test
+    public void testUtil() {
+        final String str = "a b c d%na b c d%n a b c d%na b c d".formatted();
+        System.out.println(StringUtil.split(str).toString());
+    }
 }

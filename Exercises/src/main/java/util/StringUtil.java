@@ -2,6 +2,7 @@ package util;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class StringUtil {
@@ -23,5 +24,12 @@ public class StringUtil {
         List<String> words = words(str);
 
         return words.stream().map(s -> s.charAt(0)).collect(Collectors.toList());
+    }
+
+    //TODO: map
+    public static <T, R> List<Character> map(String str, Function<T,R> fn) {
+        List<String> words = words(str);
+
+        return ;
     }
 }
