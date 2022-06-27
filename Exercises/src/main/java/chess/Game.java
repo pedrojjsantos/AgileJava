@@ -1,6 +1,7 @@
 package chess;
 
 import chess.pieces.Piece;
+import util.StringUtil;
 
 import java.io.*;
 
@@ -12,8 +13,41 @@ public class Game {
     }
 
     public void initialize() {
-        board.initialize();
+        initWhiteRanks();
+        initBlackRanks();
     }
+
+    private void initWhiteRanks() {
+        board.put("a1", Piece.createWhiteRook());
+        board.put("b1", Piece.createWhiteKnight());
+        board.put("c1", Piece.createWhiteBishop());
+        board.put("d1", Piece.createWhiteQueen());
+        board.put("e1", Piece.createWhiteKing());
+        board.put("f1", Piece.createWhiteBishop());
+        board.put("g1", Piece.createWhiteKnight());
+        board.put("h1", Piece.createWhiteRook());
+
+        for (int i = 0; i < 8; i++) {
+            String position = StringUtil.join2Chars('a'+ i, '2');
+            board.put(position, Piece.createWhitePawn());
+        }
+    }
+    private void initBlackRanks() {
+        board.put("a8", Piece.createBlackRook());
+        board.put("b8", Piece.createBlackKnight());
+        board.put("c8", Piece.createBlackBishop());
+        board.put("d8", Piece.createBlackQueen());
+        board.put("e8", Piece.createBlackKing());
+        board.put("f8", Piece.createBlackBishop());
+        board.put("g8", Piece.createBlackKnight());
+        board.put("h8", Piece.createBlackRook());
+
+        for (int i = 0; i < 8; i++) {
+            String position = StringUtil.join2Chars('a'+ i, '7');
+            board.put(position, Piece.createBlackPawn());
+        }
+    }
+
 
     public int pieceCount() {
         return board.pieceCount();
@@ -47,21 +81,9 @@ public class Game {
                 strength += piece.getStrength();
         }
 
-        strength += getWhitePawnsStrength();
+        strength += getPawnStrength(pawn);
 
         return strength;
-    }
-
-    private double getWhitePawnsStrength() {
-        double strengthCount = 0;
-
-        for (int file = 0; file < 8; file++) {
-            int nPawnsInFile = board.pieceCountInFile(file, Piece.createWhitePawn());
-            double pawnStrength = (nPawnsInFile > 1) ? 0.5 : 1.0;
-
-            strengthCount += pawnStrength * nPawnsInFile;
-        }
-        return strengthCount;
     }
 
     public double getBlackStrength() {
@@ -73,22 +95,22 @@ public class Game {
                 strength += piece.getStrength();
         }
 
-        strength += getBlackPawnsStrength();
+        strength += getPawnStrength(pawn);
 
         return strength;
     }
 
-    private double getBlackPawnsStrength() {
-        double strengthCount = 0;
+    private double getPawnStrength(Piece pawn) {
+        double totalStrength = 0;
 
         for (int file = 0; file < 8; file++) {
-            int nPawnsInFile = board.pieceCountInFile(file, Piece.createBlackPawn());
+            int nPawnsInFile = board.pieceCountInFile(file, pawn);
             double pawnStrength = (nPawnsInFile > 1) ? 0.5 : 1.0;
 
-            strengthCount += pawnStrength * nPawnsInFile;
+            totalStrength += pawnStrength * nPawnsInFile;
         }
 
-        return strengthCount;
+        return totalStrength;
     }
 
     public void saveSerialized(String filename) throws IOException {
@@ -103,23 +125,40 @@ public class Game {
         }
     }
 
-    public void saveTextual(String filename) throws IOException {
-        try (BufferedWriter output = new BufferedWriter(new FileWriter(filename))) {
-            output.write(board.print());
+
+    public void saveTextual(String filename) throws IOException{
+        try (BufferedWriter saveFile = new BufferedWriter(new FileWriter(filename))) {
+            saveFile.write(""+pieceCount());
+            saveFile.newLine();
+
+            for (Piece piece : board) {
+                saveFile.write(piece.print());
+                saveFile.write(' ');
+                saveFile.write(piece.getPosition());
+                saveFile.newLine();
+            }
         }
     }
 
     public void loadTextual(String filename) throws IOException {
-        try (BufferedReader input = new BufferedReader(new FileReader(filename))) {
-            StringBuilder printedBoard =new StringBuilder();
-            String line = input.readLine();
+        try (BufferedReader saveFile = new BufferedReader(new FileReader(filename))) {
+            try{
+                int nLines = Integer.parseInt(saveFile.readLine());
 
-            while (line != null) {
-                printedBoard.append(line).append("%n");
-                line = input.readLine();
+                Board newBoard = new Board();
+
+                for (int i = 0; i < nLines; i++) {
+                    char piece = (char) saveFile.read();
+                    saveFile.read();
+                    String position = saveFile.readLine();
+
+                    newBoard.put(position, Piece.fromChar(piece));
+                }
+
+                this.board = newBoard;
+            } catch (Exception e) {
+                throw new InvalidSaveFileException(e);
             }
-
-            this.board = Board.fromStringPrime(printedBoard.toString().formatted());
         }
     }
 }

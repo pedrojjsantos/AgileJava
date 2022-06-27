@@ -25,7 +25,7 @@ public class PawnTest extends PieceTest {
 
         assertTrue(blackPiece.isBlack());
         assertSame(Pawn.class, blackPiece.getClass());
-        assertEquals('p', blackPiece.print());
+        assertEquals('P', blackPiece.print());
         assertEquals(1, blackPiece.getStrength(), STRENGTH_PRECISION);
     }
 }

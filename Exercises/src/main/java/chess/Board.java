@@ -26,117 +26,6 @@ public class Board implements Iterable<Piece>, Serializable {
 
     }
 
-    private static Board fromBoardStringToBoard(String boardString) {
-        String[] lines = boardString.split("%n".formatted());
-        return null;
-    }
-
-    public static Board fromStringPrime(String boardString) {
-        Board board = new Board();
-        List<List<Character>> representations =
-                boardString.lines().map(StringUtil::getInitials).toList();
-
-        if (representations.size() != 8) return null;
-        for (int i = 7; i >= 0; i--) {
-            Piece[] rank = board.ranks[i];
-            List<Character> rankChars = representations.get(7-i);
-
-            for (int j = 0; j < 8; j++) {
-                char ch = rankChars.get(j);
-                rank[j] = Piece.fromChar(ch);
-            }
-        }
-        return board;
-    }
-
-
-    public static Board fromString(String boardString) {
-        Board board = new Board();
-        List<List<Character>> representations =
-                boardString.lines().map(StringUtil::getInitials).toList();
-
-        if (representations.size() != 8) return null;
-
-        for (int i = 7; i >= 0; i--) {
-            Piece[] rank = board.ranks[i];
-            List<Character> rankChars = representations.get(7-i);
-
-            for (int j = 0; j < 8; j++) {
-                char ch = rankChars.get(j);
-                boolean isLower = Character.isLowerCase(ch);
-                rank[j] = (isLower) ? readWhitePiece(ch) : readBlackPiece(ch);
-            }
-        }
-        return board;
-    }
-    private static Piece readWhitePiece(char ch) {
-        return switch (ch) {
-            case 'b' -> Piece.createWhiteBishop();
-            case 'k' -> Piece.createWhiteKing();
-            case 'n' -> Piece.createWhiteKnight();
-            case 'p' -> Piece.createWhitePawn();
-            case 'q' -> Piece.createWhiteQueen();
-            case 'r' -> Piece.createWhiteRook();
-            default  -> Piece.noPiece();
-        };
-    }
-    private static Piece readBlackPiece(char ch) {
-        return switch (ch) {
-            case 'B' -> Piece.createBlackBishop();
-            case 'K' -> Piece.createBlackKing();
-            case 'N' -> Piece.createBlackKnight();
-            case 'P' -> Piece.createBlackPawn();
-            case 'Q' -> Piece.createBlackQueen();
-            case 'R' -> Piece.createBlackRook();
-            default  -> Piece.noPiece();
-        };
-    }
-
-    public void initialize() {
-        whitePieces.clear();
-        blackPieces.clear();
-
-        initWhiteRanks();
-        initBlackRanks();
-    }
-
-    private void initBlackRanks() {
-        for (int i = 0; i < 8; i++)
-            ranks[6][i] = Piece.createBlackPawn();
-
-        ranks[7][0] = Piece.createBlackRook();
-        ranks[7][1] = Piece.createBlackKnight();
-        ranks[7][2] = Piece.createBlackBishop();
-        ranks[7][3] = Piece.createBlackQueen();
-        ranks[7][4] = Piece.createBlackKing();
-        ranks[7][5] = Piece.createBlackBishop();
-        ranks[7][6] = Piece.createBlackKnight();
-        ranks[7][7] = Piece.createBlackRook();
-
-        blackPieces.addAll(List.of(ranks[6]));
-        blackPieces.addAll(List.of(ranks[7]));
-
-        Collections.sort(blackPieces);
-    }
-    private void initWhiteRanks() {
-        ranks[0][0] = Piece.createWhiteRook();
-        ranks[0][1] = Piece.createWhiteKnight();
-        ranks[0][2] = Piece.createWhiteBishop();
-        ranks[0][3] = Piece.createWhiteQueen();
-        ranks[0][4] = Piece.createWhiteKing();
-        ranks[0][5] = Piece.createWhiteBishop();
-        ranks[0][6] = Piece.createWhiteKnight();
-        ranks[0][7] = Piece.createWhiteRook();
-
-        for (int i = 0; i < 8; i++)
-            ranks[1][i] = Piece.createWhitePawn();
-
-        whitePieces.addAll(List.of(ranks[0]));
-        whitePieces.addAll(List.of(ranks[1]));
-
-        Collections.sort(whitePieces);
-    }
-
     public int getCountWhite() {
         return whitePieces.size();
     }
@@ -170,13 +59,10 @@ public class Board implements Iterable<Piece>, Serializable {
 
     private String printRank(Piece[] rank) {
         StringBuilder buffer = new StringBuilder();
-        for (Piece piece : rank) {
-            char representation = piece.print();
-            if (piece.isBlack())
-                representation = Character.toUpperCase(representation);
 
-            buffer.append(representation).append(' ');
-        }
+        for (Piece piece : rank)
+            buffer.append(piece.print()).append(' ');
+
         buffer.setLength(buffer.length() - 1);
         return buffer.toString();
     }

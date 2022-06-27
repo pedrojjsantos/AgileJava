@@ -24,7 +24,7 @@ public class KnightTest extends PieceTest {
 
         assertTrue(blackPiece.isBlack());
         assertSame(Knight.class, blackPiece.getClass());
-        assertEquals('n', blackPiece.print());
+        assertEquals('N', blackPiece.print());
         assertEquals(2.5, blackPiece.getStrength(), STRENGTH_PRECISION);
     }
 }

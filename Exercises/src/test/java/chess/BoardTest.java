@@ -40,7 +40,7 @@ public class BoardTest {
 
     @Test
     public void testInitialize() {
-        board.initialize();
+        initialize(board);
         assertEquals(32, board.pieceCount());
         assertEquals(16, board.getCountWhite());
         assertEquals(16, board.getCountBlack());
@@ -56,7 +56,7 @@ public class BoardTest {
 
     @Test
     public void testPieceCount() {
-        board.initialize();
+        initialize(board);
 
         assertEquals(8, board.pieceCount(createWhitePawn()));
         assertEquals(8, board.pieceCount(createBlackPawn()));
@@ -66,7 +66,7 @@ public class BoardTest {
 
     @Test
     public void testRetrievePiece() {
-        board.initialize();
+        initialize(board);
         verifyBoardQuery("a8", createBlackRook());
         verifyBoardQuery("b7", createBlackPawn());
         verifyBoardQuery("f2", createWhitePawn());
@@ -160,7 +160,7 @@ public class BoardTest {
 
     @Test
     public void testIterable() {
-        board.initialize();
+        initialize(board);
         String iteratedPrint = iteratePrint();
         assertEquals(
                 "RNBQKBNR" +
@@ -172,13 +172,46 @@ public class BoardTest {
     private String iteratePrint() {
         StringBuilder buffer = new StringBuilder();
 
-        for (Piece piece : board) {
-            char ch = piece.print();
+        for (Piece piece : board)
+            buffer.append(piece.print());
 
-            if (piece.isBlack())
-                ch = Character.toUpperCase(ch);
-            buffer.append(ch);
-        }
         return buffer.toString();
+    }
+
+    private void initialize(Board board) {
+        initWhiteRanks(board);
+        initBlackRanks(board);
+    }
+
+    private void initWhiteRanks(Board board) {
+        board.put("a1", Piece.createWhiteRook());
+        board.put("b1", Piece.createWhiteKnight());
+        board.put("c1", Piece.createWhiteBishop());
+        board.put("d1", Piece.createWhiteQueen());
+        board.put("e1", Piece.createWhiteKing());
+        board.put("f1", Piece.createWhiteBishop());
+        board.put("g1", Piece.createWhiteKnight());
+        board.put("h1", Piece.createWhiteRook());
+
+        for (int i = 0; i < 8; i++) {
+            String position = StringUtil.join2Chars('a'+ i, '2');
+            board.put(position, Piece.createWhitePawn());
+        }
+    }
+
+    private void initBlackRanks(Board board) {
+        board.put("a8", Piece.createBlackRook());
+        board.put("b8", Piece.createBlackKnight());
+        board.put("c8", Piece.createBlackBishop());
+        board.put("d8", Piece.createBlackQueen());
+        board.put("e8", Piece.createBlackKing());
+        board.put("f8", Piece.createBlackBishop());
+        board.put("g8", Piece.createBlackKnight());
+        board.put("h8", Piece.createBlackRook());
+
+        for (int i = 0; i < 8; i++) {
+            String position = StringUtil.join2Chars('a'+ i, '7');
+            board.put(position, Piece.createBlackPawn());
+        }
     }
 }

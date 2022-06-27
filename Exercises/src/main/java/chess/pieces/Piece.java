@@ -5,21 +5,13 @@ import java.util.HashMap;
 import java.util.function.Supplier;
 
 public class Piece implements Comparable<Piece>, Serializable {
-    public boolean isEmpty() {
-        return false;
-    }
-
-    public void setPosition(String position) {
-        this.position = position;
-    }
-
     public enum Color {WHITE, BLACK;}
 
     private final Color color;
+
     private final char representation;
     private final double strength;
     private String position = "";
-
     protected Piece(Color color, char representation, double strength) {
         this.color = color;
         this.strength = strength;
@@ -27,6 +19,7 @@ public class Piece implements Comparable<Piece>, Serializable {
     }
 
     private static HashMap<Character, Supplier<Piece>> charToPieceFactory;
+
     private static void loadFactoryMap() {
         if (charToPieceFactory != null) return;
 
@@ -45,12 +38,12 @@ public class Piece implements Comparable<Piece>, Serializable {
         charToPieceFactory.put('q', Piece::createWhiteQueen);
         charToPieceFactory.put('r', Piece::createWhiteRook);
     }
-
     public static NoPiece noPiece() {
         return new NoPiece();
     }
 
     // White Pieces
+
     public static Pawn   createWhitePawn() {
         return new Pawn(Color.WHITE);
     }
@@ -69,8 +62,8 @@ public class Piece implements Comparable<Piece>, Serializable {
     public static King   createWhiteKing() {
         return new King(Color.WHITE);
     }
-
     // Black Pieces
+
     public static Pawn   createBlackPawn() {
         return new Pawn(Color.BLACK);
     }
@@ -89,26 +82,38 @@ public class Piece implements Comparable<Piece>, Serializable {
     public static King   createBlackKing() {
         return new King(Color.BLACK);
     }
-
     public static Piece fromChar(char ch) {
         loadFactoryMap();
-        return charToPieceFactory.get(ch).get();
+        Supplier<Piece> fn = charToPieceFactory.get(ch);
+        if (fn == null)
+            return noPiece();
+        return fn.get();
     }
 
     public boolean isWhite() {
         return color == Color.WHITE;
     }
+
     public boolean isBlack() {
         return color == Color.BLACK;
     }
-
     public char print() {
-        return this.representation;
+        if (color == Color.WHITE)
+            return this.representation;
+        return Character.toUpperCase(this.representation);
     }
 
     public boolean isEqualTo(Piece that) {
         return this.getClass() == that.getClass() &&
                 this.color == that.color;
+    }
+
+    public boolean isEmpty() {
+        return false;
+    }
+
+    public void setPosition(String position) {
+        this.position = position;
     }
 
     public int compareTo(Piece that) {

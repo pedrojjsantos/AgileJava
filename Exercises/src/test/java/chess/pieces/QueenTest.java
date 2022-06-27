@@ -28,7 +28,7 @@ public class QueenTest extends PieceTest {
 
         assertTrue(blackPiece.isBlack());
         assertSame(Queen.class, blackPiece.getClass());
-        assertEquals('q', blackPiece.print());
+        assertEquals('Q', blackPiece.print());
         assertEquals(9, blackPiece.getStrength(), STRENGTH_PRECISION);
     }
     @Test

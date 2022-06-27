@@ -25,38 +25,4 @@ public class StringUtilTest {
         assertEquals("ab", StringUtil.join2Chars((int) c1, (int) c2));
         assertEquals("ba", StringUtil.join2Chars((int) c2, (int) c1));
     }
-
-    @Test
-    public void testWords() {
-        final String str = "asd as abc assass";
-        List<String> expected = new ArrayList<>();
-        expected.add("asd");
-        expected.add("as");
-        expected.add("abc");
-        expected.add("assass");
-
-        List<String> words = StringUtil.words(str);
-
-        assertEquals(expected, words);
-    }
-
-    @Test
-    public void testGetInitials() {
-        final String str = "asd as abc sass";
-        List<Character> expected = new ArrayList<>();
-        expected.add('a');
-        expected.add('a');
-        expected.add('a');
-        expected.add('s');
-
-        List<Character> initials = StringUtil.getInitials(str);
-
-        assertEquals(expected, initials);
-    }
-
-    @Test
-    public void testUtil() {
-        final String str = "a b c d%na b c d%n a b c d%na b c d".formatted();
-        System.out.println(StringUtil.split(str).toString());
-    }
 }

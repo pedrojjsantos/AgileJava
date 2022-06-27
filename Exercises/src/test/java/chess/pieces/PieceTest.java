@@ -10,7 +10,6 @@ import static org.junit.Assert.*;
 
 abstract public class PieceTest {
     protected final double STRENGTH_PRECISION = 0.05;
-    protected char pieceRepresentation;
 
     abstract protected Piece createWhitePiece();
     abstract protected Piece createBlackPiece();

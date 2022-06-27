@@ -25,7 +25,7 @@ public class BishopTest extends PieceTest {
 
         assertTrue(blackPiece.isBlack());
         assertSame(Bishop.class, blackPiece.getClass());
-        assertEquals('b', blackPiece.print());
+        assertEquals('B', blackPiece.print());
         assertEquals(3, blackPiece.getStrength(), STRENGTH_PRECISION);
     }
 }

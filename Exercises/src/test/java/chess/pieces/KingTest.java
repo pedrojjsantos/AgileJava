@@ -27,7 +27,7 @@ public class KingTest extends PieceTest {
 
         assertTrue(blackPiece.isBlack());
         assertEquals(King.class, blackPiece.getClass());
-        assertEquals('k', blackPiece.print());
+        assertEquals('K', blackPiece.print());
         assertEquals(0, blackPiece.getStrength(), STRENGTH_PRECISION);
     }
 

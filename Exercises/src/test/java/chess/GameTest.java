@@ -3,10 +3,8 @@ package chess;
 import chess.pieces.Piece;
 import org.junit.Before;
 import org.junit.Test;
-import util.StringUtil;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 
 import static chess.pieces.Piece.*;
 import static org.junit.Assert.*;
@@ -128,7 +126,7 @@ public class GameTest {
     }
 
     @Test
-    public void testSaveBoardTextual() throws IOException, ClassNotFoundException{
+    public void testSaveBoardTextual() throws IOException {
         game.initialize();
 
         String saveFileTextual = "boardTextual.save";
@@ -138,6 +136,7 @@ public class GameTest {
             loadedGame.loadTextual(saveFileTextual);
 
             assertEquals(game.printBoard(), loadedGame.printBoard());
+            assertEquals(game.pieceCount(), loadedGame.pieceCount());
             assertEquals(game.getBlackStrength(), game.getBlackStrength(), 0.05);
             assertEquals(game.getWhiteStrength(), game.getWhiteStrength(), 0.05);
         }

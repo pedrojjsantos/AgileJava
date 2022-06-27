@@ -25,7 +25,7 @@ public class RookTest extends PieceTest {
 
         assertTrue(blackPiece.isBlack());
         assertSame(Rook.class, blackPiece.getClass());
-        assertEquals('r', blackPiece.print());
+        assertEquals('R', blackPiece.print());
         assertEquals(5, blackPiece.getStrength(), STRENGTH_PRECISION);
     }
 }
