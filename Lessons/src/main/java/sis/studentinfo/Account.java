@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import com.jimbob.ach.*;
 
-public class Account {
+public class Account implements Accountable {
     private BigDecimal balance = new BigDecimal("0.00");
     private int transactionCount = 0;
     private String bankAba;
