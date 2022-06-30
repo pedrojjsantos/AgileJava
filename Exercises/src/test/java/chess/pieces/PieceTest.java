@@ -74,8 +74,9 @@ abstract public class PieceTest {
 
         assertTrue(whiteQueen.compareTo(blackRook) < 0);
         assertTrue(blackRook.compareTo(whiteQueen) > 0);
-        assertEquals(0, whiteQueen.compareTo(blackQueen));
-        assertEquals(0, blackQueen.compareTo(whiteQueen));
+        // if both have the same strength, return 1 instead of 0;
+        assertEquals(1, whiteQueen.compareTo(blackQueen));
+        assertEquals(1, blackQueen.compareTo(whiteQueen));
     }
 
     @Test

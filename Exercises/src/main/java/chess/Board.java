@@ -15,15 +15,14 @@ import java.util.stream.Stream;
  */
 public class Board implements Iterable<Piece>, Serializable {
     private final Piece[][] ranks = new Piece[8][8];
-    private final List<Piece> whitePieces = new ArrayList<>();
-    private final List<Piece> blackPieces = new ArrayList<>();
+    private final Collection<Piece> whitePieces = new TreeSet<>();
+    private final Collection<Piece> blackPieces = new TreeSet<>();
 
     public Board() {
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++)
                 ranks[i][j] = Piece.noPiece();
         }
-
     }
 
     public int getCountWhite() {
@@ -90,21 +89,17 @@ public class Board implements Iterable<Piece>, Serializable {
         ranks[rank][file] = piece;
         piece.setPosition(position);
 
-        if (piece.isWhite()) {
+        if (piece.isWhite())
             whitePieces.add(piece);
-            Collections.sort(whitePieces);
-        }
-        else {
+        else if (piece.isBlack())
             blackPieces.add(piece);
-            Collections.sort(blackPieces);
-        }
     }
 
-    public List<Piece> getWhitePieces() {
+    public Collection<Piece> getWhitePieces() {
         return whitePieces;
     }
 
-    public List<Piece> getBlackPieces() {
+    public Collection<Piece> getBlackPieces() {
         return blackPieces;
     }
 

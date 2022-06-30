@@ -7,6 +7,7 @@ import util.StringUtil;
 
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -94,44 +95,19 @@ public class BoardTest {
 
     @Test
     public void testPieceCollections() {
-        verifyWhiteSortedPieces();
-        verifyBlackSortedPieces();
+        initialize(board);
+
+        verifySortedPieces(board.getWhitePieces());
+        verifySortedPieces(board.getBlackPieces());
     }
 
-    private void verifyWhiteSortedPieces() {
-        ArrayList<Piece> whitePieces = new ArrayList<>();
-        whitePieces.add(createWhitePawn());
-        whitePieces.add(createWhiteQueen());
-        whitePieces.add(createWhiteRook());
+    private void verifySortedPieces(Collection<Piece> boardPieces) {
+        Piece[] pieceList = boardPieces.toArray(new Piece[] {});
 
-        board.put("c8",whitePieces.get(2));
-        board.put("b8",whitePieces.get(1));
-        board.put("a8",whitePieces.get(0));
-
-        Collections.sort(whitePieces);
-
-        List<Piece> boardWhitePieces = board.getWhitePieces();
-
-        for (int index = 0; index < 3; index++)
-            assertTrue(whitePieces.get(index).isEqualTo(boardWhitePieces.get(index)));
+        for (int i = 0; i < pieceList.length - 1; i++)
+            assertTrue(pieceList[i].getStrength() >= pieceList[i+1].getStrength());
     }
-    private void verifyBlackSortedPieces() {
-        ArrayList<Piece> blackPieces = new ArrayList<>();
-        blackPieces.add(createBlackPawn());
-        blackPieces.add(createBlackQueen());
-        blackPieces.add(createBlackRook());
 
-        board.put("c8",blackPieces.get(2));
-        board.put("b8",blackPieces.get(1));
-        board.put("a8",blackPieces.get(0));
-
-        Collections.sort(blackPieces);
-
-        List<Piece> boardBlackPieces = board.getBlackPieces();
-
-        for (int index = 0; index < 3; index++)
-            assertTrue(blackPieces.get(index).isEqualTo(boardBlackPieces.get(index)));
-    }
 
     @Test
     public void testGetPositions() {

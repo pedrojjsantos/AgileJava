@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.function.Supplier;
 
 public class Piece implements Comparable<Piece>, Serializable {
-    public enum Color {WHITE, BLACK;}
+    public enum Color {WHITE, BLACK}
 
     private final Color color;
 
@@ -93,10 +93,13 @@ public class Piece implements Comparable<Piece>, Serializable {
     public boolean isWhite() {
         return color == Color.WHITE;
     }
-
     public boolean isBlack() {
         return color == Color.BLACK;
     }
+    public boolean isEmpty() {
+        return false;
+    }
+
     public char print() {
         if (color == Color.WHITE)
             return this.representation;
@@ -108,16 +111,13 @@ public class Piece implements Comparable<Piece>, Serializable {
                 this.color == that.color;
     }
 
-    public boolean isEmpty() {
-        return false;
-    }
-
     public void setPosition(String position) {
         this.position = position;
     }
 
     public int compareTo(Piece that) {
-        return Double.compare(that.getStrength(), this.getStrength());
+        int comp = Double.compare(that.getStrength(), this.getStrength());
+        return (comp == 0) ? 1 : comp;
     }
 
     public double getStrength() {
