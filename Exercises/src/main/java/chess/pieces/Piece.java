@@ -82,6 +82,7 @@ public class Piece implements Comparable<Piece>, Serializable {
     public static King   createBlackKing() {
         return new King(Color.BLACK);
     }
+
     public static Piece fromChar(char ch) {
         loadFactoryMap();
         Supplier<Piece> fn = charToPieceFactory.get(ch);

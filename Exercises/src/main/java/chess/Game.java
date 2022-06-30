@@ -8,7 +8,7 @@ import java.io.*;
 public class Game {
     private Board board;
 
-    Game() {
+    public Game() {
         board = new Board();
     }
 
