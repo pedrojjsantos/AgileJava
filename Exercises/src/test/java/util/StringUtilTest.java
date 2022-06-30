@@ -25,4 +25,14 @@ public class StringUtilTest {
         assertEquals("ab", StringUtil.join2Chars((int) c1, (int) c2));
         assertEquals("ba", StringUtil.join2Chars((int) c2, (int) c1));
     }
+
+    @Test
+    public void truncate() {
+        final String str = "abcdefghij";
+
+        assertEquals(str, StringUtil.truncate(str, 20));
+        assertEquals("abcdefghij", StringUtil.truncate(str, 10));
+        assertEquals("abcdefg..", StringUtil.truncate(str, 9));
+        assertEquals("abcde..", StringUtil.truncate(str, 7));
+    }
 }
