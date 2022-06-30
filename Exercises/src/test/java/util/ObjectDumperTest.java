@@ -11,30 +11,36 @@ public class ObjectDumperTest {
     public void testDump() throws IllegalAccessException{
         final String name = "Jane";
         final int number = 101;
-        final String format = "%n\t%-10s %-10s %-25s %s";
+        final String newline = "%n".formatted();
         Object obj = new TestObject1(name, number);
 
         String dump = ObjectDumper.print(obj);
         assertEquals(
-                obj.getClass().getCanonicalName() +
-                        format.formatted(
-                                "name:", "Jane", String.class.getCanonicalName(), "public") +
-                        format.formatted(
-                                "number:", "101", Integer.class.getCanonicalName(), "public")
+                obj.getClass().getCanonicalName() + newline +
+                        "\tname:     Jane            | String          public" + newline +
+                        "\tnumber:   101             | Integer         public"
                 , dump);
 
         obj = new TestObject2(name, number);
         dump = ObjectDumper.print(obj);
+
         assertEquals(
-                obj.getClass().getCanonicalName() +
-                        format.formatted(
-                                "name:", "Jane", String.class.getCanonicalName(), "public") +
-                        format.formatted(
-                                "number:", "101", Integer.class.getCanonicalName(), "public")
+            obj.getClass().getCanonicalName() + newline +
+                "\t" + "list:     " + "[0, 1, 2, 3, .. | " + "ArrayList       private" + newline +
+                "\t" + "obj:      " + "                | " + "TestObject1     public" + newline +
+                "\t-\t"  + "name:     " + "Jane            | " + "String          public" + newline +
+                "\t-\t"  + "number:   " + "101             | " + "Integer         public" + newline +
+                "\t" + "flag:     " + "true            | " + "Boolean         public static" + newline +
+                "\t" + "id:       " + "200             | " + "Integer         protected"
+
                 , dump);
+
+//        Game game  = new Game();
+//        game.initialize();
+//        System.out.println(ObjectDumper.print(game));
     }
 
-    class TestObject1 {
+    static class TestObject1 {
         String name;
         int number;
 
@@ -43,17 +49,22 @@ public class ObjectDumperTest {
             this.number = number;
         }
     }
-    class TestObject2 {
-        private ArrayList<Byte> list;
+    static class TestObject2 {
+        private final ArrayList<Byte> list;
         TestObject1 obj;
         static boolean flag = true;
+        protected int id = 200;
 
         TestObject2(String name, int number) {
             list = new ArrayList<>();
-            for (byte i = 0; i < 5; i++)
+            for (byte i = 0; i < 6; i++)
                 list.add(i);
 
             obj = new TestObject1(name, number);
+        }
+
+        public ArrayList<Byte> getList() {
+            return list;
         }
     }
 }

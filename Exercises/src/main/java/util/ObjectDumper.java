@@ -3,7 +3,6 @@ package util;
 import java.lang.reflect.*;
 
 public class ObjectDumper {
-    private static final String FIELD_VALUE = "%-10s %-25s %s";
     private ObjectDumper() {}
 
     public static String print(Object obj) throws IllegalAccessException {
@@ -13,7 +12,6 @@ public class ObjectDumper {
 
         print(buffer, obj, indent);
 
-        System.out.println(buffer);
         return buffer.toString();
     }
 
@@ -25,31 +23,37 @@ public class ObjectDumper {
         for (Field field : fields) {
             buffer.append("%n%s".formatted(indent));
             if (isPrivate(field))
-                printFieldWithoutValue(buffer, field);
+                field.setAccessible(true);
 
-            else if (field.getType().getPackageName().startsWith("java"))
+            if (field.getType().getPackageName().startsWith("java"))
                 printField(buffer, field, field.get(obj));
 
             else {
                 printFieldWithoutValue(buffer, field);
-                print(buffer, field.get(obj), indent + '\t');
+                print(buffer, field.get(obj), indent + "-\t");
             }
         }
     }
 
     private static void printFieldWithoutValue(StringBuilder buffer, Field field) {
-        buffer.append("%-10s %-25s %s"
-                .formatted(field.getName()+':',
-                        field.getType().getCanonicalName(),
-                        getModifier(field)));
+        String name = StringUtil.truncate(field.getName(), 8);
+        String[] fullType = field.getType().getCanonicalName().split("\\.");
+        String type = StringUtil.truncate(fullType[fullType.length - 1], 15);
+
+        buffer.append("%-9s %-15s | %-15s %s"
+                .formatted(name + ':', " ", type, getModifier(field)));
     }
 
     private static void printField(StringBuilder buffer, Field field, Object obj) {
-        buffer.append("%-10s %-10s %-25s %s"
-                .formatted(field.getName()+':',
-                        obj,
-                        obj.getClass().getCanonicalName(),
-                        getModifier(field)));
+        String name = StringUtil.truncate(field.getName(), 8);
+
+        String value = StringUtil.truncate(obj.toString(), 15);
+
+        String[] fullType = obj.getClass().getCanonicalName().split("\\.");
+        String type = StringUtil.truncate(fullType[fullType.length - 1], 15);
+
+        buffer.append("%-9s %-15s | %-15s %s"
+                .formatted(name + ':', value, type, getModifier(field)));
     }
 
     private static String getModifier(Field field) {
