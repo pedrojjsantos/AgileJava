@@ -28,6 +28,17 @@ public class BoardTest {
 
     @Test
     public void testCreate() {
+        isClear(board);
+    }
+
+    @Test
+    public void testClearBoard() {
+        initialize(board);
+        board.clearBoard();
+        isClear(board);
+    }
+
+    private void isClear(Board board) {
         assertEquals(0, board.pieceCount());
 
         assertEquals(

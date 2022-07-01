@@ -14,15 +14,20 @@ import java.util.stream.Stream;
  * Provides representation of a chess board
  */
 public class Board implements Iterable<Piece>, Serializable {
-    private final Piece[][] ranks = new Piece[8][8];
-    private final Collection<Piece> whitePieces = new TreeSet<>();
-    private final Collection<Piece> blackPieces = new TreeSet<>();
+    private Piece[][] ranks = new Piece[8][8];
+    private TreeSet<Piece> whitePieces;
+    private TreeSet<Piece> blackPieces;
 
     public Board() {
-        for (int i = 0; i < 8; i++) {
-            for (int j = 0; j < 8; j++)
-                ranks[i][j] = Piece.noPiece();
-        }
+        clearBoard();
+    }
+
+    public void clearBoard() {
+        for (int i = 0; i < 8; i++)
+            Arrays.setAll(ranks[i], j -> Piece.noPiece());
+
+        whitePieces = new TreeSet<>();
+        blackPieces = new TreeSet<>();
     }
 
     public int getCountWhite() {
