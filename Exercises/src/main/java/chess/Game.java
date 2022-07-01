@@ -105,7 +105,8 @@ public class Game {
 
         for (int file = 0; file < 8; file++) {
             int nPawnsInFile = board.pieceCountInFile(file, pawn);
-            double pawnStrength = (nPawnsInFile > 1) ? 0.5 : 1.0;
+            double pawnStrength = pawn.getStrength();
+            pawnStrength = (nPawnsInFile <= 1) ? pawnStrength : pawnStrength / 2;
 
             totalStrength += pawnStrength * nPawnsInFile;
         }

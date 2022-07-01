@@ -12,6 +12,7 @@ public class Piece implements Comparable<Piece>, Serializable {
     private final char representation;
     private final double strength;
     private String position = "";
+
     protected Piece(Color color, char representation, double strength) {
         this.color = color;
         this.strength = strength;
@@ -38,12 +39,12 @@ public class Piece implements Comparable<Piece>, Serializable {
         charToPieceFactory.put('q', Piece::createWhiteQueen);
         charToPieceFactory.put('r', Piece::createWhiteRook);
     }
+
     public static NoPiece noPiece() {
         return new NoPiece();
     }
 
     // White Pieces
-
     public static Pawn   createWhitePawn() {
         return new Pawn(Color.WHITE);
     }
@@ -62,8 +63,8 @@ public class Piece implements Comparable<Piece>, Serializable {
     public static King   createWhiteKing() {
         return new King(Color.WHITE);
     }
-    // Black Pieces
 
+    // Black Pieces
     public static Pawn   createBlackPawn() {
         return new Pawn(Color.BLACK);
     }

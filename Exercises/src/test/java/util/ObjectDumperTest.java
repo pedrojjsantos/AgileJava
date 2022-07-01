@@ -16,7 +16,7 @@ public class ObjectDumperTest {
 
         String dump = ObjectDumper.print(obj);
         assertEquals(
-                obj.getClass().getCanonicalName() + newline +
+                obj.getClass().getName() + newline +
                         "\tname:     Jane            | String          public" + newline +
                         "\tnumber:   101             | Integer         public"
                 , dump);
@@ -25,7 +25,7 @@ public class ObjectDumperTest {
         dump = ObjectDumper.print(obj);
 
         assertEquals(
-            obj.getClass().getCanonicalName() + newline +
+            obj.getClass().getName() + newline +
                 "\t" + "list:     " + "[0, 1, 2, 3, .. | " + "ArrayList       private" + newline +
                 "\t" + "obj:      " + "                | " + "TestObject1     public" + newline +
                 "\t-\t"  + "name:     " + "Jane            | " + "String          public" + newline +

@@ -7,7 +7,7 @@ public class ObjectDumper {
 
     public static String print(Object obj) throws IllegalAccessException {
         Class<?> objClass = obj.getClass();
-        StringBuilder buffer = new StringBuilder(objClass.getCanonicalName());
+        StringBuilder buffer = new StringBuilder(objClass.getName());
         String indent = "\t";
 
         print(buffer, obj, indent);
@@ -37,11 +37,11 @@ public class ObjectDumper {
 
     private static void printFieldWithoutValue(StringBuilder buffer, Field field) {
         String name = StringUtil.truncate(field.getName(), 8);
-        String[] fullType = field.getType().getCanonicalName().split("\\.");
+        String[] fullType = field.getType().getName().split("[.$]");
         String type = StringUtil.truncate(fullType[fullType.length - 1], 15);
 
         buffer.append("%-9s %-15s | %-15s %s"
-                .formatted(name + ':', " ", type, getModifier(field)));
+                .formatted(name + ':', "", type, getModifier(field)));
     }
 
     private static void printField(StringBuilder buffer, Field field, Object obj) {
@@ -49,7 +49,7 @@ public class ObjectDumper {
 
         String value = StringUtil.truncate(obj.toString(), 15);
 
-        String[] fullType = obj.getClass().getCanonicalName().split("\\.");
+        String[] fullType = obj.getClass().getName().split("[.$]");
         String type = StringUtil.truncate(fullType[fullType.length - 1], 15);
 
         buffer.append("%-9s %-15s | %-15s %s"

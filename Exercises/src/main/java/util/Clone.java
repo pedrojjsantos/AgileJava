@@ -2,6 +2,7 @@ package util;
 
 import java.io.*;
 import java.lang.reflect.*;
+import java.util.List;
 
 public class Clone {
     private Clone() {}
@@ -17,13 +18,18 @@ public class Clone {
     }
 
     public static Object cloneReflection(Object obj) throws Exception {
+        if (obj == null) return null;
+
         Field[] fields = obj.getClass().getDeclaredFields();
-        Object copy = obj.getClass().getConstructor().newInstance();
+        Class<?> klass = obj.getClass();
+
+        Object copy = klass.getDeclaredConstructor().newInstance();
 
         for (Field field : fields) {
-            field.setAccessible(true);
-            Field copyField = copy.getClass().getDeclaredField(field.getName());
-            copyField.set(copy, field.get(obj));
+            if (!Modifier.isFinal(field.getModifiers())) {
+                field.setAccessible(true);
+                field.set(copy, field.get(obj));
+            }
         }
 
         return copy;
