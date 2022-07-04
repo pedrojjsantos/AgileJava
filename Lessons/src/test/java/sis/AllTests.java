@@ -12,6 +12,7 @@ import org.junit.runners.Suite;
         sis.ui.AllTests.class,
         sis.db.AllTests.class,
         sis.security.AllTests.class,
+        sis.search.AllTests.class,
 })
 public class AllTests {
 }

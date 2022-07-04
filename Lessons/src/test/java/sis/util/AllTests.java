@@ -9,6 +9,8 @@ import org.junit.runners.Suite;
         PasswordGeneratorTest.class,
         DateUtilTest.class,
         IOUtilTest.class,
+        LineWriterTest.class,
+        StringUtilTest.class,
 })
 public class AllTests {
 }

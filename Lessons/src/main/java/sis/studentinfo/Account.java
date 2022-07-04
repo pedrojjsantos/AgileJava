@@ -12,6 +12,14 @@ public class Account implements Accountable {
     private BankAccountType bankAccountType;
     private Ach ach;
 
+    public synchronized void withdraw(BigDecimal amount) {
+        if (amount.compareTo(balance) > 0)
+            return;
+        try {Thread.sleep(1); }
+        catch (InterruptedException e) {}
+        balance = balance.subtract(amount);
+    }
+
     public enum BankAccountType {
         CHECKING("ck"),
         SAVINGS("sv");
@@ -77,7 +85,10 @@ public class Account implements Accountable {
     }
     private Ach getAch() {
         return ach;
-    }void setAch(Ach ach) {
+    }
+    void setAch(Ach ach) {
         this.ach = ach;
     }
+
+
 }
