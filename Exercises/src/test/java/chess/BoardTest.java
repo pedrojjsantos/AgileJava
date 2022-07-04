@@ -6,10 +6,7 @@ import org.junit.Test;
 import util.StringUtil;
 
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 import static chess.pieces.Piece.*;
 import static org.junit.Assert.assertEquals;
@@ -79,29 +76,29 @@ public class BoardTest {
     @Test
     public void testRetrievePiece() {
         initialize(board);
-        verifyBoardQuery("a8", createBlackRook());
-        verifyBoardQuery("b7", createBlackPawn());
-        verifyBoardQuery("f2", createWhitePawn());
-        verifyBoardQuery("e1", createWhiteKing());
-        verifyBoardQuery("e4", noPiece());
+        verifyBoardQuery(new Position("a8"), createBlackRook());
+        verifyBoardQuery(new Position("b7"), createBlackPawn());
+        verifyBoardQuery(new Position("f2"), createWhitePawn());
+        verifyBoardQuery(new Position("e1"), createWhiteKing());
+        verifyBoardQuery(new Position("e4"), noPiece());
     }
 
-    private void verifyBoardQuery(String position, Piece expected) {
-        assertTrue(board.getPiece(position).isEqualTo(expected));
+    private void verifyBoardQuery(Position pos, Piece expected) {
+        assertTrue(board.getPiece(pos).isEqualTo(expected));
     }
 
     @Test
     public void testPutPiece() {
-        verifyPutPiece("b4", createWhitePawn());
-        verifyPutPiece("f5", createWhiteKing());
-        verifyPutPiece("a8", createBlackBishop());
-        verifyPutPiece("d6", createWhiteRook());
-        verifyPutPiece("d6", noPiece());
+        verifyPutPiece(new Position("b4"), createWhitePawn());
+        verifyPutPiece(new Position("f5"), createWhiteKing());
+        verifyPutPiece(new Position("a8"), createBlackBishop());
+        verifyPutPiece(new Position("d6"), createWhiteRook());
+        verifyPutPiece(new Position("d6"), noPiece());
     }
 
-    private void verifyPutPiece(String position, Piece piece) {
-        board.put(position, piece);
-        assertEquals(piece, board.getPiece(position));
+    private void verifyPutPiece(Position pos, Piece piece) {
+        board.put(pos, piece);
+        assertEquals(piece, board.getPiece(pos));
     }
 
     @Test
@@ -122,27 +119,28 @@ public class BoardTest {
 
     @Test
     public void testGetPositions() {
-        List<String> positions;
+        List<Position> positions;
 
         // File Positions
-        positions = board.getFilePositionsAt("b4");
+        positions = board.getFilePositionsAt(new Position("b4"));
         assertEquals(8, positions.size());
         assertContains(positions, "b1", "b2", "b3", "b4", "b5", "b6", "b7", "b8");
 
         // Rank Positions
-        positions = board.getRankPositionsAt("a5");
+        positions = board.getRankPositionsAt(new Position("a5"));
         assertEquals(8, positions.size());
         assertContains(positions, "a5", "b5", "c5", "d5", "e5", "f5", "g5", "h5");
 
         // Diagonal Positions
-        positions = board.getDiagonalPositionsAt("d3");
+        positions = board.getDiagonalPositionsAt(new Position("d3"));
         assertEquals(12, positions.size());
         assertContains(positions, "b1", "c2", "e4", "f5", "g6", "h7");
         assertContains(positions, "a6", "b5", "c4", "d3", "e2", "f1");
     }
 
-    private void assertContains(List<String> list, String...expected) {
-        assertTrue(list.containsAll(List.of(expected)));
+    private void assertContains(List<Position> list, String...expected) {
+        List<Position> expectedList = Arrays.stream(expected).map(Position::new).toList();
+        assertTrue(list.containsAll(expectedList));
     }
 
     @Test
@@ -171,34 +169,30 @@ public class BoardTest {
     }
 
     private void initWhiteRanks(Board board) {
-        board.put("a1", Piece.createWhiteRook());
-        board.put("b1", Piece.createWhiteKnight());
-        board.put("c1", Piece.createWhiteBishop());
-        board.put("d1", Piece.createWhiteQueen());
-        board.put("e1", Piece.createWhiteKing());
-        board.put("f1", Piece.createWhiteBishop());
-        board.put("g1", Piece.createWhiteKnight());
-        board.put("h1", Piece.createWhiteRook());
+        board.put(new Position("a1"), Piece.createWhiteRook());
+        board.put(new Position("b1"), Piece.createWhiteKnight());
+        board.put(new Position("c1"), Piece.createWhiteBishop());
+        board.put(new Position("d1"), Piece.createWhiteQueen());
+        board.put(new Position("e1"), Piece.createWhiteKing());
+        board.put(new Position("f1"), Piece.createWhiteBishop());
+        board.put(new Position("g1"), Piece.createWhiteKnight());
+        board.put(new Position("h1"), Piece.createWhiteRook());
 
-        for (int i = 0; i < 8; i++) {
-            String position = StringUtil.join2Chars('a'+ i, '2');
-            board.put(position, Piece.createWhitePawn());
-        }
+        for (int file = 0; file < 8; file++)
+            board.put(new Position(file, 1), Piece.createWhitePawn());
     }
 
     private void initBlackRanks(Board board) {
-        board.put("a8", Piece.createBlackRook());
-        board.put("b8", Piece.createBlackKnight());
-        board.put("c8", Piece.createBlackBishop());
-        board.put("d8", Piece.createBlackQueen());
-        board.put("e8", Piece.createBlackKing());
-        board.put("f8", Piece.createBlackBishop());
-        board.put("g8", Piece.createBlackKnight());
-        board.put("h8", Piece.createBlackRook());
+        board.put(new Position("a8"), Piece.createBlackRook());
+        board.put(new Position("b8"), Piece.createBlackKnight());
+        board.put(new Position("c8"), Piece.createBlackBishop());
+        board.put(new Position("d8"), Piece.createBlackQueen());
+        board.put(new Position("e8"), Piece.createBlackKing());
+        board.put(new Position("f8"), Piece.createBlackBishop());
+        board.put(new Position("g8"), Piece.createBlackKnight());
+        board.put(new Position("h8"), Piece.createBlackRook());
 
-        for (int i = 0; i < 8; i++) {
-            String position = StringUtil.join2Chars('a'+ i, '7');
-            board.put(position, Piece.createBlackPawn());
-        }
+        for (int file = 0; file < 8; file++)
+            board.put(new Position(file, 6), Piece.createBlackPawn());
     }
 }

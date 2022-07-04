@@ -1,5 +1,7 @@
 package chess.pieces;
 
+import chess.Position;
+
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.function.Supplier;
@@ -11,7 +13,7 @@ public class Piece implements Comparable<Piece>, Serializable {
 
     private final char representation;
     private final double strength;
-    private String position = "";
+    private Position position = null;
 
     protected Piece(Color color, char representation, double strength) {
         this.color = color;
@@ -113,7 +115,7 @@ public class Piece implements Comparable<Piece>, Serializable {
                 this.color == that.color;
     }
 
-    public void setPosition(String position) {
+    public void setPosition(Position position) {
         this.position = position;
     }
 
@@ -125,7 +127,7 @@ public class Piece implements Comparable<Piece>, Serializable {
     public double getStrength() {
         return strength;
     }
-    public String getPosition() {
+    public Position getPosition() {
         return position;
     }
 

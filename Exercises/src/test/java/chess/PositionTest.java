@@ -27,8 +27,8 @@ public class PositionTest {
         assertEquals(strPos.charAt(0), position.getFileChar());
         assertEquals(strPos.charAt(1), position.getRankChar());
 
-        assertEquals(file, position.getFileInt());
-        assertEquals(rank, position.getRankInt());
+        assertEquals(file, position.getFile());
+        assertEquals(rank, position.getRank());
     }
 
     @Test

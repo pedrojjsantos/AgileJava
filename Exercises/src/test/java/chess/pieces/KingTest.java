@@ -1,6 +1,7 @@
 package chess.pieces;
 
 import chess.Board;
+import chess.Position;
 import org.junit.Test;
 
 import java.util.List;
@@ -36,12 +37,12 @@ public class KingTest extends PieceTest {
         Board board = new Board();
         King king = Piece.createWhiteKing();
 
-        List<String> possibleMoves = king.getPossibleMoves("d4", board);
+        List<Position> possibleMoves = king.getPossibleMoves(new Position("d4"), board);
 
         assertEquals(8, possibleMoves.size());
         assertContains(possibleMoves, "c3", "c4", "c5", "d3", "d5", "e3", "e4", "e5");
 
-        possibleMoves = king.getPossibleMoves("a2", board);
+        possibleMoves = king.getPossibleMoves(new Position("a2"), board);
 
         assertEquals(5, possibleMoves.size());
         assertContains(possibleMoves, "a1", "a3", "b1", "b2", "b3");

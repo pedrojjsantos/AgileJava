@@ -1,6 +1,7 @@
 package chess.pieces;
 
 import chess.Board;
+import chess.Position;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,8 +11,8 @@ public class Queen extends Piece{
         super(color, 'q', 9.0);
     }
 
-    public List<String> getPossibleMoves(String pos, Board board) {
-        ArrayList<String> moves = new ArrayList<>();
+    public List<Position> getPossibleMoves(Position pos, Board board) {
+        ArrayList<Position> moves = new ArrayList<>();
 
         if (Board.isValidPosition(pos)) {
             moves.addAll(board.getFilePositionsAt(pos));

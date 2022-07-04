@@ -2,6 +2,7 @@ package util;
 
 import chess.Board;
 import chess.Game;
+import chess.Position;
 import chess.pieces.Piece;
 import org.junit.Test;
 
@@ -19,7 +20,7 @@ public class CloneTest {
         assertNotSame(str, strCopy);
 
         Board board = new Board();
-        board.put("a6", Piece.createBlackRook());
+        board.put(new Position("a6"), Piece.createBlackRook());
         Board boardCopy = (Board) Clone.cloneSerialized(board);
 
         assertEquals(board.print(), boardCopy.print());
@@ -36,8 +37,8 @@ public class CloneTest {
         assertNotSame(game, gameCopy);
 
         Board board = new Board();
-        board.put("a6", Piece.createBlackRook());
-        board.put("f5", Piece.createWhiteQueen());
+        board.put(new Position("a6"), Piece.createBlackRook());
+        board.put(new Position("f5"), Piece.createWhiteQueen());
         Board boardCopy = (Board) Clone.cloneReflection(board);
 
         assertEquals(board.print(), boardCopy.print());

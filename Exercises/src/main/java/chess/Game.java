@@ -18,34 +18,30 @@ public class Game {
     }
 
     private void initWhiteRanks() {
-        board.put("a1", Piece.createWhiteRook());
-        board.put("b1", Piece.createWhiteKnight());
-        board.put("c1", Piece.createWhiteBishop());
-        board.put("d1", Piece.createWhiteQueen());
-        board.put("e1", Piece.createWhiteKing());
-        board.put("f1", Piece.createWhiteBishop());
-        board.put("g1", Piece.createWhiteKnight());
-        board.put("h1", Piece.createWhiteRook());
+        board.put(new Position("a1"), Piece.createWhiteRook());
+        board.put(new Position("b1"), Piece.createWhiteKnight());
+        board.put(new Position("c1"), Piece.createWhiteBishop());
+        board.put(new Position("d1"), Piece.createWhiteQueen());
+        board.put(new Position("e1"), Piece.createWhiteKing());
+        board.put(new Position("f1"), Piece.createWhiteBishop());
+        board.put(new Position("g1"), Piece.createWhiteKnight());
+        board.put(new Position("h1"), Piece.createWhiteRook());
 
-        for (int i = 0; i < 8; i++) {
-            String position = StringUtil.join2Chars('a'+ i, '2');
-            board.put(position, Piece.createWhitePawn());
-        }
+        for (int file = 0; file < 8; file++)
+            board.put(new Position(file, 1), Piece.createWhitePawn());
     }
     private void initBlackRanks() {
-        board.put("a8", Piece.createBlackRook());
-        board.put("b8", Piece.createBlackKnight());
-        board.put("c8", Piece.createBlackBishop());
-        board.put("d8", Piece.createBlackQueen());
-        board.put("e8", Piece.createBlackKing());
-        board.put("f8", Piece.createBlackBishop());
-        board.put("g8", Piece.createBlackKnight());
-        board.put("h8", Piece.createBlackRook());
+        board.put(new Position("a8"), Piece.createBlackRook());
+        board.put(new Position("b8"), Piece.createBlackKnight());
+        board.put(new Position("c8"), Piece.createBlackBishop());
+        board.put(new Position("d8"), Piece.createBlackQueen());
+        board.put(new Position("e8"), Piece.createBlackKing());
+        board.put(new Position("f8"), Piece.createBlackBishop());
+        board.put(new Position("g8"), Piece.createBlackKnight());
+        board.put(new Position("h8"), Piece.createBlackRook());
 
-        for (int i = 0; i < 8; i++) {
-            String position = StringUtil.join2Chars('a'+ i, '7');
-            board.put(position, Piece.createBlackPawn());
-        }
+        for (int file = 0; file < 8; file++)
+            board.put(new Position(file, 6), Piece.createBlackPawn());
     }
 
 
@@ -64,11 +60,11 @@ public class Game {
         return board.print();
     }
 
-    public void putPiece(String pos, Piece piece) {
+    public void putPiece(Position pos, Piece piece) {
         board.put(pos, piece);
     }
 
-    public Piece getPiece(String pos) {
+    public Piece getPiece(Position pos) {
         return board.getPiece(pos);
     }
 
@@ -135,7 +131,7 @@ public class Game {
             for (Piece piece : board) {
                 saveFile.write(piece.print());
                 saveFile.write(' ');
-                saveFile.write(piece.getPosition());
+                saveFile.write(piece.getPosition().toString());
                 saveFile.newLine();
             }
         }
@@ -153,7 +149,7 @@ public class Game {
                     saveFile.read();
                     String position = saveFile.readLine();
 
-                    newBoard.put(position, Piece.fromChar(piece));
+                    newBoard.put(new Position(position), Piece.fromChar(piece));
                 }
 
                 this.board = newBoard;

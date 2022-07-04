@@ -55,10 +55,13 @@ public class GameTest {
         Piece pawn = createWhitePawn();
         Piece rook = createBlackRook();
 
-        game.putPiece("d4", pawn);
-        assertEquals(pawn, game.getPiece("d4"));
-        game.putPiece("d3", rook);
-        assertEquals(rook, game.getPiece("d3"));
+        Position pawnPos = new Position("d4");
+        Position rookPos = new Position("d3");
+
+        game.putPiece(pawnPos, pawn);
+        assertEquals(pawn, game.getPiece(pawnPos));
+        game.putPiece(rookPos, rook);
+        assertEquals(rook, game.getPiece(rookPos));
     }
 
     @Test
@@ -71,36 +74,36 @@ public class GameTest {
     }
 
     private void verifyWhiteStrength() {
-        game.putPiece("g4", createWhiteQueen());
+        game.putPiece(new Position("g4"), createWhiteQueen());
         assertEquals(9.0, game.getWhiteStrength(), STRENGTH_PRECISION);
 
-        game.putPiece("f4", createWhiteKnight());
+        game.putPiece(new Position("f4"), createWhiteKnight());
         assertEquals(11.5, game.getWhiteStrength(), STRENGTH_PRECISION);
 
-        game.putPiece("f3", createWhitePawn());
-        game.putPiece("h3", createWhitePawn());
+        game.putPiece(new Position("f3"), createWhitePawn());
+        game.putPiece(new Position("h3"), createWhitePawn());
         assertEquals(13.5, game.getWhiteStrength(), STRENGTH_PRECISION);
 
-        game.putPiece("f2", createWhitePawn());
-        game.putPiece("g2", createWhitePawn());
+        game.putPiece(new Position("f2"), createWhitePawn());
+        game.putPiece(new Position("g2"), createWhitePawn());
         assertEquals(14.5, game.getWhiteStrength(), STRENGTH_PRECISION);
 
-        game.putPiece("e1", createWhiteRook());
+        game.putPiece(new Position("e1"), createWhiteRook());
         assertEquals(19.5, game.getWhiteStrength(), STRENGTH_PRECISION);
     }
     private void verifyBlackStrength() {
-        game.putPiece("c8", createBlackRook());
+        game.putPiece(new Position("c8"), createBlackRook());
         assertEquals(5.0, game.getBlackStrength(), STRENGTH_PRECISION);
 
-        game.putPiece("a7", createBlackPawn());
-        game.putPiece("c7", createBlackPawn());
+        game.putPiece(new Position("a7"), createBlackPawn());
+        game.putPiece(new Position("c7"), createBlackPawn());
         assertEquals(7.0, game.getBlackStrength(), STRENGTH_PRECISION);
 
-        game.putPiece("d7", createBlackBishop());
+        game.putPiece(new Position("d7"), createBlackBishop());
         assertEquals(10.0, game.getBlackStrength(), STRENGTH_PRECISION);
 
-        game.putPiece("b6", createBlackPawn());
-        game.putPiece("e6", createBlackQueen());
+        game.putPiece(new Position("b6"), createBlackPawn());
+        game.putPiece(new Position("e6"), createBlackQueen());
         assertEquals(20.0, game.getBlackStrength(), STRENGTH_PRECISION);
     }
 

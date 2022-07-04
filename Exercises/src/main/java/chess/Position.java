@@ -1,6 +1,6 @@
 package chess;
 
-public class Position {
+public class Position implements java.io.Serializable {
     private char file;
     private char rank;
 
@@ -26,10 +26,10 @@ public class Position {
         return rank;
     }
 
-    public int getFileInt() {
+    public int getFile() {
         return file - 'a';
     }
-    public int getRankInt() {
+    public int getRank() {
         return rank - '1';
     }
 

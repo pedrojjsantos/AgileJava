@@ -1,6 +1,7 @@
 package chess.pieces;
 
 import chess.Board;
+import chess.Position;
 import util.StringUtil;
 
 import java.util.ArrayList;
@@ -11,21 +12,21 @@ public class King extends Piece{
         super(color, 'k', 0.0);
     }
 
-    public List<String> getPossibleMoves(String pos, Board board) {
-        ArrayList<String> moves = new ArrayList<>();
+    public List<Position> getPossibleMoves(Position pos, Board board) {
+        ArrayList<Position> moves = new ArrayList<>();
 
         if (Board.isValidPosition(pos)) {
-            char file = pos.charAt(0);
-            char rank = pos.charAt(1);
+            int file = pos.getFile();
+            int rank = pos.getRank();
 
-            moves.add(StringUtil.join2Chars(file + 1, rank + 1));
-            moves.add(StringUtil.join2Chars(file + 1, rank));
-            moves.add(StringUtil.join2Chars(file + 1, rank - 1));
-            moves.add(StringUtil.join2Chars(file, rank + 1));
-            moves.add(StringUtil.join2Chars(file, rank - 1));
-            moves.add(StringUtil.join2Chars(file - 1, rank + 1));
-            moves.add(StringUtil.join2Chars(file - 1, rank));
-            moves.add(StringUtil.join2Chars(file - 1, rank - 1));
+            moves.add(new Position(file + 1, rank + 1));
+            moves.add(new Position(file + 1, rank));
+            moves.add(new Position(file + 1, rank - 1));
+            moves.add(new Position(file, rank + 1));
+            moves.add(new Position(file, rank - 1));
+            moves.add(new Position(file - 1, rank + 1));
+            moves.add(new Position(file - 1, rank));
+            moves.add(new Position(file - 1, rank - 1));
 
             moves.removeIf(position -> !Board.isValidPosition(position));
         }

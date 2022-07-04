@@ -1,6 +1,7 @@
 package chess.pieces;
 
 import chess.Board;
+import chess.Position;
 import org.junit.Test;
 
 import java.util.List;
@@ -36,7 +37,7 @@ public class QueenTest extends PieceTest {
         Board board = new Board();
         Queen queen = Piece.createBlackQueen();
 
-        List<String> possibleMoves = queen.getPossibleMoves("d3", board);
+        List<Position> possibleMoves = queen.getPossibleMoves(new Position("d3"), board);
 
         assertEquals(25, possibleMoves.size());
 

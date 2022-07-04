@@ -1,8 +1,10 @@
 package chess.pieces;
 
 import chess.Board;
+import chess.Position;
 import org.junit.Test;
 
+import java.util.Arrays;
 import java.util.List;
 
 import static chess.pieces.Piece.*;
@@ -15,8 +17,9 @@ abstract public class PieceTest {
     abstract protected Piece createBlackPiece();
     abstract protected void verifyCreation(Piece whitePiece, Piece blackPiece);
 
-    protected void assertContains(List<String> list, String...expected) {
-        assertTrue(list.containsAll(List.of(expected)));
+    protected void assertContains(List<Position> list, String...expected) {
+        List<Position> expectedList = Arrays.stream(expected).map(Position::new).toList();
+        assertTrue(list.containsAll(expectedList));
     }
 
     @Test
@@ -24,16 +27,16 @@ abstract public class PieceTest {
         Piece whitePiece = createWhitePiece();
         Piece blackPiece = createBlackPiece();
 
-        assertEquals("", whitePiece.getPosition());
-        assertEquals("", blackPiece.getPosition());
+        assertNull(whitePiece.getPosition());
+        assertNull(blackPiece.getPosition());
 
         verifyCreation(whitePiece, blackPiece);
 
         Piece whitePieceFromChar = Piece.fromChar(whitePiece.print());
         Piece blackPieceFromChar = Piece.fromChar(Character.toUpperCase(whitePiece.print()));
 
-        assertEquals("", whitePieceFromChar.getPosition());
-        assertEquals("", blackPieceFromChar.getPosition());
+        assertNull(whitePieceFromChar.getPosition());
+        assertNull(blackPieceFromChar.getPosition());
 
         verifyCreation(whitePieceFromChar, blackPieceFromChar);
     }
@@ -83,11 +86,13 @@ abstract public class PieceTest {
     public void testGetPosition() {
         Board board = new Board();
         Piece piece = Piece.createWhitePawn();
+        Position p1 = new Position("a2");
+        Position p2 = new Position("a7");
 
-        board.put("a2", piece);
-        assertEquals("a2", piece.getPosition());
+        board.put(p1, piece);
+        assertEquals(p1, piece.getPosition());
 
-        board.put("a7", piece);
-        assertEquals("a7", piece.getPosition());
+        board.put(p2, piece);
+        assertEquals(p2, piece.getPosition());
     }
 }

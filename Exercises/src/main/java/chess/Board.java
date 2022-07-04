@@ -52,9 +52,9 @@ public class Board implements Iterable<Piece>, Serializable {
     }
 
     public int pieceCountInFile(int file, Piece piece) {
-        List<String> filePositions = getFilePositionsAt(StringUtil.join2Chars('a' + file, '1'));
+        List<Position> filePositions = getFilePositionsAt(new Position(file, 0));
         int count = 0;
-        for (String pos : filePositions) {
+        for (Position pos : filePositions) {
             if (getPiece(pos).isEqualTo(piece))
                 count++;
         }
@@ -80,19 +80,13 @@ public class Board implements Iterable<Piece>, Serializable {
         return  printedBoard.toString();
     }
 
-    public Piece getPiece(String position) {
-        int file = position.charAt(0) - 'a';
-        int rank = position.charAt(1) - '1';
-
-        return ranks[rank][file];
+    public Piece getPiece(Position pos) {
+        return ranks[pos.getRank()][pos.getFile()];
     }
 
-    public void put(String position, Piece piece) {
-        int file = position.charAt(0) - 'a';
-        int rank = position.charAt(1) - '1';
-
-        ranks[rank][file] = piece;
-        piece.setPosition(position);
+    public void put(Position pos, Piece piece) {
+        ranks[pos.getRank()][pos.getFile()] = piece;
+        piece.setPosition(pos);
 
         if (piece.isWhite())
             whitePieces.add(piece);
@@ -108,64 +102,62 @@ public class Board implements Iterable<Piece>, Serializable {
         return blackPieces;
     }
 
-    public static boolean isValidPosition(String pos) {
-        if (pos.length() < 2) return false;
-
-        int file = pos.charAt(0) - 'a';
-        int rank = pos.charAt(1) - '1';
+    public static boolean isValidPosition(Position pos) {
+        int file = pos.getFile();
+        int rank = pos.getRank();
 
         return file >= 0 && file < 8 && rank >= 0 && rank < 8;
     }
 
-    public List<String> getFilePositionsAt(String pos) {
-        ArrayList<String> positions = new ArrayList<>();
+    public List<Position> getFilePositionsAt(Position pos) {
+        ArrayList<Position> positions = new ArrayList<>();
 
         if (isValidPosition(pos)) {
-            char file = pos.charAt(0);
+            int file = pos.getFile();
 
-            for (int i = 0; i < 8; i++)
-                positions.add(StringUtil.join2Chars(file, i + '1'));
+            for (int rank = 0; rank < 8; rank++)
+                positions.add(new Position(file, rank));
         }
         return positions;
     }
 
-    public List<String> getRankPositionsAt(String pos) {
-        ArrayList<String> positions = new ArrayList<>();
+    public List<Position> getRankPositionsAt(Position pos) {
+        ArrayList<Position> positions = new ArrayList<>();
 
         if (isValidPosition(pos)){
-            char rank = pos.charAt(1);
+            int rank = pos.getRank();
 
-            for (int i = 0; i < 8; i++)
-                positions.add(StringUtil.join2Chars(i + 'a', rank));
+            for (int file = 0; file < 8; file++)
+                positions.add(new Position(file, rank));
         }
         return positions;
     }
 
-    public List<String> getDiagonalPositionsAt(String pos) {
-        ArrayList<String> positions = new ArrayList<>();
+    public List<Position> getDiagonalPositionsAt(Position pos) {
+        ArrayList<Position> positions = new ArrayList<>();
 
         if (Board.isValidPosition(pos)) {
-            char file = pos.charAt(0);
-            char rank = pos.charAt(1);
+            int file = pos.getFile();
+            int rank = pos.getRank();
 
             // First diagonal
             for (int i = 0; i <= 8; i++) {
-                if (file + i > 'h' || rank + i > '8') break;
-                positions.add(StringUtil.join2Chars(file+i, rank+i));
+                if (file + i > 7 || rank + i > 7) break;
+                positions.add(new Position(file+i, rank+i));
             }
             for (int i = 1; i <= 8; i++) {
-                if (file - i < 'a' || rank - i < '1') break;
-                positions.add(StringUtil.join2Chars(file-i, rank-i));
+                if (file - i < 0 || rank - i < 0) break;
+                positions.add(new Position(file-i, rank-i));
             }
 
             // Second Diagonal
             for (int i = 1; i <= 8; i++) {
-                if (file + i > 'h' || rank - i < '1') break;
-                positions.add(StringUtil.join2Chars(file+i, rank-i));
+                if (file + i > 7 || rank - i < 0) break;
+                positions.add(new Position(file+i, rank-i));
             }
             for (int i = 1; i <= 8; i++) {
-                if (file - i < 'a' || rank + i > '8') break;
-                positions.add(StringUtil.join2Chars(file-i, rank+i));
+                if (file - i < 0 || rank + i > 7) break;
+                positions.add(new Position(file-i, rank+i));
             }
         }
 
