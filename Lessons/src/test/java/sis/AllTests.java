@@ -13,6 +13,7 @@ import org.junit.runners.Suite;
         sis.db.AllTests.class,
         sis.security.AllTests.class,
         sis.search.AllTests.class,
+        sis.clock.ClockTest.class,
 })
 public class AllTests {
 }

@@ -1,27 +1,65 @@
 package sis.search;
 
 import java.util.*;
+import java.util.concurrent.*;
 
 
 public class Server extends Thread {
-    private List<Search> queue = Collections.synchronizedList(new LinkedList<>());
+    static final String START_MSG = "started";
+    static final String END_MSG = "finished";
+    private BlockingQueue<Search> queue = new LinkedBlockingQueue<>();
     private ResultsListener listener;
-    public Server(ResultsListener listener) {
+    private ExecutorService threadPool;
+
+    private static ThreadLocal<List<String>> threadLog =
+            ThreadLocal.withInitial(ArrayList::new);
+
+    private List<String> completeLog =
+            Collections.synchronizedList(new ArrayList<>());
+
+    public Server(ResultsListener listener, int maxThreads) {
         this.listener = listener;
+        this.threadPool = Executors.newFixedThreadPool(maxThreads);
         start();
     }
     public void run() {
         while (true) {
-            if (!queue.isEmpty())
-                execute(queue.remove(0));
-            Thread.yield();
+            try{
+                execute(queue.take());
+            }
+            catch (InterruptedException e) {
+                break;
+            }
         }
     }
-    public void add(Search search) {
-        queue.add(search);
+    public void add(Search search) throws Exception {
+        queue.put(search);
     }
-    private void execute(Search search) {
-        search.execute();
-        listener.executed(search);
+    private void execute(final Search search) {
+        threadPool.execute(() -> {
+            try {
+                log(START_MSG, search);
+                search.execute();
+                log(END_MSG, search);
+                listener.executed(search);
+                completeLog.addAll(threadLog.get());
+
+            } finally { threadLog.remove(); }
+        });
     }
+
+    public void shutDown() {
+        this.interrupt();
+        threadPool.shutdown();
+    }
+
+    public List<String> getLog() {
+        return completeLog;
+    }
+
+    private void log(String message, Search search) {
+        threadLog.get().add(
+                search + " " + message + " at " + new Date());
+    }
+
 }

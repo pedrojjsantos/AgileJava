@@ -1,8 +1,12 @@
 package sis.search;
 
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 import sis.util.LineWriter;
 import sis.util.TestUtil;
+
+import java.util.*;
 
 import static org.junit.Assert.*;
 
@@ -10,49 +14,71 @@ public class ServerTest {
     private int numberOfResults = 0;
     private Server server;
     private static final long TIMEOUT = 3000L;
-    private static final String[] URLS = {
-            SearchTest.URL, SearchTest.URL, SearchTest.URL };
+    private final int numberOfSearches = 100;
 
-    @Test
+    @Before
     public void setUp() throws Exception {
-        TestUtil.delete(SearchTest.FILE);
-        LineWriter.write(SearchTest.FILE, SearchTest.TEST_HTML);
-
-        ResultsListener listener = search -> numberOfResults++;
-        server = new Server(listener);
+        ResultsListener listener = (search -> ++numberOfResults);
+        server = new Server(listener, 4);
     }
 
-    @Test
+    @After
     public void tearDown() throws Exception {
-        TestUtil.delete(SearchTest.FILE);
+        assertTrue(server.isAlive());
+        server.shutDown();
+        server.join(3000);
+        assertFalse(server.isAlive());
     }
 
     @Test
     public void testSearch() throws Exception {
         long start = System.currentTimeMillis();
-
-        for (String url: URLS)
-            server.add(new Search(url, "xxx"));
-
+        executeSearches();
         long elapsed = System.currentTimeMillis() - start;
-        long averageLatency = elapsed / URLS.length;
-
-        assertTrue(averageLatency < 20);
-        assertTrue(waitForResults());
+        assertTrue(elapsed < 20);
+        waitForResults();
     }
 
-    private boolean waitForResults() {
+    @Test
+    public void testLogs() throws Exception {
+        executeSearches();
+        waitForResults();
+        verifyLogs();
+    }
+    private void executeSearches() throws Exception {
+        for (int i = 0; i < numberOfSearches; i++)
+            server.add(new Search(SearchTest.URL, "xxx"));
+    }
+
+    private void waitForResults() {
         long start = System.currentTimeMillis();
 
-        while (numberOfResults < URLS.length) {
-            try {
-                Thread.sleep(1);
-            }
+        while (numberOfResults < numberOfSearches) {
+            try { Thread.sleep(1); }
             catch (InterruptedException e) {}
 
             if (System.currentTimeMillis() - start > TIMEOUT)
-                return false;
+                fail("Timeout");
         }
-        return true;
+    }
+
+    private void verifyLogs() {
+        List<String> list = server.getLog();
+        assertEquals(numberOfSearches * 2, list.size());
+        for (int i = 0; i < numberOfSearches; i += 2)
+            verifySameSearch(list.get(i), list.get(i + 1));
+    }
+
+    private void verifySameSearch(String startSearchMsg, String endSearchMsg) {
+        String startSearch = substring(startSearchMsg, Server.START_MSG);
+        String endSearch = substring(endSearchMsg, Server.END_MSG);
+        assertEquals(startSearch, endSearch);
+    }
+
+    private String substring(String string, String upTo) {
+        int endIndex = string.indexOf(upTo);
+        assertTrue("didn't find " + upTo + " in " + string,
+                endIndex != -1);
+        return string.substring(0, endIndex);
     }
 }
