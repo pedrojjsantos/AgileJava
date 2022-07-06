@@ -41,10 +41,14 @@ public class Server extends Thread {
                 log(START_MSG, search);
                 search.execute();
                 log(END_MSG, search);
-                listener.executed(search);
                 completeLog.addAll(threadLog.get());
+                listener.executed(search);
 
-            } finally { threadLog.remove(); }
+            } catch (Exception e) {
+                completeLog.add(search + " " + e.getMessage());
+                listener.executed(search);
+            }
+            finally { threadLog.remove(); }
         });
     }
 

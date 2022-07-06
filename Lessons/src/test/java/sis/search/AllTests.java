@@ -7,6 +7,7 @@ import org.junit.runners.Suite;
 @Suite.SuiteClasses({
         SearchTest.class,
         ServerTest.class,
+        SearchSchedulerTest.class,
 })
 public class AllTests {
 }
