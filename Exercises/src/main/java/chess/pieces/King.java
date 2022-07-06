@@ -12,6 +12,7 @@ public class King extends Piece{
         super(color, 'k', 0.0);
     }
 
+    @Override
     public List<Position> getPossibleMoves(Position pos, Board board) {
         ArrayList<Position> moves = new ArrayList<>();
 

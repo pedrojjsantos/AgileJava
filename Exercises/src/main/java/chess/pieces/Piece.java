@@ -1,12 +1,15 @@
 package chess.pieces;
 
+import chess.Board;
 import chess.Position;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.function.Supplier;
 
-public class Piece implements Comparable<Piece>, Serializable {
+public abstract class Piece implements Comparable<Piece>, Serializable {
     public enum Color {WHITE, BLACK}
 
     private final Color color;
@@ -131,4 +134,7 @@ public class Piece implements Comparable<Piece>, Serializable {
         return position;
     }
 
+    public List<Position> getPossibleMoves(Position pos, Board board) {
+        return new ArrayList<>();
+    }
 }

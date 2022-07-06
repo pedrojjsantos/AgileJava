@@ -44,7 +44,7 @@ public class FileTest {
     public void testPerformance() throws IOException {
         String fileName1 = "testNotBuffered.txt";
         String fileName2 = "testBuffered.txt";
-        long size = 100000;
+        long size = 10000;
 
         try (FileOutputStream file1 = new FileOutputStream(fileName1);
              FileOutputStream file2 = new FileOutputStream(fileName2)) {
@@ -54,7 +54,7 @@ public class FileTest {
             long writerTime = writerPerformance(writer, size);
             long bufferedTime = writerPerformance(bufferedWriter, size);
 
-//            System.out.printf("w%d,\tb%d%n", writerTime, bufferedTime);
+//            System.out.printf("w: %d,\tb: %d%n", writerTime, bufferedTime);
             assertTrue(writerTime > bufferedTime);
         }
         finally {
