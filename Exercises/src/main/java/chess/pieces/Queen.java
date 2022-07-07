@@ -12,13 +12,13 @@ public class Queen extends Piece{
     }
 
     @Override
-    public List<Position> getPossibleMoves(Position pos, Board board) {
+    public List<Position> getPossibleMoves(Position pos) {
         ArrayList<Position> moves = new ArrayList<>();
 
         if (Board.isValidPosition(pos)) {
-            moves.addAll(board.getFilePositionsAt(pos));
-            moves.addAll(board.getRankPositionsAt(pos));
-            moves.addAll(board.getDiagonalPositionsAt(pos));
+            moves.addAll(Board.getFilePositionsAt(pos));
+            moves.addAll(Board.getRankPositionsAt(pos));
+            moves.addAll(Board.getDiagonalPositionsAt(pos));
 
             moves.removeIf(pos::equals);
         }

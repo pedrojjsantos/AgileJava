@@ -2,7 +2,6 @@ package chess.pieces;
 
 import chess.Board;
 import chess.Position;
-import util.StringUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +12,7 @@ public class King extends Piece{
     }
 
     @Override
-    public List<Position> getPossibleMoves(Position pos, Board board) {
+    public List<Position> getPossibleMoves(Position pos) {
         ArrayList<Position> moves = new ArrayList<>();
 
         if (Board.isValidPosition(pos)) {

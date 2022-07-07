@@ -1,5 +1,8 @@
 package chess.pieces;
 
+import chess.Position;
+import org.junit.Test;
+
 import static org.junit.Assert.*;
 import static org.junit.Assert.assertEquals;
 
@@ -25,5 +28,10 @@ public class NoPieceTest extends PieceTest {
         assertSame(NoPiece.class, blackPiece.getClass());
         assertEquals('.', blackPiece.print());
         assertEquals(0, blackPiece.getStrength(), STRENGTH_PRECISION);
+    }
+
+    @Test
+    public void testNoPieceMoves() {
+        assertEquals(0, Piece.noPiece().getPossibleMoves(new Position("d4")).size());
     }
 }

@@ -35,10 +35,9 @@ public class BishopTest extends PieceTest {
 
     @Test
     public void testBishopMoves() {
-        Board board = new Board();
         Bishop bishop = Piece.createBlackBishop();
 
-        List<Position> possibleMoves = bishop.getPossibleMoves(new Position("d3"), board);
+        List<Position> possibleMoves = bishop.getPossibleMoves(new Position("d3"));
 
         assertEquals(11, possibleMoves.size());
 

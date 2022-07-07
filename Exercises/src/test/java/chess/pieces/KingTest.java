@@ -34,15 +34,16 @@ public class KingTest extends PieceTest {
 
     @Test
     public void testKingMoves() {
-        Board board = new Board();
         King king = Piece.createWhiteKing();
 
-        List<Position> possibleMoves = king.getPossibleMoves(new Position("d4"), board);
+        List<Position> possibleMoves = king.getPossibleMoves(new Position("d4"));
 
         assertEquals(8, possibleMoves.size());
         assertContains(possibleMoves, "c3", "c4", "c5", "d3", "d5", "e3", "e4", "e5");
 
-        possibleMoves = king.getPossibleMoves(new Position("a2"), board);
+
+        // Assert it won't go outside the board
+        possibleMoves = king.getPossibleMoves(new Position("a2"));
 
         assertEquals(5, possibleMoves.size());
         assertContains(possibleMoves, "a1", "a3", "b1", "b2", "b3");

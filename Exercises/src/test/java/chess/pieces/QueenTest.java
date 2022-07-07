@@ -34,10 +34,9 @@ public class QueenTest extends PieceTest {
     }
     @Test
     public void testQueenMoves() {
-        Board board = new Board();
         Queen queen = Piece.createBlackQueen();
 
-        List<Position> possibleMoves = queen.getPossibleMoves(new Position("d3"), board);
+        List<Position> possibleMoves = queen.getPossibleMoves(new Position("d3"));
 
         assertEquals(25, possibleMoves.size());
 

@@ -5,8 +5,9 @@ public class Position implements java.io.Serializable {
     private char rank;
 
     public Position(String strPos) {
-        this.file = strPos.charAt(0);
-        this.rank = strPos.charAt(1);
+        String pos = strPos.toLowerCase();
+        this.file = pos.charAt(0);
+        this.rank = pos.charAt(1);
     }
 
     public Position(int file, int rank) {

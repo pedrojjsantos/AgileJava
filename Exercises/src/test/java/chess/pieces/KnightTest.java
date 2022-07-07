@@ -34,10 +34,9 @@ public class KnightTest extends PieceTest {
 
     @Test
     public void testKnightMoves() {
-        Board board = new Board();
         Knight knight = Piece.createBlackKnight();
 
-        List<Position> possibleMoves = knight.getPossibleMoves(new Position("e5"), board);
+        List<Position> possibleMoves = knight.getPossibleMoves(new Position("e5"));
 
         assertEquals(8, possibleMoves.size());
 

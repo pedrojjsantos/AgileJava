@@ -35,10 +35,9 @@ public class RookTest extends PieceTest {
 
     @Test
     public void testRookMoves() {
-        Board board = new Board();
         Rook rook = Piece.createBlackRook();
 
-        List<Position> possibleMoves = rook.getPossibleMoves(new Position("e3"), board);
+        List<Position> possibleMoves = rook.getPossibleMoves(new Position("e3"));
 
         assertEquals(14, possibleMoves.size());
 

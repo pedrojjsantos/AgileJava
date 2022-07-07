@@ -103,13 +103,15 @@ public class Board implements Iterable<Piece>, Serializable {
     }
 
     public static boolean isValidPosition(Position pos) {
+        if (pos == null) return false;
+
         int file = pos.getFile();
         int rank = pos.getRank();
 
         return file >= 0 && file < 8 && rank >= 0 && rank < 8;
     }
 
-    public List<Position> getFilePositionsAt(Position pos) {
+    public static List<Position> getFilePositionsAt(Position pos) {
         ArrayList<Position> positions = new ArrayList<>();
 
         if (isValidPosition(pos)) {
@@ -121,7 +123,7 @@ public class Board implements Iterable<Piece>, Serializable {
         return positions;
     }
 
-    public List<Position> getRankPositionsAt(Position pos) {
+    public static List<Position> getRankPositionsAt(Position pos) {
         ArrayList<Position> positions = new ArrayList<>();
 
         if (isValidPosition(pos)){
@@ -133,7 +135,7 @@ public class Board implements Iterable<Piece>, Serializable {
         return positions;
     }
 
-    public List<Position> getDiagonalPositionsAt(Position pos) {
+    public static List<Position> getDiagonalPositionsAt(Position pos) {
         ArrayList<Position> positions = new ArrayList<>();
 
         if (Board.isValidPosition(pos)) {
