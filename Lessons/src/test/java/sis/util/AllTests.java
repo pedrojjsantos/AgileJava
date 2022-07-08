@@ -11,6 +11,8 @@ import org.junit.runners.Suite;
         IOUtilTest.class,
         LineWriterTest.class,
         StringUtilTest.class,
+        MultiHashMapTest.class,
+        EventMapTest.class,
 })
 public class AllTests {
 }
