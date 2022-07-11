@@ -16,7 +16,7 @@ public class MultiHashMapTest {
 
     @Before
     public void setUp() {
-        events = new MultiHashMap<Date,String>();
+        events = new MultiHashMap<>();
     }
 
     @Test
@@ -56,5 +56,33 @@ public class MultiHashMapTest {
         assertEquals(2, retrievedEvents.size());
         assertTrue(retrievedEvents.contains(eventA));
         assertTrue(retrievedEvents.contains(eventB));
+    }
+
+    @Test
+    public void testFilter() {
+        MultiHashMap<String,java.sql.Date> meetings= new MultiHashMap<>();
+
+        meetings.put("iteration start", createSqlDate(2005, 9, 12));
+        meetings.put("iteration start", createSqlDate(2005, 9, 26));
+        meetings.put("VP blather", createSqlDate(2005, 9, 12));
+        meetings.put("brown bags", createSqlDate(2005, 9, 14));
+
+        MultiHashMap<String,java.util.Date> mondayMeetings = new MultiHashMap<>();
+        MultiHashMap.filter(mondayMeetings, meetings, (MultiHashMap.Filter<Date>) this::isMonday);
+        assertEquals(2, mondayMeetings.size());
+        assertEquals(2, mondayMeetings.get("iteration start").size());
+        assertNull(mondayMeetings.get("brown bags"));
+        assertEquals(1, mondayMeetings.get("VP blather").size());
+    }
+
+    private boolean isMonday(Date date) {
+        Calendar calendar = GregorianCalendar.getInstance();
+        calendar.setTime(date);
+        return calendar.get(Calendar.DAY_OF_WEEK) == Calendar.MONDAY;
+    }
+
+    private java.sql.Date createSqlDate(int year, int month, int day) {
+        java.util.Date date = DateUtil.createDate(year, month, day);
+        return new java.sql.Date(date.getTime());
     }
 }
