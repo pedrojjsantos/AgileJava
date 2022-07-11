@@ -44,7 +44,6 @@ public class AlarmClockTest {
             monitor.wait(300);
         }
         long end = System.currentTimeMillis();
-        alarm.finish();
         assertTrue(alarm.getTime()<= end - start);
         assertEquals(1, alarmsRung.size());
         assertEquals(alarm.toString(), alarmsRung.get(0));

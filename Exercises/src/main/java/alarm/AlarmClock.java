@@ -18,7 +18,6 @@ public class AlarmClock extends Thread{
         while (true) {
             try {
                 AlarmInfo alarm = finishedAlarms.take();
-                alarm.finish();
                 listener.ring(alarm);
             } catch (InterruptedException e) {
                 break;

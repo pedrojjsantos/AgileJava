@@ -11,17 +11,7 @@ public class AlarmInfoTest {
 
         assertEquals("test", alarm.getName());
         assertEquals(300, alarm.getTime());
-        assertEquals("Ready!", alarm.getStatus());
 
-        assertEquals("test(300ms) Ready!", alarm.toString());
-    }
-
-    @Test
-    public void testUpdateStatus() {
-        AlarmInfo alarm = new AlarmInfo("test", 300);
-        assertEquals("Ready!", alarm.getStatus());
-
-        alarm.finish();
-        assertEquals("Finished!", alarm.getStatus());
+        assertEquals("test(300ms)", alarm.toString());
     }
 }
