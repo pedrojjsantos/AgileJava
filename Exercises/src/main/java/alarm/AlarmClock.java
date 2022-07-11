@@ -18,7 +18,7 @@ public class AlarmClock extends Thread{
         while (true) {
             try {
                 AlarmInfo alarm = finishedAlarms.take();
-                listener.ring(alarm);
+                listener.ring(alarm.toString());
             } catch (InterruptedException e) {
                 break;
             }
@@ -26,12 +26,13 @@ public class AlarmClock extends Thread{
 
     }
 
-    public void add(AlarmInfo alarm) throws Exception {
+    public void add(String name, long time) throws Exception {
+        AlarmInfo alarm = new AlarmInfo(name, time);
         Thread thr = new Thread(() -> {
             try {
                 long start, current;
                 start = current = System.currentTimeMillis();
-                while (current - start < alarm.getTime()) {
+                while (current - start < alarm.time) {
                     sleep(5);
                     current = System.currentTimeMillis();
                 }
@@ -39,7 +40,7 @@ public class AlarmClock extends Thread{
             } catch (InterruptedException ignored) {}
         });
         thr.start();
-        alarms.put(alarm.getName(), thr);
+        alarms.put(alarm.name, thr);
     }
 
     public void shutDown() {
@@ -51,5 +52,20 @@ public class AlarmClock extends Thread{
 
         if (thr != null)
             thr.interrupt();
+    }
+
+    class AlarmInfo {
+        private final String name;
+        private final long time;
+
+        AlarmInfo(String name, long time) {
+            this.name = name;
+            this.time = time;
+        }
+
+        @Override
+        public String toString() {
+            return "%s(%dms)".formatted(name, time);
+        }
     }
 }

@@ -11,6 +11,7 @@ import java.util.List;
 import static org.junit.Assert.*;
 
 public class AlarmClockTest {
+    private final String ALARM_FMT = "%s(%dms)";
     private AlarmClock alarmClock;
     private final Object monitor = new Object();
     List<String> alarmsRung = Collections.synchronizedList(new ArrayList<>());
@@ -18,7 +19,7 @@ public class AlarmClockTest {
     @Before
     public void setUp() {
         AlarmListener listener = alarmInfo -> {
-            alarmsRung.add(alarmInfo.toString());
+            alarmsRung.add(alarmInfo);
             synchronized (monitor){
                 monitor.notifyAll();
             }
@@ -37,27 +38,30 @@ public class AlarmClockTest {
 
     @Test
     public void testAlarm() throws Exception {
-        AlarmInfo alarm = new AlarmInfo("Test", 200);
+        String name = "Test";
+        long time = 200;
         long start = System.currentTimeMillis();
-        alarmClock.add(alarm);
+        alarmClock.add(name, time);
         synchronized (monitor) {
             monitor.wait(300);
         }
         long end = System.currentTimeMillis();
-        assertTrue(alarm.getTime()<= end - start);
+        assertTrue(time <= end - start);
         assertEquals(1, alarmsRung.size());
-        assertEquals(alarm.toString(), alarmsRung.get(0));
+        assertEquals(ALARM_FMT.formatted(name, time), alarmsRung.get(0));
     }
 
     @Test
     public void testMultipleAlarms() throws Exception{
-        AlarmInfo alarm1 = new AlarmInfo("Alarm:1", 300);
-        AlarmInfo alarm2 = new AlarmInfo("Alarm:2", 150);
+        String alarm1Name = "Alarm:1";
+        long alarm1Time = 300;
+        String alarm2Name = "Alarm:2";
+        long alarm2Time = 150;
         long start, endAlarm1, endAlarm2;
         start = System.currentTimeMillis();
 
-        alarmClock.add(alarm1);
-        alarmClock.add(alarm2);
+        alarmClock.add(alarm1Name, alarm1Time);
+        alarmClock.add(alarm2Name, alarm2Time);
 
         synchronized (monitor) {
             monitor.wait(200);
@@ -71,29 +75,31 @@ public class AlarmClockTest {
         endAlarm1 = System.currentTimeMillis();
         assertEquals(2, alarmsRung.size());
 
-        assertTrue(alarm1.getTime() <= endAlarm1 - start);
-        assertTrue(alarm2.getTime() <= endAlarm2 - start);
+        assertTrue(alarm1Time <= endAlarm1 - start);
+        assertTrue(alarm2Time <= endAlarm2 - start);
 
-        assertEquals(alarm2.toString(), alarmsRung.get(0));
-        assertEquals(alarm1.toString(), alarmsRung.get(1));
+        assertEquals(ALARM_FMT.formatted(alarm2Name, alarm2Time), alarmsRung.get(0));
+        assertEquals(ALARM_FMT.formatted(alarm1Name, alarm1Time), alarmsRung.get(1));
 
     }
 
     @Test
     public void testCancelAlarm() throws Exception {
-        AlarmInfo alarm1 = new AlarmInfo("Alarm:1", 300);
-        AlarmInfo alarm2 = new AlarmInfo("Alarm:2", 150);
+        String alarm1Name = "Alarm:1";
+        long alarm1Time = 300;
+        String alarm2Name = "Alarm:2";
+        long alarm2Time = 150;
 
-        alarmClock.add(alarm1);
-        alarmClock.add(alarm2);
-        Thread.sleep(alarm2.getTime() - 50);
-        alarmClock.cancel(alarm2.getName());
+        alarmClock.add(alarm1Name, alarm1Time);
+        alarmClock.add(alarm2Name, alarm2Time);
+        Thread.sleep(alarm2Time - 50);
+        alarmClock.cancel(alarm2Name);
 
         Thread.sleep(60);
         assertEquals(0, alarmsRung.size());
 
-        Thread.sleep(alarm1.getTime() - alarm2.getTime());
+        Thread.sleep(alarm1Time - alarm2Time);
         assertEquals(1, alarmsRung.size());
-        assertEquals(alarm1.toString(), alarmsRung.get(0));
+        assertEquals(ALARM_FMT.formatted(alarm1Name, alarm1Time), alarmsRung.get(0));
     }
 }
