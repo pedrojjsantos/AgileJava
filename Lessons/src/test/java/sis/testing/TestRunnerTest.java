@@ -1,13 +1,10 @@
 package sis.testing;
 
-import org.junit.Test;
-
 import java.lang.reflect.*;
 import java.util.*;
 
 public class TestRunnerTest {
-    @Test
-    public void singleMethodTest() {
+    public void singleMethodTest() throws Exception {
         TestRunner runner = new TestRunner(SingleMethodTest.class);
         Set<Method> testMethods = runner.getTestMethods();
         assert 1 == testMethods.size() : "expected single test method";
@@ -21,28 +18,30 @@ public class TestRunnerTest {
         assert 0 == runner.failed() : "expected no failures";
     }
 
-//    public void multipleMethodTest() {
-//        TestRunner runner = new TestRunner(MultipleMethodTest.class);
-//        runner.run();
-//        assert 2 == runner.passed() : "expected 2 pass";
-//        assert 0 == runner.failed() : "expected no failures";
-//        Set<Method> testMethods = runner.getTestMethods();
-//        assert 2 == testMethods.size() : "expected single test method";
-//        Set<String> methodNames = new HashSet<String>();
-//        for (Method method: testMethods)
-//            methodNames.add(method.getName());
-//        final String testMethodNameA = "testA";
-//        final String testMethodNameB = "testB";
-//        assert methodNames.contains(testMethodNameA):
-//                "expected " + testMethodNameA + " as test method";
-//        assert methodNames.contains(testMethodNameB):
-//                "expected " + testMethodNameB + " as test method";
-//    }
+    public void multipleMethodTest() {
+        TestRunner runner = new TestRunner(MultipleMethodTest.class);
+        runner.run();
+        assert 2 == runner.passed() : "expected 2 pass";
+        assert 0 == runner.failed() : "expected no failures";
+        Set<Method> testMethods = runner.getTestMethods();
+        assert 2 == testMethods.size() : "expected single test method";
+        Set<String> methodNames = new HashSet<String>();
+        for (Method method: testMethods)
+            methodNames.add(method.getName());
+        final String testMethodNameA = "testA";
+        final String testMethodNameB = "testB";
+        assert methodNames.contains(testMethodNameA):
+                "expected " + testMethodNameA + " as test method";
+        assert methodNames.contains(testMethodNameB):
+                "expected " + testMethodNameB + " as test method";
+    }
 
-    class SingleMethodTest {
+    static class SingleMethodTest {
+        SingleMethodTest() {}
         public void testA() {}
     }
-    class MultipleMethodTest {
+    static class MultipleMethodTest {
+        MultipleMethodTest() {}
         public void testA() {}
         public void testB() {}
     }

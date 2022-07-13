@@ -1,10 +1,8 @@
 package sis.testing;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
+
+import java.lang.reflect.*;
+import java.util.*;
 
 public class TestRunner {
     Class<?> testClass;
@@ -14,8 +12,8 @@ public class TestRunner {
     public static void main(String[] args) throws Exception {
         TestRunner runner = new TestRunner(args[0]);
         runner.run();
-        System.out.println(
-                "passed: " + runner.passed() + " failed: " + runner.failed());
+
+        System.out.println("passed: " + runner.passed() + " failed: " + runner.failed());
         if (runner.failed() > 0)
             System.exit(1);
     }
@@ -38,7 +36,7 @@ public class TestRunner {
     }
     private void run(Method method) {
         try {
-            Object testObject = testClass.newInstance();
+            Object testObject = testClass.getDeclaredConstructor().newInstance();
             method.invoke(testObject);
         }
         catch (InvocationTargetException e) {
