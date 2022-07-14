@@ -5,9 +5,10 @@ import java.lang.reflect.*;
 import java.util.*;
 
 public class TestRunner {
-    Class<?> testClass;
-    Set<Method> methods = new HashSet<>();
-    int failed = 0;
+    private final Class<?> testClass;
+    private final Set<Method> testMethods = new HashSet<>();
+    private final Map<Method, Ignore> ignoredMethods = new HashMap<>();
+    private int failed = 0;
 
     public static void main(String[] args) throws Exception {
         TestRunner runner = new TestRunner(args[0]);
@@ -18,22 +19,44 @@ public class TestRunner {
             System.exit(1);
     }
 
+    private boolean isTestMethod(Method method) {
+        return method.isAnnotationPresent(TestMethod.class);
+    }
+
+    private boolean shouldIgnore(Method method) {
+        return method.isAnnotationPresent(Ignore.class);
+    }
+
+    private void addToIgnoreOrToTestList(Method method) {
+        if (shouldIgnore(method))
+            ignoredMethods.put(method, method.getAnnotation(Ignore.class));
+        else testMethods.add(method);
+    }
+
     public TestRunner(Class<?> testClass) {
         this.testClass = testClass;
-        methods.addAll(Arrays.asList(testClass.getDeclaredMethods()));
+
+        Arrays.stream(testClass.getDeclaredMethods())
+                .filter(this::isTestMethod)
+                .forEach(this::addToIgnoreOrToTestList);
     }
     public TestRunner(String className) throws Exception {
         this(Class.forName(className));
     }
 
     public Set<Method> getTestMethods() {
-        return methods;
+        return testMethods;
+    }
+
+    public Map<Method, Ignore> getIgnoredMethods() {
+        return ignoredMethods;
     }
 
     public void run() {
         for (Method method: getTestMethods())
             run(method);
     }
+
     private void run(Method method) {
         try {
             Object testObject = testClass.getDeclaredConstructor().newInstance();
@@ -52,10 +75,10 @@ public class TestRunner {
             failed++;
         }
     }
-
     public int passed() {
-        return methods.size() - failed;
+        return testMethods.size() - failed;
     }
+
     public int failed() {
         return failed;
     }

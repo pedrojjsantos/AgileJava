@@ -4,45 +4,92 @@ import java.lang.reflect.*;
 import java.util.*;
 
 public class TestRunnerTest {
-    public void singleMethodTest() throws Exception {
-        TestRunner runner = new TestRunner(SingleMethodTest.class);
-        Set<Method> testMethods = runner.getTestMethods();
-        assert 1 == testMethods.size() : "expected single test method";
-        Iterator<Method> it = testMethods.iterator();
-        Method method = it.next();
-        final String testMethodName = "testA";
-        assert testMethodName.equals(method.getName()) :
-                "expected " + testMethodName + " as test method";
+    private TestRunner runner;
+    private static final String methodNameA = "testA";
+    private static final String methodNameB = "testB";
+    public static final String IGNORE_REASON1 = "because";
+
+    @TestMethod
+    public void singleMethodTest() {
+        runTests(SingleMethodTest.class);
+        verifyTests(methodNameA);
+    }
+
+    @TestMethod
+    public void multipleMethodTest() {
+        runTests(MultipleMethodTest.class);
+        verifyTests(methodNameA, methodNameB);
+    }
+
+    @TestMethod
+    public void ignoreMethodTest() {
+        runTests(IgnoreMethodTest.class);
+        verifyTests(methodNameA, methodNameB);
+        assertIgnoreReasons();
+    }
+
+    private void runTests(Class<?> testClass) {
+        runner = new TestRunner(testClass);
         runner.run();
-        assert 1 == runner.passed() : "expected 1 pass";
+    }
+
+    private void verifyTests(String... expectedTestMethodNames) {
+        verifyNumberOfTests(expectedTestMethodNames);
+        verifyMethodNames(expectedTestMethodNames);
+        verifyCounts(expectedTestMethodNames);
+    }
+
+    private void verifyCounts(String... testMethodNames) {
+        assert testMethodNames.length == runner.passed() :
+            "expected " + testMethodNames.length + " passed";
         assert 0 == runner.failed() : "expected no failures";
     }
 
-    public void multipleMethodTest() {
-        TestRunner runner = new TestRunner(MultipleMethodTest.class);
-        runner.run();
-        assert 2 == runner.passed() : "expected 2 pass";
-        assert 0 == runner.failed() : "expected no failures";
-        Set<Method> testMethods = runner.getTestMethods();
-        assert 2 == testMethods.size() : "expected single test method";
-        Set<String> methodNames = new HashSet<String>();
-        for (Method method: testMethods)
+    private void verifyNumberOfTests(String... testMethodNames) {
+        assert testMethodNames.length == runner.getTestMethods().size() :
+                "expected " + testMethodNames.length + " test method(s)";
+    }
+
+    private void verifyMethodNames(String... testMethodNames) {
+        Set<String> actualMethodNames = getTestMethodNames();
+        for (String methodName: testMethodNames)
+            assert actualMethodNames.contains(methodName):
+                    "expected " + methodName + " as test method";
+    }
+
+    private Set<String> getTestMethodNames() {
+        Set<String> methodNames = new HashSet<>();
+        for (Method method: runner.getTestMethods())
             methodNames.add(method.getName());
-        final String testMethodNameA = "testA";
-        final String testMethodNameB = "testB";
-        assert methodNames.contains(testMethodNameA):
-                "expected " + testMethodNameA + " as test method";
-        assert methodNames.contains(testMethodNameB):
-                "expected " + testMethodNameB + " as test method";
+        return methodNames;
+    }
+
+    private void assertIgnoreReasons() {
+        Map<Method, Ignore> ignoredMethods = runner.getIgnoredMethods();
+        Map.Entry<Method, Ignore> entry = getSoleEntry(ignoredMethods);
+        assert "testC".equals(entry.getKey().getName()):
+                "unexpected ignore method: " + entry.getKey();
+        Ignore ignore = entry.getValue();
+        assert IGNORE_REASON1.equals(ignore.value());
+    }
+
+    private <K, V> Map.Entry<K, V> getSoleEntry(Map<K, V> map) {
+        assert 1 == map.size(): "expected only one entry";
+        Iterator<Map.Entry<K, V>> it = map.entrySet().iterator();
+        return it.next();
     }
 
     static class SingleMethodTest {
-        SingleMethodTest() {}
-        public void testA() {}
+        @TestMethod public void testA() {}
     }
     static class MultipleMethodTest {
-        MultipleMethodTest() {}
-        public void testA() {}
-        public void testB() {}
+        @TestMethod public void testA() {}
+        @TestMethod public void testB() {}
+    }
+    static class IgnoreMethodTest {
+        @TestMethod public void testA() {}
+        @TestMethod public void testB() {}
+        @Ignore(IGNORE_REASON1)
+        @TestMethod public void testC() {}
     }
 }
