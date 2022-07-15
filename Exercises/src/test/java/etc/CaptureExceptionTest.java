@@ -3,22 +3,28 @@ package etc;
 import org.junit.Test;
 
 import java.io.*;
-import java.util.Arrays;
 import java.util.stream.Collectors;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
+@SuppressWarnings({"UnusedAssignment", "ConstantConditions"})
 public class CaptureExceptionTest {
     @Test
-    public void testWithWriter() throws IOException{
+    public void testWithWriter(){
         try {
             String str = null;
-            str.toLowerCase();
+
+            str = str.toLowerCase();
             fail("Expected Exception!");
+
         } catch (Exception e) {
             String output = getStackTraceWithWriter(e);
 
 //            System.out.println(output);
+            assertTrue(output.contains(e.toString()));
+            for (StackTraceElement trace : e.getStackTrace())
+                assertTrue(output.contains(trace.toString()));
         }
     }
 
@@ -40,12 +46,16 @@ public class CaptureExceptionTest {
     public void testWithoutWriter() throws IOException{
         try {
             String str = null;
-            str.toLowerCase();
+
+            str = str.toLowerCase();
             fail("Expected Exception!");
         } catch (Exception e) {
             String output = getStackTraceWithoutWriter(e);
 
 //            System.out.println(output);
+            assertTrue(output.contains(e.toString()));
+            for (StackTraceElement trace : e.getStackTrace())
+                assertTrue(output.contains(trace.toString()));
         }
     }
 
