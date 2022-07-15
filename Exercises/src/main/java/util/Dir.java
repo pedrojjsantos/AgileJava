@@ -16,11 +16,8 @@ public class Dir {
             throw new DirPathNameException("Path given is an already existent file!");
     }
 
-    public void ensureExists() {
-        if (directory.exists() && directory.isDirectory())
-            return;
-
-        directory.mkdir();
+    public boolean ensureExists() {
+        return directory.mkdir();
     }
 
     public List<MyFile> files() {
@@ -57,8 +54,8 @@ public class Dir {
     }
 
     static class Attributes {
-        private boolean isReadOnly;
-        private boolean isHidden;
+        private final boolean isReadOnly;
+        private final boolean isHidden;
 
         Attributes(Dir dir) {
             isReadOnly = dir.isReadOnly();
