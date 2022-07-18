@@ -118,4 +118,12 @@ public class RingTest {
             fail("Expected exception");
         } catch (EmptyRingException ignored) {}
     }
+
+    @Test
+    public void testAddNull() {
+        try {
+            ring.add(null);
+            throw new RuntimeException("Expected an AssertionError!");
+        } catch (AssertionError ignoredSuccess) {}
+    }
 }

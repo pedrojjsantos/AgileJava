@@ -21,6 +21,7 @@ public class Ring<T> implements Iterable<T> {
     }
 
     public void add(T item) {
+        assert item != null;
         Node newNode = new Node(item);
         if (current != null) {
             Node nextNode = current.next;

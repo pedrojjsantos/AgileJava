@@ -6,6 +6,8 @@ import org.junit.runners.Suite;
         chess.AllTests.class,
         etc.AllTests.class,
         util.AllTests.class,
+        alarm.AllTests.class,
+        ring.AllTests.class,
 })
 public class AllTests {
 }
