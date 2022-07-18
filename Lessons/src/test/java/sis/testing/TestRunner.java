@@ -5,19 +5,12 @@ import java.lang.reflect.*;
 import java.util.*;
 
 public class TestRunner {
+    public static final String DEFAULT_IGNORE_REASON = "temporarily disabling it";
+
     private final Class<?> testClass;
     private final Set<Method> testMethods = new HashSet<>();
     private final Map<Method, Ignore> ignoredMethods = new HashMap<>();
     private int failed = 0;
-
-    public static void main(String[] args) throws Exception {
-        TestRunner runner = new TestRunner(args[0]);
-        runner.run();
-
-        System.out.println("passed: " + runner.passed() + " failed: " + runner.failed());
-        if (runner.failed() > 0)
-            System.exit(1);
-    }
 
     private boolean isTestMethod(Method method) {
         return method.isAnnotationPresent(TestMethod.class);
@@ -40,6 +33,7 @@ public class TestRunner {
                 .filter(this::isTestMethod)
                 .forEach(this::addToIgnoreOrToTestList);
     }
+
     public TestRunner(String className) throws Exception {
         this(Class.forName(className));
     }

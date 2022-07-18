@@ -8,6 +8,8 @@ public class TestRunnerTest {
     private static final String methodNameA = "testA";
     private static final String methodNameB = "testB";
     public static final String IGNORE_REASON1 = "because";
+    public static final String IGNORE_REASON2 = "why not";
+    public static final String IGNORE_INITIALS = "jjl";
 
     @TestMethod
     public void singleMethodTest() {
@@ -26,6 +28,36 @@ public class TestRunnerTest {
         runTests(IgnoreMethodTest.class);
         verifyTests(methodNameA, methodNameB);
         assertIgnoreReasons();
+    }
+
+    @TestMethod
+    public void ignoreWithDefaultReason() {
+        runTests(DefaultIgnoreMethodTest.class);
+        verifyTests(methodNameA, methodNameB);
+        Map<Method, Ignore> ignoredMethods = runner.getIgnoredMethods();
+        Map.Entry<Method, Ignore> entry = getSoleEntry(ignoredMethods);
+        Ignore ignore = entry.getValue();
+        assert TestRunner.DEFAULT_IGNORE_REASON.
+                equals(ignore.reasons()[0]);
+    }
+
+    @TestMethod
+    public void dateTest() {
+        runTests(IgnoreDateTest.class);
+        Map<Method, Ignore> ignoredMethods = runner.getIgnoredMethods();
+        Map.Entry<Method, Ignore> entry = getSoleEntry(ignoredMethods);
+        Ignore ignore = entry.getValue();
+        sis.testing.Date date = ignore.date();
+        assert 1 == date.month();
+        assert 2 == date.day();
+        assert 2005 == date.year();
+    }
+
+    @TestMethod
+    public void packageAnnotations() {
+        Package pkg = this.getClass().getPackage();
+        TestPackage testPackage = pkg.getAnnotation(TestPackage.class);
+        assert testPackage.isPerformance();
     }
 
     private void runTests(Class<?> testClass) {
@@ -70,7 +102,13 @@ public class TestRunnerTest {
         assert "testC".equals(entry.getKey().getName()):
                 "unexpected ignore method: " + entry.getKey();
         Ignore ignore = entry.getValue();
-        assert IGNORE_REASON1.equals(ignore.value());
+        String[] reasons = ignore.reasons();
+
+        assert 2 == reasons.length :
+                "expected two reasons to ignore method: " + entry.getKey().getName();
+        assert IGNORE_REASON1.equals(reasons[0]);
+        assert IGNORE_REASON2.equals(reasons[1]);
+        assert IGNORE_INITIALS.equals(ignore.initials());
     }
 
     private <K, V> Map.Entry<K, V> getSoleEntry(Map<K, V> map) {
@@ -89,7 +127,22 @@ public class TestRunnerTest {
     static class IgnoreMethodTest {
         @TestMethod public void testA() {}
         @TestMethod public void testB() {}
-        @Ignore(IGNORE_REASON1)
+        @Ignore(reasons = {IGNORE_REASON1, IGNORE_REASON2},
+                initials = IGNORE_INITIALS,
+                date=@Date(month=1, day=2, year=2005))
+        @TestMethod public void testC() {}
+    }
+    static class DefaultIgnoreMethodTest {
+        @TestMethod public void testA() {}
+        @TestMethod public void testB() {}
+        @Ignore(initials=TestRunnerTest.IGNORE_INITIALS,
+                date=@Date(month=1, day=2, year=2005))
+        @TestMethod public void testC() {}
+    }
+    static class IgnoreDateTest {
+        @Ignore(
+                initials=TestRunnerTest.IGNORE_INITIALS,
+                date=@Date(month=1, day=2, year=2005))
         @TestMethod public void testC() {}
     }
 }
