@@ -9,6 +9,7 @@ import org.junit.runners.Suite;
         CloneTest.class,
         ObjectDumperTest.class,
         util.file.AllTests.class,
+        util.stringer.AllTests.class,
 })
 public class AllTests {
 }

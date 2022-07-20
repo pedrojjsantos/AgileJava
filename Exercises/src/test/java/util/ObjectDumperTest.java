@@ -34,10 +34,6 @@ public class ObjectDumperTest {
                 "\t" + "id:       " + "200             | " + "Integer         protected"
 
                 , dump);
-
-//        Game game  = new Game();
-//        game.initialize();
-//        System.out.println(ObjectDumper.print(game));
     }
 
     static class TestObject1 {
