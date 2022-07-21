@@ -10,6 +10,6 @@ import java.lang.annotation.Target;
 public @interface Dump {
     int order() default Integer.MAX_VALUE;
     boolean quote() default false;
-    String[] outputMethod() default "toString";
+    String[] outputMethods() default "toString";
     String separator() default " ";
 }

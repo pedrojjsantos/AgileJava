@@ -2,7 +2,9 @@ package util.stringer;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.List;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
 
@@ -17,14 +19,23 @@ public class ToStringer {
         return field.getAnnotation(Dump.class).order();
     }
 
+    private static String getSeparator(Field field) {
+        return field.getAnnotation(Dump.class).separator();
+    }
+
     private static boolean hasQuotes(Field field) {
         return field.getAnnotation(Dump.class).quote();
+    }
+
+    private static String[] getOutputMethods(Field field) {
+        return field.getAnnotation(Dump.class).outputMethods();
     }
 
     private static String getContent(Field field, Object obj, String methodName) {
         try {
             if (methodName.equals("toString"))
                 return field.get(obj).toString();
+
             Method method = obj.getClass().getDeclaredMethod(methodName);
             return method.invoke(obj).toString();
         } catch (Exception e) {
@@ -36,41 +47,39 @@ public class ToStringer {
         if (!field.canAccess(obj))
             field.setAccessible(true);
 
-        String[] methodNames = field.getAnnotation(Dump.class).outputMethod();
-        String separator = field.getAnnotation(Dump.class).separator();
-        StringBuilder buffer = new StringBuilder(field.getName() + ": [");
+        String separator = getSeparator(field);
+        String[] outputMethods = getOutputMethods(field);
 
-        for (String methodName : methodNames) {
-            String content = getContent(field, obj, methodName);
+        List<String> fieldContent = new ArrayList<>(outputMethods.length);
+
+        for (String methodName : outputMethods) {
+            String output = getContent(field, obj, methodName);
 
             if (hasQuotes(field))
-                buffer.append('"').append(content).append("\"");
-            else
-                buffer.append(content);
+                output = "\"%s\"".formatted(output);
 
-            buffer.append(separator);
+            fieldContent.add(output);
         }
-        buffer.setLength(buffer.length() - separator.length());
-        buffer.append(']');
 
-        return buffer.toString();
+        return field.getName() + ": " + String.join(separator, fieldContent);
     }
 
     public static String dump(Object obj){
         if (obj == null) return "";
-        Class<?> klass = obj.getClass();
-        TreeSet<Field> fields = new TreeSet<>(new FieldComparator());
 
-        for (Field field : klass.getDeclaredFields())
+        TreeSet<Field> fields = new TreeSet<>(new FieldOrder());
+
+        for (Field field : obj.getClass().getDeclaredFields())
             if (isDumpable(field))
                 fields.add(field);
 
         return fields.stream()
                 .map(field -> fromFieldToString(field, obj))
-                .collect(Collectors.joining("%n")).formatted();
+                .collect(Collectors.joining("%n"))
+                .formatted();
     }
 
-    static class FieldComparator implements Comparator<Field> {
+    static class FieldOrder implements Comparator<Field> {
         @SuppressWarnings("ComparatorMethodParameterNotUsed")
         public int compare(Field f1, Field f2) {
             int compare = Integer.compare(getOrder(f1), getOrder(f2));

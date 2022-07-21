@@ -9,50 +9,8 @@ public class ToStringerTest {
     public void testDump() {
         String result = ToStringer.dump(new TestDumpOne(123, "hey"));
         assertEquals((
-                "dumpableNum: [123]%n" +
-                "dumpableMsg: [hey]").formatted(), result);
-
-        result = ToStringer.dump(new TestDumpPrivate(123, "hey"));
-        assertEquals((
-                "dumpableNum: [123]%n" +
-                "dumpableMsg: [hey]").formatted(), result);
-    }
-
-    @Test
-    public void testDumpWithOrder() {
-        String result = ToStringer.dump(new TestDumpOrdered(123, "hey"));
-        assertEquals((
-                "msg: [hey]%n" +
-                "dumpableNum: [123]%n" +
-                "dumpableMsg: [hey]%n" +
-                "num: [123]").formatted(), result);
-    }
-
-    @Test
-    public void testDumpWithQuotes() {
-        String result = ToStringer.dump(new TestDumpQuotable("heya"));
-        assertEquals((
-                "msg1: [\"\"]%n" +
-                "msg2: [heya]%n" +
-                "msg3: [\"   \"]").formatted(), result);
-    }
-
-    @Test
-    public void testDumpWithOutputMethod() {
-        String result = ToStringer.dump(new TestDumpMethod(123, "hey"));
-        assertEquals((
-                "dumpableNum: [123]%n" +
-                        "msg: [||hey||]%n" +
-                        "dumpableMsg: [hey]").formatted(), result);
-    }
-
-    @Test
-    public void testDumpWithOutputMethodArray() {
-        String result = ToStringer.dump(new TestDumpMethodArray(123, "hey"));
-        assertEquals((
-                "dumpableNum: [123 | 61 | 30]%n" +
-                        "msg: [hey ||hey|| ##hey##]%n" +
-                        "dumpableMsg: [hey]").formatted(), result);
+                "dumpableNum: 123%n" +
+                "dumpableMsg: hey").formatted(), result);
     }
 
     static class TestDumpOne {
@@ -61,7 +19,7 @@ public class ToStringerTest {
         int dumpableNum;
         String msg;
         @Dump
-        String dumpableMsg;
+        private String dumpableMsg;
 
         TestDumpOne(int num, String msg) {
             this.num = this.dumpableNum = num;
@@ -69,18 +27,14 @@ public class ToStringerTest {
         }
     }
 
-    static class TestDumpPrivate {
-        int num;
-        @Dump
-        private int dumpableNum;
-        String msg;
-        @Dump
-        private String dumpableMsg;
-
-        TestDumpPrivate(int num, String msg) {
-            this.num = this.dumpableNum = num;
-            this.msg = this.dumpableMsg = msg;
-        }
+    @Test
+    public void testDumpWithOrder() {
+        String result = ToStringer.dump(new TestDumpOrdered(123, "hey"));
+        assertEquals((
+                "msg: hey%n" +
+                "dumpableNum: 123%n" +
+                "dumpableMsg: hey%n" +
+                "num: 123").formatted(), result);
     }
 
     static class TestDumpOrdered {
@@ -99,6 +53,15 @@ public class ToStringerTest {
         }
     }
 
+    @Test
+    public void testDumpWithQuotes() {
+        String result = ToStringer.dump(new TestDumpQuotable("heya"));
+        assertEquals((
+                "msg1: \"\"%n" +
+                "msg2: heya%n" +
+                "msg3: \"   \"").formatted(), result);
+    }
+
     static class TestDumpQuotable {
         @Dump(quote = true)
         String msg1 = "";
@@ -112,11 +75,20 @@ public class ToStringerTest {
         }
     }
 
+    @Test
+    public void testDumpWithOutputMethod() {
+        String result = ToStringer.dump(new TestDumpMethod(123, "hey"));
+        assertEquals((
+                "dumpableNum: 123%n" +
+                        "msg: ||hey||%n" +
+                        "dumpableMsg: hey").formatted(), result);
+    }
+
     static class TestDumpMethod {
         int num;
         @Dump
         int dumpableNum;
-        @Dump(outputMethod = "dumpMsg")
+        @Dump(outputMethods = "dumpMsg")
         String msg;
         @Dump
         String dumpableMsg;
@@ -131,11 +103,20 @@ public class ToStringerTest {
         }
     }
 
+    @Test
+    public void testDumpWithOutputMethodArray() {
+        String result = ToStringer.dump(new TestDumpMethodArray(123, "hey"));
+        assertEquals((
+                "dumpableNum: 123 | 61 | 30%n" +
+                        "msg: hey ||hey|| ##hey##%n" +
+                        "dumpableMsg: hey").formatted(), result);
+    }
+
     static class TestDumpMethodArray {
         int num;
-        @Dump(outputMethod = {"toString", "half", "quarter"}, separator = " | ")
+        @Dump(outputMethods = {"toString", "half", "quarter"}, separator = " | ")
         int dumpableNum;
-        @Dump(outputMethod = {"toString", "dumpMsg", "dumpMsg2"})
+        @Dump(outputMethods = {"toString", "dumpMsg", "dumpMsg2"})
         String msg;
         @Dump
         String dumpableMsg;
