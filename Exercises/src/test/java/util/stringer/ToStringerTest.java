@@ -50,8 +50,8 @@ public class ToStringerTest {
     public void testDumpWithOutputMethodArray() {
         String result = ToStringer.dump(new TestDumpMethodArray(123, "hey"));
         assertEquals((
-                "dumpableNum: [123 61 30]%n" +
-                        "msg: [hey ||hey|| |##|>hey<|##|]%n" +
+                "dumpableNum: [123 | 61 | 30]%n" +
+                        "msg: [hey ||hey|| ##hey##]%n" +
                         "dumpableMsg: [hey]").formatted(), result);
     }
 
@@ -133,7 +133,7 @@ public class ToStringerTest {
 
     static class TestDumpMethodArray {
         int num;
-        @Dump(outputMethod = {"toString", "half", "quarter"})
+        @Dump(outputMethod = {"toString", "half", "quarter"}, separator = " | ")
         int dumpableNum;
         @Dump(outputMethod = {"toString", "dumpMsg", "dumpMsg2"})
         String msg;
@@ -149,7 +149,7 @@ public class ToStringerTest {
             return "||" + msg + "||";
         }
         String dumpMsg2() {
-            return "|##|>" + msg + "<|##|";
+            return "##" + msg + "##";
         }
         int half() {
             return dumpableNum/2;

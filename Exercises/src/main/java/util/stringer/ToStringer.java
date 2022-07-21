@@ -37,17 +37,21 @@ public class ToStringer {
             field.setAccessible(true);
 
         String[] methodNames = field.getAnnotation(Dump.class).outputMethod();
+        String separator = field.getAnnotation(Dump.class).separator();
         StringBuilder buffer = new StringBuilder(field.getName() + ": [");
 
         for (String methodName : methodNames) {
             String content = getContent(field, obj, methodName);
 
             if (hasQuotes(field))
-                buffer.append('"').append(content).append("\" ");
+                buffer.append('"').append(content).append("\"");
             else
-                buffer.append(content).append(' ');
+                buffer.append(content);
+
+            buffer.append(separator);
         }
-        buffer.setCharAt(buffer.length() - 1, ']');
+        buffer.setLength(buffer.length() - separator.length());
+        buffer.append(']');
 
         return buffer.toString();
     }
