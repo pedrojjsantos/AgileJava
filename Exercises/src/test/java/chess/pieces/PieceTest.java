@@ -56,20 +56,6 @@ abstract public class PieceTest {
     }
 
     @Test
-    public void testStrength() {
-        verifyStrength(1.0, Piece.createWhitePawn());
-        verifyStrength(9.0, Piece.createWhiteQueen());
-        verifyStrength(5.0, Piece.createBlackRook());
-        verifyStrength(2.5, Piece.createBlackKnight());
-        verifyStrength(5.0, Piece.createWhiteRook());
-        verifyStrength(9.0, Piece.createBlackQueen());
-    }
-
-    private void verifyStrength(double strength, Piece piece) {
-        assertEquals(strength, piece.getStrength(), 0.05);
-    }
-
-    @Test
     public void testCompare() {
         Piece whiteQueen = createWhiteQueen();
         Piece blackRook = createBlackRook();
