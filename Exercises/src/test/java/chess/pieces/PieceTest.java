@@ -18,7 +18,9 @@ abstract public class PieceTest {
     abstract protected void verifyCreation(Piece whitePiece, Piece blackPiece);
 
     protected void assertContains(List<Position> list, String...expected) {
-        List<Position> expectedList = Arrays.stream(expected).map(Position::new).toList();
+        List<Position> expectedList = Arrays.stream(expected)
+                        .map(Position::new)
+                        .toList();
         assertTrue(list.containsAll(expectedList));
     }
 
