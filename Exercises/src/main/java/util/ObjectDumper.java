@@ -26,7 +26,7 @@ public class ObjectDumper {
             if (isPrivate(field))
                 field.setAccessible(true);
 
-            if (field.getType().getPackageName().startsWith("java"))
+            if (isFromJavaLangOrJavax(field))
                 printField(buffer, field, field.get(obj));
 
             else {
@@ -36,25 +36,39 @@ public class ObjectDumper {
         }
     }
 
+    private static boolean isFromJavaLangOrJavax(Field field) {
+        return field.getType().getPackageName().startsWith("java");
+    }
+
     private static void printFieldWithoutValue(StringBuilder buffer, Field field) {
         String name = StringUtil.truncate(field.getName(), 8);
-        String[] fullType = field.getType().getName().split("[.$]");
-        String type = StringUtil.truncate(fullType[fullType.length - 1], 15);
-
-        buffer.append("%-9s %-15s | %-15s %s"
+        String type = getType(field);
+        buffer.append("%-9s %-15s | %-27s %s"
                 .formatted(name + ':', "", type, getModifier(field)));
     }
 
     private static void printField(StringBuilder buffer, Field field, Object obj) {
         String name = StringUtil.truncate(field.getName(), 8);
-
         String value = StringUtil.truncate(obj.toString(), 15);
+        String type = getType(field);
 
-        String[] fullType = obj.getClass().getName().split("[.$]");
-        String type = StringUtil.truncate(fullType[fullType.length - 1], 15);
-
-        buffer.append("%-9s %-15s | %-15s %s"
+        buffer.append("%-9s %-15s | %-27s %s"
                 .formatted(name + ':', value, type, getModifier(field)));
+    }
+
+    private static String getType(Field field) {
+        String[] fieldType = field.getGenericType().getTypeName().split("[<>]");
+        String type = StringUtil.truncate(StringUtil.splitAndGetLast("[.$]", fieldType[0]), 15);
+        String params = "";
+        if (fieldType.length > 1) {
+            String param = Arrays.stream(fieldType[1].split(", "))
+                            .map(s -> StringUtil.splitAndGetLast("[.$]", s))
+                            .collect(Collectors.joining(","));
+            if (type.length() + param.length() > 25)
+                param = StringUtil.truncate(param, 25 - type.length());
+            params = '<' + param + '>';
+        }
+        return type + params;
     }
 
     private static String getModifier(Field field) {

@@ -69,8 +69,8 @@ public class MyFileTest {
 
     @Test
     public void testWriteException() throws IOException{
+        file.write("");
         try {
-            file.write("");
             file.write("");
             fail("Expected Exception");
         } catch (FileAlreadyExistException ignoredSuccess) {}
@@ -85,8 +85,8 @@ public class MyFileTest {
     }
     @Test
     public void testWriteLinesException() throws IOException{
+        file.write(new ArrayList<>());
         try {
-            file.write(new ArrayList<>());
             file.write(new ArrayList<>());
             fail("Expected Exception");
         } catch (FileAlreadyExistException ignoredSuccess) {}

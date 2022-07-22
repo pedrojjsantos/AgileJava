@@ -3,6 +3,7 @@ package util;
 import org.junit.Test;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import static org.junit.Assert.*;
 
@@ -17,8 +18,8 @@ public class ObjectDumperTest {
         String dump = ObjectDumper.print(obj);
         assertEquals(
                 obj.getClass().getName() + newline +
-                        "\tname:     Jane            | String          public" + newline +
-                        "\tnumber:   101             | Integer         public"
+                        "\tname:     Jane            | String                      public" + newline +
+                        "\tnumber:   101             | int                         public"
                 , dump);
 
         obj = new TestObject2(name, number);
@@ -26,12 +27,13 @@ public class ObjectDumperTest {
 
         assertEquals(
             obj.getClass().getName() + newline +
-                "\t" + "list:     " + "[0, 1, 2, 3, .. | " + "ArrayList       private" + newline +
-                "\t" + "obj:      " + "                | " + "TestObject1     public" + newline +
-                "\t-\t"  + "name:     " + "Jane            | " + "String          public" + newline +
-                "\t-\t"  + "number:   " + "101             | " + "Integer         public" + newline +
-                "\t" + "flag:     " + "true            | " + "Boolean         public static" + newline +
-                "\t" + "id:       " + "200             | " + "Integer         protected"
+                "\t" + "list:     " + "[0, 1, 2, 3, .. | " + "ArrayList<Byte>             private" + newline +
+                "\t" + "hashmap:  " + "{1=1, 2=4, 3=9} | " + "HashMap<String,Short>       private" + newline +
+                "\t" + "obj:      " + "                | " + "TestObject1                 public" + newline +
+                "\t-\t"  + "name:     " + "Jane            | " + "String                      public" + newline +
+                "\t-\t"  + "number:   " + "101             | " + "int                         public" + newline +
+                "\t" + "flag:     " + "true            | " + "boolean                     public static" + newline +
+                "\t" + "id:       " + "200             | " + "Integer                     protected"
 
                 , dump);
     }
@@ -47,14 +49,20 @@ public class ObjectDumperTest {
     }
     static class TestObject2 {
         private final ArrayList<Byte> list;
+        private HashMap<String, Short> hashmap;
         TestObject1 obj;
         static boolean flag = true;
-        protected int id = 200;
+        protected Integer id = 200;
 
         TestObject2(String name, int number) {
             list = new ArrayList<>();
             for (byte i = 0; i < 6; i++)
                 list.add(i);
+
+            hashmap = new HashMap<>();
+            hashmap.put("1", (short) 1);
+            hashmap.put("2", (short) 4);
+            hashmap.put("3", (short) 9);
 
             obj = new TestObject1(name, number);
         }

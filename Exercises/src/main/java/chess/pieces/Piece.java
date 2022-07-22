@@ -89,9 +89,7 @@ public abstract class Piece implements Comparable<Piece>, Serializable {
 
     public static Piece fromChar(char ch) {
         loadFactoryMap();
-        Supplier<Piece> fn = charToPieceFactory.get(ch);
-        if (fn == null)
-            return noPiece();
+        Supplier<Piece> fn = charToPieceFactory.getOrDefault(ch, Piece::noPiece);
         return fn.get();
     }
 
