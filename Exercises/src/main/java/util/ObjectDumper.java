@@ -1,13 +1,15 @@
 package util;
 
-import java.lang.reflect.*;
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
+import java.util.Arrays;
+import java.util.stream.Collectors;
 
 public class ObjectDumper {
     private ObjectDumper() {}
 
     public static String print(Object obj) throws IllegalAccessException {
-        Class<?> objClass = obj.getClass();
-        StringBuilder buffer = new StringBuilder(objClass.getName());
+        StringBuilder buffer = new StringBuilder(obj.getClass().getName());
         String indent = "\t";
 
         print(buffer, obj, indent);
@@ -17,8 +19,7 @@ public class ObjectDumper {
 
     private static void print(StringBuilder buffer, Object obj, String indent)
             throws IllegalAccessException {
-        Class<?> objClass = obj.getClass();
-        Field[] fields = objClass.getDeclaredFields();
+        Field[] fields = obj.getClass().getDeclaredFields();
 
         for (Field field : fields) {
             buffer.append("%n%s".formatted(indent));
