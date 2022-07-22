@@ -2,9 +2,6 @@ package util;
 
 import org.junit.Test;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import static org.junit.Assert.assertEquals;
 
 public class StringUtilTest {
@@ -22,5 +19,16 @@ public class StringUtilTest {
         assertEquals("abcdefghij", StringUtil.truncate(str, 10));
         assertEquals("abcdefg..", StringUtil.truncate(str, 9));
         assertEquals("abcde..", StringUtil.truncate(str, 7));
+    }
+
+    @Test
+    public void testSplitAndGetLast() {
+        String str = "This is a simple test";
+
+        assertEquals("test", StringUtil.splitAndGetLast(" ", str));
+        assertEquals(str, StringUtil.splitAndGetLast("z", str));
+        assertEquals("le test", StringUtil.splitAndGetLast("p", str));
+        assertEquals("st", StringUtil.splitAndGetLast("[ e]", str));
+        assertEquals("" , StringUtil.splitAndGetLast("1", ""));
     }
 }

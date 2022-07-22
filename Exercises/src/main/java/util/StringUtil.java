@@ -14,4 +14,9 @@ public class StringUtil {
         String truncated = str.substring(0, i - 2);
         return truncated + "..";
     }
+
+    public static String splitAndGetLast(String regex, String str) {
+        String[] strSplit = str.split(regex);
+        return strSplit[strSplit.length - 1];
+    }
 }
