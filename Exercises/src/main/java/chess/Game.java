@@ -1,7 +1,6 @@
 package chess;
 
 import chess.pieces.Piece;
-import util.StringUtil;
 
 import java.io.*;
 
@@ -13,6 +12,7 @@ public class Game {
     }
 
     public void initialize() {
+        board.clearBoard();
         initWhiteRanks();
         initBlackRanks();
     }
@@ -130,7 +130,6 @@ public class Game {
 
             for (Piece piece : board) {
                 saveFile.write(piece.print());
-                saveFile.write(' ');
                 saveFile.write(piece.getPosition().toString());
                 saveFile.newLine();
             }
@@ -146,7 +145,6 @@ public class Game {
 
                 for (int i = 0; i < nLines; i++) {
                     char piece = (char) saveFile.read();
-                    saveFile.read();
                     String position = saveFile.readLine();
 
                     newBoard.put(new Position(position), Piece.fromChar(piece));
