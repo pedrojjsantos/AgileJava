@@ -225,15 +225,40 @@ public class NumTest {
 
     @Test
     public void testIntegralSize() {
-        assertEquals(8,  getNumOfBits(Type.BYTE));
-        assertEquals(16, getNumOfBits(Type.CHAR));
-        assertEquals(16, getNumOfBits(Type.SHORT));
-        assertEquals(32, getNumOfBits(Type.INT));
-        assertEquals(64, getNumOfBits(Type.LONG));
+        assertEquals(16, getNumOfBits(Character.MAX_VALUE));
+
+        assertEquals(8,  getNumOfBits( minus(Byte.MIN_VALUE) ));
+        assertEquals(16, getNumOfBits( minus(Short.MIN_VALUE) ));
+        assertEquals(32, getNumOfBits( minus(Integer.MIN_VALUE) ));
+        assertEquals(64, getNumOfBits( minus(Long.MIN_VALUE) ));
+    }
+
+    private long minus(long num) {
+        return ~num + 1;
+    } // * -1
+
+    private int getNumOfBits(long num) {
+        int n = 0;
+
+        while (num != 0) {
+            num >>>= 1;
+            n++;
+        }
+
+        return n;
+    }
+
+    @Test
+    public void testIntegralSizeOLD() {
+        assertEquals(8,  getNumOfBitsOLD(Type.BYTE));
+        assertEquals(16, getNumOfBitsOLD(Type.CHAR));
+        assertEquals(16, getNumOfBitsOLD(Type.SHORT));
+        assertEquals(32, getNumOfBitsOLD(Type.INT));
+        assertEquals(64, getNumOfBitsOLD(Type.LONG));
     }
     enum Type {BYTE, CHAR, SHORT, INT, LONG};
 
-    int getNumOfBits(Type type) {
+    int getNumOfBitsOLD(Type type) {
         switch (type) {
             case BYTE -> {
                 for (int i = 1; i < 128; i++) {
