@@ -3,8 +3,10 @@ package chess;
 import chess.pieces.Piece;
 import org.junit.Before;
 import org.junit.Test;
+import util.file.MyFile;
 
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
 
 import static chess.pieces.Piece.*;
 import static org.junit.Assert.*;
@@ -122,9 +124,7 @@ public class GameTest {
             assertEquals(game.getWhiteStrength(), game.getWhiteStrength(), 0.05);
         }
         finally {
-            File file = new File(saveFileSerialized);
-            if (file.exists())
-                assertTrue(file.delete());
+            deleteFile(saveFileSerialized);
         }
     }
 
@@ -144,9 +144,27 @@ public class GameTest {
             assertEquals(game.getWhiteStrength(), game.getWhiteStrength(), 0.05);
         }
         finally {
-            File file = new File(saveFileTextual);
-            if (file.exists())
-                assertTrue(file.delete());
+            deleteFile(saveFileTextual);
         }
+    }
+
+    @Test
+    public void testSaveFileException() throws IOException {
+        final String filename = "saveFile";
+
+        try {
+            MyFile file = new MyFile(filename);
+            file.write("This will give a parse error");
+
+            assertThrows(InvalidSaveFileException.class, () -> game.loadTextual(filename));
+        } finally {
+            deleteFile(filename);
+        }
+    }
+
+    private void deleteFile(String filename) {
+        File file = new File(filename);
+        if (file.exists())
+            assertTrue(file.delete());
     }
 }
