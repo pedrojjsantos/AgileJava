@@ -103,27 +103,19 @@ public class RingTest {
 
     @Test
     public void testEmptyExceptions() {
-        try {
-            ring.remove();
-            fail("Expected exception");
-        } catch (EmptyRingException ignored) {}
+        assertThrows("Expected exception for trying to use an empty ring",
+                EmptyRingException.class, () -> ring.remove());
 
-        try {
-            ring.next();
-            fail("Expected exception");
-        } catch (EmptyRingException ignored) {}
+        assertThrows("Expected exception for trying to use an empty ring",
+                EmptyRingException.class, () -> ring.next());
 
-        try {
-            ring.prev();
-            fail("Expected exception");
-        } catch (EmptyRingException ignored) {}
+        assertThrows("Expected exception for trying to use an empty ring",
+                EmptyRingException.class, () -> ring.prev());
     }
 
     @Test
     public void testAddNull() {
-        try {
-            ring.add(null);
-            throw new RuntimeException("Expected an AssertionError!");
-        } catch (AssertionError ignoredSuccess) {}
+        assertThrows("Expected AssertionError for trying to add a null to the ring",
+                AssertionError.class, () -> ring.add(null));
     }
 }

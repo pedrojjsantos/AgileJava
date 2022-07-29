@@ -68,28 +68,11 @@ public class MyFileTest {
     }
 
     @Test
-    public void testWriteException() throws IOException{
-        file.write("");
-        try {
-            file.write("");
-            fail("Expected Exception");
-        } catch (FileAlreadyExistException ignoredSuccess) {}
-    }
-
-    @Test
     public void testWriteLines() throws IOException {
         file.write(contentList);
 
         String fileContent = file.read();
         assertEquals(content, fileContent);
-    }
-    @Test
-    public void testWriteLinesException() throws IOException{
-        file.write(new ArrayList<>());
-        try {
-            file.write(new ArrayList<>());
-            fail("Expected Exception");
-        } catch (FileAlreadyExistException ignoredSuccess) {}
     }
 
     @Test
@@ -119,15 +102,6 @@ public class MyFileTest {
     }
 
     @Test
-    public void testReadException() throws IOException {
-        try {
-            file.read();
-            fail("Expected exception");
-        }
-        catch (FileDoesntExistException ignoredSuccess) {}
-    }
-
-    @Test
     public void testReadLines() throws IOException {
             file.write(contentList);
 
@@ -136,12 +110,21 @@ public class MyFileTest {
     }
 
     @Test
-    public void testReadLinesException() throws IOException {
-        try {
-            file.readLines();
-            fail("Expected exception");
-        }
-        catch (FileDoesntExistException ignoredSuccess) {}
+    public void testWriteException() throws IOException{
+        file.write("");
+        assertThrows("Expected an exception for trying to write inside an existent file",
+                FileAlreadyExistException.class, () -> file.write(""));
+
+        assertThrows("Expected an exception for trying to write inside an existent file",
+                FileAlreadyExistException.class, () -> file.write(new ArrayList<>()));
     }
 
+    @Test
+    public void testReadException() {
+        assertThrows("Expected an exception for trying to read a nonexistent file",
+                FileDoesntExistException.class, () -> file.read());
+
+        assertThrows("Expected an exception for trying to read a nonexistent file",
+                FileDoesntExistException.class, () -> file.readLines());
+    }
 }

@@ -43,19 +43,14 @@ public class DirTest {
     }
 
     @Test
-    public void testNonExistentDir() {
-        try {
-            directory.files();
-            fail("Expected Exception");
-        } catch (DirNonExistentException ignoredSuccess) {}
-    }
+    public void testDirExceptions() {
+        assertThrows("Expected an exception for trying to access the files " +
+                             "in a nonexistent directory",
+                DirNonExistentException.class, () -> directory.files());
 
-    @Test
-    public void testDirectoryNameException() {
-        try {
-            new Dir("pom.xml");
-            fail("Expected Exception!");
-        } catch (DirPathNameException ignoredSuccess) {}
+        assertThrows("Expected an exception for trying to create a directory " +
+                             "with the same name of an existent file",
+                DirPathNameException.class, () -> new Dir("pom.xml"));
     }
 
     @Test
