@@ -8,21 +8,21 @@ import java.util.stream.Collectors;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
-@SuppressWarnings({"UnusedAssignment", "ConstantConditions"})
 public class CaptureExceptionTest {
+    private void throwNullPointerException() {
+        throw new NullPointerException("Ops!");
+    }
     @Test
     public void testWithWriter(){
         try {
-            String str = null;
-
-            str = str.toLowerCase();
+            throwNullPointerException();
             fail("Expected Exception!");
 
         } catch (Exception e) {
             String output = getStackTraceWithWriter(e);
 
-//            System.out.println(output);
-            assertTrue(output.contains(e.toString()));
+            assertTrue(output.startsWith(e.toString()));
+
             for (StackTraceElement trace : e.getStackTrace())
                 assertTrue(output.contains(trace.toString()));
         }
@@ -45,15 +45,13 @@ public class CaptureExceptionTest {
     @Test
     public void testWithoutWriter() throws IOException{
         try {
-            String str = null;
-
-            str = str.toLowerCase();
+            throwNullPointerException();
             fail("Expected Exception!");
         } catch (Exception e) {
             String output = getStackTraceWithoutWriter(e);
 
-//            System.out.println(output);
-            assertTrue(output.contains(e.toString()));
+            assertTrue(output.startsWith(e.toString()));
+
             for (StackTraceElement trace : e.getStackTrace())
                 assertTrue(output.contains(trace.toString()));
         }
