@@ -3,9 +3,12 @@ package etc;
 import org.junit.Test;
 
 import java.util.logging.Handler;
+import java.util.logging.Level;
+import java.util.logging.LogRecord;
 import java.util.logging.Logger;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 public class ExceptionTest {
     private final String BLOWS_UP_MSG = "Somebody should catch this!";
@@ -57,16 +60,83 @@ public class ExceptionTest {
 
     @Test
     public void testReverseLog() {
-        Logger logger = Logger.getLogger(Dyer.class.getName());
-        DyerHandler handler = new DyerHandler();
+        Logger logger = Logger.getLogger(this.getClass().getName());
+        MockHandler handler = new MockHandler();
         logger.addHandler(handler);
 
+        Throwable exception = getException();
+        StackTraceElement[] stackTrace = exception.getStackTrace();
+
+        log(logger, exception);
+
+        Throwable loggedException = handler.getThrowable();
+        StackTraceElement[] loggedStackTrace = loggedException.getStackTrace();
+
+        assertEquals(exception.getClass(), loggedException.getClass());
+        assertEquals(stackTrace.length, loggedStackTrace.length);
+
+        int last = stackTrace.length - 1;
+
+        for (int i = 0; i <= last; i++)
+            assertEquals(stackTrace[i], loggedStackTrace[last - i]);
+    }
+
+    private Throwable getException() {
+        Throwable exception = null;
+
         try {
-            Dyer dyer = Dyer.create();
-            fail("Expected an exception!");
-        } catch (RuntimeException e) {
-            assertEquals(e.getMessage(), handler.getLog(0));
-            assertEquals(e.getCause().getMessage(), handler.getLog(1));
+            rethrows();
+            fail("Expected Exception");
+        }
+        catch (Throwable e) {
+            exception = e;
+        }
+        return exception;
+    }
+
+    private void log(Logger logger, Throwable exception) {
+        if (!logger.isLoggable(Level.FINE))
+            logger.setLevel(Level.FINE);
+
+        exception.setStackTrace(reverse(exception.getStackTrace()));
+
+        logger.log(Level.FINE, "", exception);
+    }
+
+    private <T> T[] reverse(T[] list) {
+        int last = list.length - 1;
+
+        for (int i = 0; i < list.length / 2; i++)
+            swap(list, i, last - i);
+
+        return list;
+    }
+
+    private <T> void swap(T[] list, int i, int j) {
+        T tmp = list[i];
+        list[i] = list[j];
+        list[j] = tmp;
+    }
+
+    private static class MockHandler extends Handler {
+        private LogRecord record;
+        @Override
+        public void publish(LogRecord record) {
+            this.record = record;
+        }
+
+        @Override
+        public void flush() {
+
+        }
+
+        @Override
+        public void close() throws SecurityException {
+
+        }
+
+        public Throwable getThrowable() {
+            return record.getThrown();
         }
     }
 }

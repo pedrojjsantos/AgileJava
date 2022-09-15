@@ -8,6 +8,7 @@ import org.junit.runners.Suite;
         StringUtilTest.class,
         CloneTest.class,
         ObjectDumperTest.class,
+        DumpProxyTest.class,
         util.file.AllTests.class,
         util.stringer.AllTests.class,
 })
