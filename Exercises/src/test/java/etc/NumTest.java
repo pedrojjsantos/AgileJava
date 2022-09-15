@@ -146,7 +146,7 @@ public class NumTest {
     public void testRng() {
         ArrayList<Integer> listRand = new ArrayList<>();
         int min = 0;
-        int max = 1;
+        int max = 50;
 
         for (int i = 0; i < 100000; i++)
             listRand.add(rng(min, max));
