@@ -18,8 +18,8 @@ public class FileTest {
         try (BufferedWriter output = new BufferedWriter(
                     new OutputStreamWriter(new FileOutputStream(fileName)));
              BufferedReader input = new BufferedReader(
-                    new InputStreamReader(new FileInputStream(fileName))))
-        {
+                    new InputStreamReader(new FileInputStream(fileName)))
+        ) {
             output.write(text);
             output.flush();
 
@@ -42,23 +42,24 @@ public class FileTest {
 
     @Test
     public void testPerformance() throws IOException {
-        String fileName1 = "testNotBuffered.txt";
-        String fileName2 = "testBuffered.txt";
+        String fileName = "test.txt";
         long size = 10000;
 
-        try (FileOutputStream file1 = new FileOutputStream(fileName1);
-             FileOutputStream file2 = new FileOutputStream(fileName2)) {
-            OutputStreamWriter writer = new OutputStreamWriter(file1);
-            BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(file2));
+        try (FileOutputStream file = new FileOutputStream(fileName);
+            OutputStreamWriter writer = new OutputStreamWriter(file);
+            BufferedWriter bufferedWriter = new BufferedWriter(writer)
+        ) {
 
             long writerTime = writerPerformance(writer, size);
             long bufferedTime = writerPerformance(bufferedWriter, size);
 
 //            System.out.printf("w: %d,\tb: %d%n", writerTime, bufferedTime);
-            assertTrue(writerTime > bufferedTime);
+            assertTrue(writerTime > bufferedTime * 5);
+            System.out.println(writerTime);
+            System.out.println(bufferedTime);
         }
         finally {
-            delete(fileName1, fileName2);
+            delete(fileName);
         }
     }
 
