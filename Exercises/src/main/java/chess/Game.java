@@ -3,6 +3,7 @@ package chess;
 import chess.pieces.Piece;
 
 import java.io.*;
+import java.util.Collection;
 
 public class Game {
     private Board board;
@@ -68,46 +69,40 @@ public class Game {
         return board.getPiece(pos);
     }
 
-    public double getWhiteStrength() {
-        double strength = 0;
-        Piece pawn = Piece.createWhitePawn();
+    private double getStrength(Collection<Piece> pieces) {
+        double totalStrength = 0;
 
-        for (Piece piece : board.getWhitePieces()) {
-            if (!piece.isEqualTo(pawn))
-                strength += piece.getStrength();
+        int[] pawnsPerFile = {0,0,0,0,0,0,0,0};
+
+        for (Piece piece : pieces) {
+            if (piece.isPawn()) {
+                int file = piece.getPosition().getFile();
+                pawnsPerFile[file]++;
+            } else totalStrength += piece.getStrength();
         }
 
-        strength += getPawnStrength(pawn);
+        totalStrength += getPawnStrength(pawnsPerFile);
 
-        return strength;
+        return totalStrength;
+    }
+
+    private double getPawnStrength(int[] pawnsPerFile) {
+        double totalStrength = 0;
+        double pawnStrength = Piece.createBlackPawn().getStrength();
+
+        for (int nPawns : pawnsPerFile) {
+            double fileStrength = pawnStrength * nPawns;
+            totalStrength += (nPawns > 1) ? fileStrength / 2 : fileStrength;
+        }
+        return totalStrength;
+    }
+
+    public double getWhiteStrength() {
+        return getStrength(board.getWhitePieces());
     }
 
     public double getBlackStrength() {
-        double strength = 0;
-        Piece pawn = Piece.createBlackPawn();
-
-        for (Piece piece : board.getBlackPieces()) {
-            if (!piece.isEqualTo(pawn))
-                strength += piece.getStrength();
-        }
-
-        strength += getPawnStrength(pawn);
-
-        return strength;
-    }
-
-    private double getPawnStrength(Piece pawn) {
-        double totalStrength = 0;
-
-        for (int file = 0; file < 8; file++) {
-            int nPawnsInFile = board.pieceCountInFile(file, pawn);
-            double pawnStrength = pawn.getStrength();
-            pawnStrength = (nPawnsInFile <= 1) ? pawnStrength : pawnStrength / 2;
-
-            totalStrength += pawnStrength * nPawnsInFile;
-        }
-
-        return totalStrength;
+        return getStrength(board.getBlackPieces());
     }
 
     public void saveSerialized(String filename) throws IOException {
