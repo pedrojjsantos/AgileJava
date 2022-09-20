@@ -114,6 +114,10 @@ public abstract class Piece implements Comparable<Piece>, Serializable {
                 this.color == that.color;
     }
 
+    public boolean isPawn() {
+        return this.getClass() == Pawn.class;
+    }
+
     public void setPosition(Position position) {
         this.position = position;
     }

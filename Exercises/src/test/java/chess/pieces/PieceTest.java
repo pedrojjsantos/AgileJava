@@ -83,4 +83,13 @@ abstract public class PieceTest {
         board.put(p2, piece);
         assertEquals(p2, piece.getPosition());
     }
+
+    @Test
+    public void testIsPawn() {
+        Piece whitePiece = createWhitePiece();
+        Piece blackPiece = createBlackPiece();
+
+        assertFalse(whitePiece.isPawn());
+        assertFalse(blackPiece.isPawn());
+    }
 }

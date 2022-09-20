@@ -63,4 +63,13 @@ public class PawnTest extends PieceTest {
         assertEquals(0, blackMoves.size());
         assertEquals(0, whiteMoves.size());
     }
+
+    @Override
+    public void testIsPawn() {
+        Piece whitePiece = createWhitePiece();
+        Piece blackPiece = createBlackPiece();
+
+        assertTrue(whitePiece.isPawn());
+        assertTrue(blackPiece.isPawn());
+    }
 }
